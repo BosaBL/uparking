@@ -20,7 +20,7 @@ En particular este repositorio consta del backend del proyecto, donde el princip
 Clonar el repositorio en la carpeta de desarrollo
 
 ```shell
-git clone https://github.com/pyenv/pyenv.git
+git clone https://github.com/proyecto-uparking/uparking-backend
 ```
 
 luego, navegar a la carpeta del proyecto e instalar las dependencias
