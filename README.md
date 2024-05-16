@@ -12,7 +12,7 @@ En particular este repositorio consta del backend del proyecto, donde el princip
 ## Instalación Local
 
 > [!IMPORTANT]
-Para la administración de paquetes durante el proyecto se usará [Poetry](https://python-poetry.org/), es importante aprender a usarlo y a trabajar con el.
+> Para la administración de paquetes durante el proyecto se usará [Poetry](https://python-poetry.org/), es importante aprender a usarlo y a trabajar con el.
 
 > [!TIP]
 > Se sugiere el uso de virtual enviroments para no mezclar el proyecto con paquetes propios ni versiones instaladas de Python, en particular se sugiere el uso de [Pyenv](https://github.com/pyenv/pyenv).
@@ -27,6 +27,7 @@ luego, navegar a la carpeta del proyecto e instalar las dependencias
 
 ```shell
 cd uparking-backend
+poetry self add poetry-plugin-export
 poetry install
 ```
 
