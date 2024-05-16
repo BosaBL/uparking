@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "git": {
+    "deploymentEnabled": {
+      "main": false,
+      "dev": false
+    }
+  },
+  "builds": [
+    {
+      "src": "src/uparking/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.12.3" }
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "src/staticfiles_build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/uparking/wsgi.py"
+    }
+  ]
+}
