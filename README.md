@@ -31,6 +31,12 @@ poetry self add poetry-plugin-export
 poetry install
 ```
 
+posteriormente, reiniciar la consola o terminal e inicializar pre-commit.py
+
+```shell
+pre-commit install
+```
+
 finalmente, navegar a la carpeta `src` e iniciar el servidor de Django para verificar que todo esté funcionando de manera correcta
 
 ```shell
