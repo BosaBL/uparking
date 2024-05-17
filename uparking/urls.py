@@ -18,13 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from uparking.api.v1 import views
-from uparking.api.v1.router import get_routes
-
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("api/", include(get_routes())),
-    path("api/auth/", include("dj_rest_auth.urls")),
-    path("api/auth/registration/", include("dj_rest_auth.registration.urls")),
+    path("auth/", include("uparking.authentication.urls")),
 ]

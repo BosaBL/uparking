@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     # APPS
-    "uparking.api",
+    "uparking.authentication",
     "dj_rest_auth",
     "django.contrib.sites",
     "allauth",
@@ -152,5 +152,24 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-    ]
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
 }
+
+# REST_AUTH
+REST_AUTH = {
+    "USE_JWT": True,
+    "REGISTER_SERIALIZER": "uparking.authentication.serializers.RegisterSerializer",
+}
+
+# AUTHENTICATION SETTINGS
+AUTH_USER_MODEL = "authentication.CustomUser"
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
