@@ -3,9 +3,7 @@ import pathlib
 
 
 def main():
-    BASE_PATH = pathlib.Path().cwd()
-    SRC_PATH = BASE_PATH / "src"
-    print(SRC_PATH)
+    SRC_PATH = pathlib.Path().cwd()
     out = subprocess.run(
         [
             "poetry",

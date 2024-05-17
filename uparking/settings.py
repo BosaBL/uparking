@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     # APPS
-    "uparking",
+    "uparking.api",
     "dj_rest_auth",
     "django.contrib.sites",
     "allauth",
