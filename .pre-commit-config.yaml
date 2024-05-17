@@ -4,7 +4,8 @@ repos:
       - id: generate-requirements
         name: generate-requirements
         entry: python -m hooks.generate-requirements
-        language: python
+        language: system
+        types: [python]
         always_run: true
 
   - repo: https://github.com/psf/black

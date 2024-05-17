@@ -14,6 +14,18 @@ En particular este repositorio consta del backend del proyecto, donde el princip
 > [!IMPORTANT]
 > Para la administración de paquetes durante el proyecto se usará [Poetry](https://python-poetry.org/), es importante aprender a usarlo y a trabajar con el.
 
+> [!IMPORTANT]
+> Es necesaria la creación de un archivo para las variables de entorno, en este archivo se guardarán las credenciales locales para la base de datos de postgres, crear el archivo en el directorio base del repositorio.
+>
+> ```shell
+> POSTGRES_DATABASE=nombre_base_de_datos
+> POSTGRES_USER=nombre_usuario
+> POSTGRES_PASSWORD=contrasena
+> POSTGRES_HOST=localhost
+> DEV=1
+> VERCELDEPLOYEMENT=0
+> ```
+
 > [!TIP]
 > Se sugiere el uso de virtual enviroments para no mezclar el proyecto con paquetes propios ni versiones instaladas de Python, en particular se sugiere el uso de [Pyenv](https://github.com/pyenv/pyenv).
 
@@ -40,7 +52,6 @@ pre-commit install
 finalmente, navegar a la carpeta `src` e iniciar el servidor de Django para verificar que todo esté funcionando de manera correcta
 
 ```shell
-cd src
 poetry run python manage.py runserver
 ```
 
