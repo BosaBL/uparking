@@ -49,7 +49,7 @@ posteriormente, reiniciar la consola o terminal e inicializar pre-commit.py
 pre-commit install
 ```
 
-finalmente, navegar a la carpeta `src` e iniciar el servidor de Django para verificar que todo esté funcionando de manera correcta
+finalmente, inciar el servidor para verificar que todo esté funcionando de manera correcta
 
 ```shell
 poetry run python manage.py runserver
