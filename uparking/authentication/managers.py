@@ -13,6 +13,8 @@ class CustomUserManager(BaseUserManager):
         Create and save a user with the given email and password.
         """
         if not email:
+            raise ValueError(_("Email must be set."))
+        if not rut:
             raise ValueError(_("Rut must be set."))
 
         email = self.normalize_email(email)
@@ -42,9 +44,10 @@ class CustomUserManager(BaseUserManager):
         """
         Normalize rut by removing dots and verifying the check digit.
         """
-        rut = rut or ""
-        try:
-            rut, *_ = rut.strip().split("-")
-        except ValueError:
-            pass
+        # rut = rut or ""
+        # try:
+        #     rut = rut.strip().replace(".", "").split("-")
+        #     rut = int(rut)
+        # except ValueError:
+        #     pass
         return rut

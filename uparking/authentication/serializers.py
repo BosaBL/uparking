@@ -1,5 +1,6 @@
 from .models import CustomUser
 from rest_framework import serializers
+from .utils import check_rut
 
 
 try:
@@ -45,6 +46,16 @@ class RegisterSerializer(serializers.Serializer):
         if data["password1"] != data["password2"]:
             raise serializers.ValidationError(("The two password fields didn't match."))
         return data
+
+    def validate_rut(self, rut):
+        try:
+            rut, dv = rut.strip().replace(".", "").split("-")
+            check_rut(rut, dv)
+            rut = int(rut)
+        except:
+            raise serializers.ValidationError("Rut inválido.")
+
+        return rut
 
     def custom_signup(self, request, user):
         pass

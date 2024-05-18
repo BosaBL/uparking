@@ -1,0 +1,2 @@
+class InvalidRUTException(Exception):
+    pass
