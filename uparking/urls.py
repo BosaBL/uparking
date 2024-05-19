@@ -16,9 +16,36 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, URLResolver, URLPattern
+from typing import List, Union
+from .settings import DEBUG
+from os import getenv
 
 
-urlpatterns = [
+urlpatterns: List[Union[URLPattern, URLResolver]] = [
     path("auth/", include("uparking.authentication.urls")),
 ]
+
+# DEV SETTINGS
+if DEBUG:
+    from drf_spectacular.views import (
+        SpectacularAPIView,
+        SpectacularRedocView,
+        SpectacularSwaggerView,
+    )
+
+    urlpatterns.extend(
+        [
+            path("schema/", SpectacularAPIView.as_view(), name="schema"),
+            path(
+                "docs/",
+                SpectacularSwaggerView.as_view(url_name="schema"),
+                name="swagger-ui",
+            ),
+            path(
+                "docs/redoc",
+                SpectacularRedocView.as_view(url_name="schema"),
+                name="redoc",
+            ),
+        ]
+    )

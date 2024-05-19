@@ -13,8 +13,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from typing import Dict, Any
 
 load_dotenv()
+
+# dev env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -149,7 +152,7 @@ if bool(int(os.getenv("VERCELDEPLOYEMENT", 0))):
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # DRF
-REST_FRAMEWORK = {
+REST_FRAMEWORK: Dict[str, Any] = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     "DEFAULT_PERMISSION_CLASSES": [
@@ -175,3 +178,15 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+
+# DEV DOC SETTINGS
+if DEBUG:
+    INSTALLED_APPS += ["drf_spectacular", "drf_spectacular_sidecar"]
+    REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "drf_spectacular.openapi.AutoSchema"
+    SPECTACULAR_SETTINGS = {
+        "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
+        "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+        "REDOC_DIST": "SIDECAR",
+        # OTHER SETTINGS
+    }
