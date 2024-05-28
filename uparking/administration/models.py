@@ -4,13 +4,13 @@ from django.utils import timezone
 from django.conf import settings
 
 
-class Sedes(models.Model):
+class Sede(models.Model):
     id = models.CharField(primary_key=True, max_length=10)
     nombre = models.CharField(max_length=50, null=False)
     direccion = models.TextField()
 
 
-class Vehiculos(models.Model):
+class Vehiculo(models.Model):
     patente = models.CharField(primary_key=True, max_length=6)
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     color = models.CharField(max_length=20)
@@ -18,9 +18,9 @@ class Vehiculos(models.Model):
     descripcion = models.TextField()
 
 
-class Estacionamientos(models.Model):
+class Estacionamiento(models.Model):
     id = models.CharField(primary_key=True, max_length=10)
-    sede = models.ForeignKey(Sedes, on_delete=models.CASCADE)
+    sede = models.ForeignKey(Sede, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=50, null=False)
     capacidad = models.PositiveIntegerField(default=0)
     capacidad_max = models.PositiveIntegerField(default=0)
@@ -29,10 +29,18 @@ class Estacionamientos(models.Model):
 
 class VigilanteNotifica(models.Model):
     vigilante = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    vehiculo = models.ForeignKey(Vehiculos, on_delete=models.CASCADE)
-    estacionamiento = models.ForeignKey(Estacionamientos, on_delete=models.CASCADE)
+    vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
+    estacionamiento = models.ForeignKey(Estacionamiento, on_delete=models.CASCADE)
     mensaje = models.TextField()
     # imagen = models.ImageField()
+    leido = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     notificar = models.BooleanField(default=False)
     last_notified = models.DateTimeField(null=True)
+
+
+class FeedBack(models.Model):
+    comentario = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    # imagen = models.ImageField()
+    leido = models.BooleanField(default=False)
