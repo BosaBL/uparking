@@ -6,11 +6,11 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    rol_choices = [
-        ("user", "usuario"),
-        ("vigilante", "vigilante"),
-        ("admin", "administrador"),
-    ]
+    rol_choices = {
+        "user": "user",
+        "vigilante": "vigilante",
+        "admin": "admin",
+    }
 
     email = models.EmailField(_("email address"), unique=True)
     rut = models.CharField(max_length=15, unique=True)
@@ -35,6 +35,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ]
 
     objects = CustomUserManager()
+
+    @property
+    def is_admin(self):
+        return self.rol == "admin"
+
+    @property
+    def is_vigilante(self):
+        return self.rol == "vigilante"
 
     def save(self, *args, **kwargs):
         self.clean()

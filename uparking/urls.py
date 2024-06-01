@@ -24,6 +24,7 @@ from os import getenv
 
 urlpatterns: List[Union[URLPattern, URLResolver]] = [
     path("auth/", include("uparking.authentication.urls")),
+    path("api/admin/", include("uparking.administration.urls")),
 ]
 
 # DEV SETTINGS
