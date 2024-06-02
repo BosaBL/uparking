@@ -1,5 +1,8 @@
 #/bin/sh
 
+brew install gdal
+gdal-config --version
+
 echo "Deployement started..."
 
 python3 -V
