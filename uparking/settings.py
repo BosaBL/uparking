@@ -153,6 +153,9 @@ if bool(int(os.getenv("VERCELDEPLOYEMENT", 0))):
     GDAL_LIBRARY_PATH = "libgdal.so"
     GEOS_LIBRARY_PATH = "libgeos_c.so.1"
 
+GDAL_LIBRARY_PATH = "libgdal.so"
+GEOS_LIBRARY_PATH = "libgeos_c.so.1"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
