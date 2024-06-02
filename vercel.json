@@ -1,5 +1,7 @@
 {
-  "functions": {
-    "uparking/wsgi.py": {}
+  "git": {
+    "deploymentEnabled": {
+      "dev": false
+    }
   }
 }
