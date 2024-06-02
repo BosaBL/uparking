@@ -150,8 +150,8 @@ STATIC_URL = "static/"
 if bool(int(os.getenv("VERCELDEPLOYEMENT", 0))):
     STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
-    GDAL_LIBRARY_PATH = "libgdal.so"
-    GEOS_LIBRARY_PATH = "libgeos_c.so.1"
+    #GDAL_LIBRARY_PATH = "libgdal.so"
+    #GEOS_LIBRARY_PATH = "libgeos_c.so.1"
 
 
 # Default primary key field type
