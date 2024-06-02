@@ -1,9 +1,4 @@
-from django.urls import path, include
-from .views import (
-    VigilanteViewSet,
-    AdminEstacionamientoViewSet,
-    VigilanteEstacionamineintoViewSet,
-)
+from .views import VigilanteViewSet, EstacionamientoViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -14,13 +9,8 @@ router.register(
 )
 router.register(
     r"estacionamientos",
-    AdminEstacionamientoViewSet,
+    EstacionamientoViewSet,
     basename="estacionamiento",
-)
-router.register(
-    r"vigilante/estacionamientos",
-    VigilanteEstacionamineintoViewSet,
-    basename="vigilante-estacionamiento",
 )
 
 urlpatterns = router.urls

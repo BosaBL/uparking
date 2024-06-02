@@ -22,9 +22,3 @@ class EstacionamientoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estacionamiento
         fields = "__all__"
-
-
-class EstacionamientoUpdateCurrentCapacitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Estacionamiento
-        fields = ["id", "capacidad"]

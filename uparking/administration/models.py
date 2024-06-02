@@ -1,7 +1,9 @@
-from django.db import models
-from django.contrib.gis.db import models as geo_models
-from django.utils import timezone
 from django.conf import settings
+from django.contrib.gis.db import models as geo_models
+from django.contrib.gis.geos import Polygon
+from django.db import models
+from django.utils import timezone
+from rest_framework.exceptions import ValidationError
 
 
 class Sede(models.Model):
@@ -25,6 +27,31 @@ class Estacionamiento(models.Model):
     capacidad = models.PositiveIntegerField(default=0)
     capacidad_max = models.PositiveIntegerField(default=0)
     area_espacio = geo_models.PolygonField(null=False)
+
+    def increment_capacity(self, increment):
+        self.capacidad += increment
+        self.save()
+
+    def decrease_capacity(self, increment):
+        self.capacidad -= increment
+        self.save()
+
+    def clean(self):
+        """
+        Constraints to mantain database integrity, in this case, checking that capacidad field is inside the expected range.
+        """
+        if self.capacidad > self.capacidad_max:
+            raise ValidationError(
+                {"capacidad": "capacidad can't be greater than capacidad_max."}
+            )
+        if self.capacidad < 0:
+            raise ValidationError({"capacidad": "capacidad can't be less than 0."})
+
+    def save(self, *args, **kwargs):
+        for i in self.area_espacio:
+            print(i)
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class VigilanteNotifica(models.Model):

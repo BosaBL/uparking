@@ -15,16 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.contrib import admin
-from django.urls import path, include, URLResolver, URLPattern
-from typing import List, Union
-from .settings import DEBUG
 from os import getenv
+from typing import List, Union
 
+from django.contrib import admin
+from django.urls import URLPattern, URLResolver, include, path
+
+from .settings import DEBUG
 
 urlpatterns: List[Union[URLPattern, URLResolver]] = [
     path("auth/", include("uparking.authentication.urls")),
+    path("api/", include("uparking.user.urls")),
     path("api/admin/", include("uparking.administration.urls")),
+    path("api/vigilante/", include("uparking.vigilante.urls")),
 ]
 
 # DEV SETTINGS

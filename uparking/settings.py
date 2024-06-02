@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
+from typing import Any, Dict
+
 from dotenv import load_dotenv
-from typing import Dict, Any
 
 load_dotenv()
 
@@ -47,10 +49,13 @@ INSTALLED_APPS = [
     "django.contrib.gis",
     # DRF
     "rest_framework",
+    "rest_framework_gis",
     "rest_framework.authtoken",
     # APPS
     "uparking.authentication",
     "uparking.administration",
+    "uparking.user",
+    "uparking.vigilante",
     # AUTH
     "dj_rest_auth",
     "django.contrib.sites",
@@ -170,6 +175,7 @@ REST_AUTH = {
     "REGISTER_SERIALIZER": "uparking.authentication.serializers.RegisterSerializer",
 }
 
+
 # AUTHENTICATION SETTINGS
 AUTH_USER_MODEL = "authentication.CustomUser"
 
@@ -190,4 +196,13 @@ if DEBUG:
         "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
         "REDOC_DIST": "SIDECAR",
         # OTHER SETTINGS
+    }
+
+    # SIMPLE_JWT
+    """
+    Increased token lifetimes for user development testing purposes
+    """
+    SIMPLE_JWT = {
+        "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
+        "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     }
