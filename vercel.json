@@ -5,10 +5,11 @@
       "dev": false
     }
   },
-   "functions": {
-    "uparking/wsgi.py": {
+  "functions": {
+    "api/index.py": {
       "runtime": "vercel-python-gis@1.0.0",
-    },
+    }
+  },
   "builds": [
     {
       "src": "uparking/wsgi.py",
@@ -26,6 +27,7 @@
       }
     }
   ],
+  
   "routes": [
     {
       "src": "/static/(.*)",
