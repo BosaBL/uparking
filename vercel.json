@@ -1,16 +1,32 @@
 {
+  "version": 2,
   "git": {
     "deploymentEnabled": {
       "dev": false
     }
   },
-  "rewrites": [
-    { "source": "/static", "destination": "/static" },
-    { "source": "/(.*)", "destination": "uparking/wsgi.py" }
-  ],
-  "functions": {
-    "uparking/wsgi.py": {
-      "runtime": "vercel-python-gis@1.0.0"
+  "builds": [
+    {
+      "src": "uparking/wsgi.py",
+      "use": "vercel-python-gis@1.0.0",
+      "config": { "maxLambdaSize": "15mb"}
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "/staticfiles_build"
+      }
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/uparking/wsgi.py"
+    }
+  ]
 }
