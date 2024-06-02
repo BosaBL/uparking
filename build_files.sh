@@ -2,6 +2,10 @@
 
 ls -a
 
+cd ..
+
+ls -a
+
 echo "Deployement started..."
 
 python3 -m venv venv
