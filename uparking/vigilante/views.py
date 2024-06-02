@@ -1,8 +1,9 @@
 from rest_framework import mixins, viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from uparking.administration.models import Estacionamiento
+from uparking.administration.permissions import IsVigilante
 
 from .serializers import (
     AnyValueUpdateEstacionamientoCapacidadSerializer,
@@ -16,7 +17,7 @@ class IncreaseCapacityViewset(viewsets.GenericViewSet):
 
     queryset = Estacionamiento.objects.all()
     serializer_class = SingleValueUpdateEstacionamientoCapacidadSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsVigilante]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -39,7 +40,7 @@ class DecreaseCapacityViewset(viewsets.GenericViewSet):
 
     queryset = Estacionamiento.objects.all()
     serializer_class = SingleValueUpdateEstacionamientoCapacidadSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsVigilante]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -61,5 +62,5 @@ class DecreaseCapacityViewset(viewsets.GenericViewSet):
 class UpdateCapacityViewset(viewsets.GenericViewSet, mixins.UpdateModelMixin):
     queryset = Estacionamiento.objects.all()
     serializer_class = AnyValueUpdateEstacionamientoCapacidadSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsVigilante]
     http_method_names = ["put"]

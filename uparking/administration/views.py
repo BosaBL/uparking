@@ -19,5 +19,4 @@ class EstacionamientoViewSet(viewsets.ModelViewSet):
 
     queryset = Estacionamiento.objects.all()
     serializer_class = EstacionamientoSerializer
-    # permission_classes = [IsAuthenticated, IsAdministrator]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsAdministrator]
