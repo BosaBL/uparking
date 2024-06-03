@@ -35,7 +35,7 @@ SECRET_KEY = "django-insecure-@gk5+*hw1qz+95x-%9165kf5*t^(8o3hj_*_94x45#(qn+#8ha
 DOCKER_CONTAINER = bool(int(os.getenv("DOCKER_CONTAINER", 0)))
 DEBUG = bool(int(os.getenv("DEV", 0)))
 
-ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".csep.dev"]
+ALLOWED_HOSTS = ["*", "127.0.0.1", ".vercel.app", ".csep.dev"]
 
 
 # Application definition
@@ -147,7 +147,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 # Default primary key field type
@@ -205,6 +209,7 @@ if DEBUG:
         "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     }
 
+print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 # CONTAINER SETTINGS
 if DOCKER_CONTAINER:
     from glob import glob
