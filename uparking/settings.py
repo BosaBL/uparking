@@ -32,6 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-@gk5+*hw1qz+95x-%9165kf5*t^(8o3hj_*_94x45#(qn+#8ha"
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DOCKER_CONTAINER = bool(int(os.getenv("DOCKER_CONTAINER", 0)))
 DEBUG = bool(int(os.getenv("DEV", 0)))
 
 ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".csep.dev"]
@@ -147,11 +148,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
-if bool(int(os.getenv("VERCELDEPLOYEMENT", 0))):
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
-    #GDAL_LIBRARY_PATH = "libgdal.so"
-    #GEOS_LIBRARY_PATH = "libgeos_c.so.1"
 
 
 # Default primary key field type
@@ -208,3 +204,12 @@ if DEBUG:
         "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
         "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     }
+
+# CONTAINER SETTINGS
+if DOCKER_CONTAINER:
+    from glob import glob
+
+    print("Running in container")
+
+    GDAL_LIBRARY_PATH = glob("/usr/lib/libgdal.so.*")[0]
+    GEOS_LIBRARY_PATH = glob("/usr/lib/libgeos_c.so.*")[0]
