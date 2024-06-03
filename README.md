@@ -18,12 +18,18 @@ En particular este repositorio consta del backend del proyecto, donde el princip
 > Es necesaria la creación de un archivo para las variables de entorno, en este archivo se guardarán las credenciales locales para la base de datos de postgres, crear el archivo en el directorio base del repositorio.
 >
 > ```shell
-> POSTGRES_DATABASE=nombre_base_de_datos
-> POSTGRES_USER=nombre_usuario
-> POSTGRES_PASSWORD=contrasena
-> POSTGRES_HOST=localhost
+> # POSTGRES CONFIGURATION
+> POSTGRES_USER=pg_user
+> POSTGRES_PASSWORD=pg_password
+> POSTGRES_DB=db_name
+>
+> # PGADMIN
+> PGADMIN_DEFAULT_EMAIL=pgadmin_email
+> PGADMIN_DEFAULT_PASSWORD=pgadmin_password
+>
+> # DEVELOPMENT
 > DEV=1
-> VERCELDEPLOYEMENT=0
+> DOCKER_CONTAINER=0
 > ```
 
 > [!TIP]
