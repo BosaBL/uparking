@@ -16,13 +16,12 @@ psycopg-binary = "^3.1.19"
 dj-rest-auth = {extras = ["with-social"], version = "^6.0.0"}
 djangorestframework-simplejwt = "^5.3.1"
 drf-spectacular = {extras = ["sidecar"], version = "^0.27.2"}
-python-lsp-isort = "^0.1"
 djangorestframework-gis = "^1.0"
 uvicorn = "^0.30.1"
 gunicorn = "^22.0.0"
 
-
 [tool.poetry.group.dev.dependencies]
+python-lsp-isort = "^0.1"
 pre-commit = "^3.7.1"
 pylsp-mypy = "^0.6.8"
 python-lsp-server = {extras = ["all"], version = "^1.11.0"}
