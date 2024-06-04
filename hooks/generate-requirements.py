@@ -1,10 +1,11 @@
-import subprocess
 import pathlib
+import subprocess
 
 
 def main():
-    SRC_PATH = pathlib.Path().cwd()
-    out = subprocess.run(
+    BASE_PATH = pathlib.Path().cwd()
+    SRC_PATH = BASE_PATH / "src"
+    subprocess.run(
         [
             "poetry",
             "export",
