@@ -105,7 +105,7 @@ WSGI_APPLICATION = "uparking.wsgi.app"
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": os.environ.get("POSTGRES_DATABASE"),
+        "NAME": os.environ.get("POSTGRES_DB"),
         "USER": os.environ.get("POSTGRES_USER"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
         "HOST": os.environ.get("POSTGRES_HOST"),
@@ -209,7 +209,6 @@ if DEBUG:
         "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     }
 
-print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 # CONTAINER SETTINGS
 if DOCKER_CONTAINER:
     from glob import glob
