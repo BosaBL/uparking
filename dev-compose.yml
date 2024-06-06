@@ -3,7 +3,12 @@ services:
     build:
       context: ./backend
       dockerfile: ./env.dockerfile
-    restart: always
+    # restart: always
+    develop:
+      watch:
+        - action: sync
+          path: ./backend/
+          target: ./
     volumes:
       - ./static_volume/:/staticfiles/
     ports:
@@ -18,7 +23,7 @@ services:
           python manage.py makemigrations --merge &&
           python manage.py migrate &&
           python manage.py collectstatic --no-input &&
-          gunicorn uparking.wsgi:app --bind 0.0.0.0:8000"
+          gunicorn uparking.wsgi:app --bind 0.0.0.0:8000 --reload --log-level debug --capture-output"
 
   database:
     image: "postgis/postgis"
@@ -29,6 +34,22 @@ services:
       - .env
     volumes:
       - ./volumes/db-data/:/var/lib/postgresql/data/
+    logging:
+      driver: none
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: uparking_pgadmin
+    ports:
+      - 15433:80
+    env_file:
+      - .env
+    depends_on:
+      - database
+    volumes:
+      - ./volumes/pgadmin-data/:/var/lib/pgadmin/
+    logging:
+      driver: none
 
   nginx:
     image: nginx:latest
@@ -40,6 +61,8 @@ services:
       - ./static_volume/:/staticfiles/
     depends_on:
       - app
+    logging:
+      driver: none
 
 volumes:
   static_volume:

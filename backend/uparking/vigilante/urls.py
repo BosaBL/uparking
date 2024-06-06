@@ -1,7 +1,8 @@
 from rest_framework.routers import DefaultRouter
 
 from .views import (DecreaseCapacityViewset, IncreaseCapacityViewset,
-                    NotificacionViewset, UpdateCapacityViewset)
+                    NotificacionViewset, PatentesViewset,
+                    UpdateCapacityViewset)
 
 router = DefaultRouter()
 router.register(
@@ -12,5 +13,6 @@ router.register(
 )
 router.register(r"update-capacidad", UpdateCapacityViewset, basename="update-capacidad")
 router.register(r"notificaciones", NotificacionViewset, basename="notificaciones")
+router.register(r"patentes", PatentesViewset, basename="patentes")
 
 urlpatterns = router.urls

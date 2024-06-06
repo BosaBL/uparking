@@ -5,8 +5,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
-from uparking.administration.models import Estacionamiento, VigilanteNotifica
+from uparking.administration.models import (Estacionamiento, Vehiculo,
+                                            VigilanteNotifica)
 from uparking.administration.permissions import IsVigilante
+from uparking.user.serializers import ShortUserSerializer, VehiculoSerializer
 from uparking.vigilante.permissions import IsNotificacionOwner
 from uparking.vigilante.serializers import NotificacionSerializer
 
@@ -50,7 +52,6 @@ class DecreaseCapacityViewset(viewsets.GenericViewSet):
         instance = self.get_object()
         instance.decrease_capacity(1)
         serializer = self.get_serializer(instance)
-
         if getattr(instance, "_prefetched_objects_cache", None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
@@ -81,3 +82,14 @@ class NotificacionViewset(
 
     def get_queryset(self):
         return VigilanteNotifica.objects.filter(vigilante=self.request.user)
+
+
+class PatentesViewset(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+):
+
+    queryset = Vehiculo.objects.all()
+    serializer_class = VehiculoSerializer
+    permission_classes = [IsAuthenticated, IsVigilante]

@@ -3,7 +3,8 @@ from dataclasses import fields
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
 
-from uparking.administration.models import Estacionamiento, VigilanteNotifica
+from uparking.administration.models import (Estacionamiento, Vehiculo,
+                                            VigilanteNotifica)
 
 
 class SingleValueUpdateEstacionamientoCapacidadSerializer(serializers.ModelSerializer):
@@ -48,3 +49,11 @@ class NotificacionSerializer(serializers.ModelSerializer):
         validated_data["vigilante"] = user
 
         return super().create(validated_data)
+
+
+class PatentesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Vehiculo
+        fields = ["patente"]
+        read_only_field = ["patente"]

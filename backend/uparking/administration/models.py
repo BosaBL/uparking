@@ -13,7 +13,7 @@ class Sede(models.Model):
 
 
 class Vehiculo(models.Model):
-    patente = models.CharField(primary_key=True, max_length=6)
+    patente = models.CharField(max_length=6, unique=True)
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     color = models.CharField(max_length=20)
     fabricante = models.CharField(max_length=10)
