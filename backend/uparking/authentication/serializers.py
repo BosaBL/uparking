@@ -1,14 +1,15 @@
-from .models import CustomUser
+from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
-from .utils import check_rut
 
+from .models import CustomUser
+from .utils import check_rut
 
 try:
     from allauth.account import app_settings as allauth_account_settings
     from allauth.account.adapter import get_adapter
     from allauth.account.utils import setup_user_email
     from allauth.socialaccount.helpers import complete_social_login
-    from allauth.socialaccount.models import SocialAccount, EmailAddress
+    from allauth.socialaccount.models import EmailAddress, SocialAccount
     from allauth.socialaccount.providers.base import AuthProcess
     from allauth.utils import get_username_max_length
 except ImportError:
@@ -93,3 +94,18 @@ class RegisterSerializer(serializers.Serializer):
         self.custom_signup(request, user)
         setup_user_email(request, user, [])
         return user
+
+
+class CustomUserDetailsSerializer(UserDetailsSerializer):
+
+    class Meta(UserDetailsSerializer.Meta):
+        extra_fields = UserDetailsSerializer.Meta.extra_fields + [
+            "rut",
+            "p_nombre",
+            "s_nombre",
+            "p_apellido",
+            "s_apellido",
+            "rol",
+        ]
+        fields = UserDetailsSerializer.Meta.fields + (*extra_fields,)
+        read_only_fields = ("",)

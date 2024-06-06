@@ -179,6 +179,7 @@ REST_FRAMEWORK: Dict[str, Any] = {
 REST_AUTH = {
     "USE_JWT": True,
     "REGISTER_SERIALIZER": "uparking.authentication.serializers.RegisterSerializer",
+    "USER_DETAILS_SERIALIZER": "uparking.authentication.serializers.CustomUserDetailsSerializer",
 }
 
 
