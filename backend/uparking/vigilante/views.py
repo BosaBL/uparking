@@ -1,14 +1,17 @@
+from asyncio.tasks import create_task
+
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 
-from uparking.administration.models import Estacionamiento
+from uparking.administration.models import Estacionamiento, VigilanteNotifica
 from uparking.administration.permissions import IsVigilante
+from uparking.vigilante.permissions import IsNotificacionOwner
+from uparking.vigilante.serializers import NotificacionSerializer
 
-from .serializers import (
-    AnyValueUpdateEstacionamientoCapacidadSerializer,
-    SingleValueUpdateEstacionamientoCapacidadSerializer,
-)
+from .serializers import (AnyValueUpdateEstacionamientoCapacidadSerializer,
+                          SingleValueUpdateEstacionamientoCapacidadSerializer)
 
 # Create your views here.
 
@@ -64,3 +67,17 @@ class UpdateCapacityViewset(viewsets.GenericViewSet, mixins.UpdateModelMixin):
     serializer_class = AnyValueUpdateEstacionamientoCapacidadSerializer
     permission_classes = [IsAuthenticated, IsVigilante]
     http_method_names = ["put"]
+
+
+class NotificacionViewset(
+    viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+):
+
+    serializer_class = NotificacionSerializer
+    permission_classes = [IsAuthenticated, IsVigilante, IsNotificacionOwner]
+
+    def get_queryset(self):
+        return VigilanteNotifica.objects.filter(vigilante=self.request.user)

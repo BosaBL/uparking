@@ -201,6 +201,7 @@ if DEBUG:
         "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
         "REDOC_DIST": "SIDECAR",
         # OTHER SETTINGS
+        "SCHEMA_PATH_PREFIX_INSERT": "api",
     }
 
     # SIMPLE_JWT
