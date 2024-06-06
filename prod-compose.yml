@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: ./src
+      context: ./backend
       dockerfile: ./env.dockerfile
     restart: always
     volumes:
@@ -29,6 +29,18 @@ services:
       - .env
     volumes:
       - ./volumes/db-data/:/var/lib/postgresql/data/
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: uparking_pgadmin
+    ports:
+      - 15433:80
+    env_file:
+      - .env
+    depends_on:
+      - database
+    volumes:
+      - ./volumes/pgadmin-data/:/var/lib/pgadmin/
 
   nginx:
     image: nginx:latest

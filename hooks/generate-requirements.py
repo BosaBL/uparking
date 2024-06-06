@@ -4,7 +4,7 @@ import subprocess
 
 def main():
     BASE_PATH = pathlib.Path().cwd()
-    SRC_PATH = BASE_PATH / "src"
+    SRC_PATH = BASE_PATH / "backend"
     subprocess.run(
         [
             "poetry",
