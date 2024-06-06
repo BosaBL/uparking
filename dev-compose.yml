@@ -3,13 +3,16 @@ services:
     build:
       context: ./src
       dockerfile: ./env.dockerfile
+    restart: always
     volumes:
       - ./static_volume/:/staticfiles/
     ports:
       - 8000:8000
     env_file:
       - .env
-    container_name: backend_container
+    container_name: uparking_backend
+    depends_on:
+      - database
     command: >
       sh -c "python manage.py makemigrations administration authentication &&
           python manage.py makemigrations --merge &&
@@ -19,6 +22,7 @@ services:
 
   database:
     image: "postgis/postgis"
+    container_name: uparking_database
     ports:
       - 15432:5432
     env_file:
@@ -28,6 +32,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: uparking_pgadmin
     ports:
       - 15433:80
     env_file:
@@ -39,6 +44,7 @@ services:
 
   nginx:
     image: nginx:latest
+    container_name: uparking_nginx
     ports:
       - 80:8080
     volumes:
