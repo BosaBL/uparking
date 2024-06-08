@@ -14,14 +14,18 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@hookform/resolvers": "^3.6.0",
     "@tanstack/react-router": "^1.35.3",
     "axios": "^1.7.2",
     "framer-motion": "^11.2.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.5",
+    "react-password-strength-bar": "^0.4.1",
+    "vite-plugin-svgr": "^4.2.0",
     "zod": "^3.23.8",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@tanstack/router-devtools": "^1.35.3",
