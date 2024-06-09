@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
+import { Route as AdminImport } from './routes/_admin'
 import { Route as IndexIndexImport } from './routes/index/index'
 import { Route as AuthAuthRegisterImport } from './routes/_auth/auth.register'
 import { Route as AuthAuthLoginImport } from './routes/_auth/auth.login'
@@ -20,6 +21,11 @@ import { Route as AuthAuthLoginImport } from './routes/_auth/auth.login'
 
 const AuthRoute = AuthImport.update({
   id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminRoute = AdminImport.update({
+  id: '/_admin',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -42,6 +48,13 @@ const AuthAuthLoginRoute = AuthAuthLoginImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AdminImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -91,9 +104,13 @@ export const routeTree = rootRoute.addChildren({
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/_admin",
         "/_auth",
         "/index/"
       ]
+    },
+    "/_admin": {
+      "filePath": "_admin.tsx"
     },
     "/_auth": {
       "filePath": "_auth.tsx",

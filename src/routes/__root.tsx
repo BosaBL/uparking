@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet, redirect } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
 export const Route = createRootRoute({
@@ -8,7 +8,4 @@ export const Route = createRootRoute({
       <TanStackRouterDevtools position="bottom-right" />
     </>
   ),
-  notFoundComponent: () => {
-    return <p>This is the notFoundComponent configured on root route</p>;
-  },
 });

@@ -9,27 +9,25 @@ import {
   Input,
   Link as ChakraLink,
   Stack,
-  Alert,
   useColorModeValue,
-  AlertIcon,
-  AlertDescription,
   InputGroup,
   InputRightElement,
   Text,
   Box,
-  Colors,
 } from '@chakra-ui/react';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
-import { Link, Navigate, useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import { loginRequest } from '../../api/auth';
 import { LoginFormData } from './types';
 import { useAuthStore } from '../../stores/auth';
 import { Logo } from '../../assets/logo';
+import useUpdatableToast from '../hooks/useUpdatableToast';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { addToast, updateToast } = useUpdatableToast(5000, true);
   const {
     setAccessToken,
     setRefreshToken,
@@ -41,19 +39,28 @@ export default function Login() {
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
-    setError,
+    formState: { isSubmitting },
   } = useForm<LoginFormData>();
 
   const onSubmit = async (values: LoginFormData) => {
     try {
+      addToast({
+        status: 'loading',
+        title: 'Iniciadon sesión',
+        description: 'Validando credenciales...',
+      });
       const response = await loginRequest(values.email, values.password);
-
       logout();
       setAccessToken(response.data.access);
       setRefreshToken(response.data.refresh);
       setUserData(response.data.user);
       setIsisAuthenticated(true);
+
+      updateToast({
+        status: 'success',
+        title: 'Sesión iniciada',
+        description: 'Bienvenido de vuelta',
+      });
 
       if (response.data.user.rol === 'admin') {
         navigate({ to: '/admin' });
@@ -63,9 +70,10 @@ export default function Login() {
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.status === 400) {
-          setError('root.serverError', {
-            type: err.response.status.toString(),
-            message: 'Credenciales incorrectas, revise bien.',
+          updateToast({
+            status: 'error',
+            title: 'Error',
+            description: 'Credenciales inválidas',
           });
         }
       }
@@ -122,17 +130,8 @@ export default function Login() {
                   justify="space-between"
                 >
                   <Checkbox>Recordar</Checkbox>
-                  <Text color="blue.600">Olvidaste tu contraseña?</Text>
                 </Stack>
                 <Stack spacing={2}>
-                  {errors.root?.serverError && (
-                    <Alert status="error">
-                      <AlertIcon />
-                      <AlertDescription>
-                        {errors.root?.serverError.message}
-                      </AlertDescription>
-                    </Alert>
-                  )}
                   <Button
                     isLoading={isSubmitting}
                     type="submit"
@@ -143,7 +142,7 @@ export default function Login() {
                       bg: 'blue.700',
                     }}
                   >
-                    Sign in
+                    Ingresar
                   </Button>
                   <Text>
                     No tienes una cuenta?{' '}

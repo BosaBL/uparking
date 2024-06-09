@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -23,17 +23,17 @@ import zxcvbn from 'zxcvbn';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useForm, useWatch } from 'react-hook-form';
-import { AxiosError } from 'axios';
 import { z } from 'zod';
-import { loginRequest } from '../../api/auth';
-import { LoginFormData } from './types';
-import { useAuthStore } from '../../stores/auth';
-import { Logo } from '../../assets/logo';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterFormType, registerRequest } from '../../api/auth';
+import { Logo } from '../../assets/logo';
 import { checkRut } from '../../utils/rut';
 import PasswordStrengthBar from './PasswordStrength';
+import useUpdatableToast from '../hooks/useUpdatableToast';
 
 export default function Register() {
+  const { addToast, updateToast } = useUpdatableToast(5000, true);
+
   const validationSchema = z
     .object({
       firstName: z.string().refine((value) => /^[a-z ,.'-]+$/i.test(value), {
@@ -66,7 +66,40 @@ export default function Register() {
   } = useForm<SchemaProps>({ resolver: zodResolver(validationSchema) });
 
   const password = useWatch({ control, name: 'password' });
-  const onSubmit = async (values: LoginFormData) => { };
+  const onSubmit = async (values: SchemaProps) => {
+    try {
+      const [pNombre, ...sNombre] = values.firstName.split(' ');
+      const [pApellido, ...sApellido] = values.lastName.split(' ');
+      const formData: RegisterFormType = {
+        rut: values.rut,
+        p_nombre: pNombre,
+        s_nombre: Array.isArray(sNombre) ? sNombre.join(' ') : sNombre,
+        p_apellido: pApellido,
+        s_apellido: Array.isArray(sApellido) ? sApellido.join(' ') : sApellido,
+        email: values.email,
+        password1: values.password,
+        password2: values.repeat_password,
+      };
+      addToast({
+        status: 'loading',
+        title: 'Registrando',
+        description: 'Estamos registrando tu cuenta.',
+      });
+      await registerRequest(formData);
+      updateToast({
+        status: 'success',
+        title: 'Genial!',
+        description: 'Te has registrado correctamente.',
+      });
+      navigate({ to: '/' });
+    } catch (error) {
+      updateToast({
+        status: 'error',
+        title: 'Error',
+        description: 'Hubo un error al registrarte.',
+      });
+    }
+  };
 
   return (
     <Flex
@@ -206,7 +239,7 @@ export default function Register() {
                       bg: 'blue.700',
                     }}
                   >
-                    Sign in
+                    Registrarme
                   </Button>
                   <Text>
                     Ya tienes una cuenta?{' '}
