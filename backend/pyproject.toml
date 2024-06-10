@@ -48,6 +48,8 @@ plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
 
 [tool.pylint.main]
 load-plugins = ["pylint_django"]
+
+[tool.pylint.'DJANGO FOREIGN KEYS REFERENCED BY STRINGS']
 django-settings-module="uparking.settings"
 
 [tool.pylint.messages_control]

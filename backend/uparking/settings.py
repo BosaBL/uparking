@@ -11,6 +11,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import logging
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -23,6 +24,7 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+logger = logging.getLogger(__name__)
 
 USE_X_FORWARDED_HOST = True
 FORCE_SCRIPT_NAME = "/api/"
@@ -205,6 +207,8 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 # DEV DOC SETTINGS
 if DEBUG:
+    logger.warning("RUNNING AS DEVELOPMENT MODE")
+
     INSTALLED_APPS += ["drf_spectacular", "drf_spectacular_sidecar"]
     REST_FRAMEWORK[
         "DEFAULT_SCHEMA_CLASS"
@@ -230,7 +234,7 @@ if DEBUG:
 if DOCKER_CONTAINER:
     from glob import glob
 
-    print("Running in container")
+    logger.warning("RUNNING INSIDE A CONTAINER")
 
     GDAL_LIBRARY_PATH = glob("/usr/lib/libgdal.so.*")[0]
     GEOS_LIBRARY_PATH = glob("/usr/lib/libgeos_c.so.*")[0]
