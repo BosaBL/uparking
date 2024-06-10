@@ -14,7 +14,9 @@ class Sede(models.Model):
 
 class Vehiculo(models.Model):
     patente = models.CharField(max_length=6, unique=True)
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
     color = models.CharField(max_length=20)
     fabricante = models.CharField(max_length=10)
     descripcion = models.TextField()
@@ -45,7 +47,9 @@ class Estacionamiento(models.Model):
                 {"capacidad": "capacidad can't be greater than capacidad_max."}
             )
         if self.capacidad < 0:
-            raise ValidationError({"capacidad": "capacidad can't be less than 0."})
+            raise ValidationError(
+                {"capacidad": "capacidad can't be less than 0."}
+            )
 
     def save(self, *args, **kwargs):
         for i in self.area_espacio:
@@ -55,9 +59,13 @@ class Estacionamiento(models.Model):
 
 
 class VigilanteNotifica(models.Model):
-    vigilante = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    vigilante = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
     vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
-    estacionamiento = models.ForeignKey(Estacionamiento, on_delete=models.CASCADE)
+    estacionamiento = models.ForeignKey(
+        Estacionamiento, on_delete=models.CASCADE
+    )
     mensaje = models.TextField()
     # imagen = models.ImageField()
     leido = models.BooleanField(default=False)

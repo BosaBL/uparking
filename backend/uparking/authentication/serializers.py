@@ -1,7 +1,6 @@
 from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 
-from .models import CustomUser
 from .utils import check_rut
 
 try:
@@ -20,11 +19,19 @@ class RegisterSerializer(serializers.Serializer):
     username = None
     rut = serializers.CharField(max_length=15, required=True)
     p_nombre = serializers.CharField(max_length=50, required=True)
-    s_nombre = serializers.CharField(max_length=50, required=False, allow_blank=True)
+    s_nombre = serializers.CharField(
+        max_length=50, required=False, allow_blank=True
+    )
     p_apellido = serializers.CharField(max_length=50, required=True)
-    s_apellido = serializers.CharField(max_length=50, required=False, allow_blank=True)
-    email = serializers.EmailField(required=allauth_account_settings.EMAIL_REQUIRED)
-    telefono = serializers.CharField(max_length=15, required=False, allow_blank=True)
+    s_apellido = serializers.CharField(
+        max_length=50, required=False, allow_blank=True
+    )
+    email = serializers.EmailField(
+        required=allauth_account_settings.EMAIL_REQUIRED
+    )
+    telefono = serializers.CharField(
+        max_length=15, required=False, allow_blank=True
+    )
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
 
@@ -46,7 +53,9 @@ class RegisterSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data["password1"] != data["password2"]:
-            raise serializers.ValidationError(("The two password fields didn't match."))
+            raise serializers.ValidationError(
+                ("The two password fields didn't match.")
+            )
         return data
 
     def validate_rut(self, rut):
@@ -80,7 +89,9 @@ class RegisterSerializer(serializers.Serializer):
         user = adapter.save_user(request, user, self, commit=False)
         if "password1" in self.cleaned_data:
             try:
-                adapter.clean_password(self.cleaned_data["password1"], user=user)
+                adapter.clean_password(
+                    self.cleaned_data["password1"], user=user
+                )
             except DjangoValidationError as exc:
                 raise serializers.ValidationError(
                     detail=serializers.as_serializer_error(exc)
