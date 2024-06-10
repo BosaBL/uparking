@@ -16,7 +16,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import { loginRequest } from '../../api/auth';
@@ -27,6 +27,10 @@ import useUpdatableToast from '../hooks/useUpdatableToast';
 
 export default function Login() {
   const navigate = useNavigate();
+  const searchParams = useSearch({ from: '/_auth/auth/login' }) as {
+    redirect?: string;
+  };
+
   const { addToast, updateToast } = useUpdatableToast(5000, true);
   const {
     setAccessToken,
@@ -62,10 +66,10 @@ export default function Login() {
         description: 'Bienvenido de vuelta',
       });
 
-      if (response.data.user.rol === 'admin') {
-        navigate({ to: '/admin' });
+      if (searchParams?.redirect) {
+        navigate({ to: searchParams.redirect, replace: true });
       } else {
-        navigate({ to: '/' });
+        navigate({ to: '/', replace: true });
       }
     } catch (err) {
       if (err instanceof AxiosError) {

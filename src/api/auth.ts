@@ -18,3 +18,11 @@ export const loginRequest = async (email: string, password: string) => {
 export const registerRequest = async (data: RegisterFormType) => {
   return axios.post('/auth/registration/', data);
 };
+
+export const userDataRequest = async () => {
+  return axios.get('/auth/user/');
+};
+
+export const blacklistRequest = async (refresh: string) => {
+  return axios.post('/auth/blacklist/', { refresh });
+};

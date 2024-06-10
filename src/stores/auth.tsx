@@ -11,6 +11,7 @@ export type User = {
   p_apellido: string;
   s_apellido: string;
   rol: string;
+  telefono?: string;
 };
 
 type State = {
@@ -26,6 +27,7 @@ type Actions = {
   setUserData: (data: User) => void;
   setIsisAuthenticated: (value: boolean) => void;
   logout: () => void;
+  getUserData: () => Promise<User | null>;
   checkTokens: (nav?: () => Promise<void>) => Promise<void> | Promise<boolean>;
 };
 
@@ -46,6 +48,22 @@ export const useAuthStore = create(
       setIsisAuthenticated: (value: boolean) =>
         set(() => ({ isAuthenticated: value })),
       logout: () => set(initialState),
+      getUserData: async () => {
+        if (get().refreshToken && get().accessToken && get().isAuthenticated) {
+          await get().checkTokens();
+          try {
+            const res = await axios.get('/auth/user/', {
+              headers: {
+                Authorization: `Bearer ${get().accessToken}`,
+              },
+            });
+            set(() => ({ userData: res.data }));
+          } catch {
+            get().logout();
+          }
+        }
+        return null;
+      },
       checkTokens: async (nav?: () => Promise<void>) => {
         if (!get().accessToken) {
           get().logout();
