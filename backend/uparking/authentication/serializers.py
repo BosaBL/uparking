@@ -20,10 +20,11 @@ class RegisterSerializer(serializers.Serializer):
     username = None
     rut = serializers.CharField(max_length=15, required=True)
     p_nombre = serializers.CharField(max_length=50, required=True)
-    s_nombre = serializers.CharField(max_length=50, required=True)
+    s_nombre = serializers.CharField(max_length=50, required=False, allow_blank=True)
     p_apellido = serializers.CharField(max_length=50, required=True)
-    s_apellido = serializers.CharField(max_length=50, required=True)
+    s_apellido = serializers.CharField(max_length=50, required=False, allow_blank=True)
     email = serializers.EmailField(required=allauth_account_settings.EMAIL_REQUIRED)
+    telefono = serializers.CharField(max_length=15, required=False, allow_blank=True)
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
 
@@ -97,7 +98,6 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class CustomUserDetailsSerializer(UserDetailsSerializer):
-
     class Meta(UserDetailsSerializer.Meta):
         extra_fields = UserDetailsSerializer.Meta.extra_fields + [
             "rut",
@@ -105,7 +105,8 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             "s_nombre",
             "p_apellido",
             "s_apellido",
+            "telefono",
             "rol",
         ]
         fields = UserDetailsSerializer.Meta.fields + (*extra_fields,)
-        read_only_fields = ("",)
+        read_only_fields = ("rut", "rol")

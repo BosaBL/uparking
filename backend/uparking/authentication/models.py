@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
 from .managers import CustomUserManager
 
 
@@ -15,10 +16,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
     rut = models.CharField(max_length=15, unique=True)
     p_nombre = models.CharField(max_length=50)
-    s_nombre = models.CharField(max_length=50)
+    s_nombre = models.CharField(max_length=50, null=True, blank=True)
     p_apellido = models.CharField(max_length=50)
-    s_apellido = models.CharField(max_length=50)
+    s_apellido = models.CharField(max_length=50, null=True, blank=True)
     rol = models.CharField(max_length=10, default="user", choices=rol_choices)
+    telefono = models.CharField(max_length=15, null=True, blank=True)
 
     # Django defaults
     is_staff = models.BooleanField(default=False)
@@ -29,9 +31,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = [
         "rut",
         "p_nombre",
-        "s_nombre",
         "p_apellido",
-        "s_apellido",
     ]
 
     objects = CustomUserManager()

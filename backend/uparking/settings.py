@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.gis",
-    "corsheaders"
+    "corsheaders",
     # DRF
     "rest_framework",
     "rest_framework_gis",
@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "dj_rest_auth.registration",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 SITE_ID = 1
@@ -86,9 +87,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "uparking.urls"
 
-CORS_ALLOWED_ORIGINS = [
-    "*",
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+CORS_ALLOW_CREDENTIALS = True
 
 TEMPLATES = [
     {
@@ -185,6 +185,7 @@ REST_AUTH = {
     "USE_JWT": True,
     "REGISTER_SERIALIZER": "uparking.authentication.serializers.RegisterSerializer",
     "USER_DETAILS_SERIALIZER": "uparking.authentication.serializers.CustomUserDetailsSerializer",
+    "JWT_AUTH_HTTPONLY": False,
 }
 
 
@@ -216,7 +217,7 @@ if DEBUG:
     Increased token lifetimes for user development testing purposes
     """
     SIMPLE_JWT = {
-        "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
+        "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
         "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     }
 
