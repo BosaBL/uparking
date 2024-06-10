@@ -39,6 +39,10 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 80
 
+[tool.isort]
+line_length = 80
+profile="black"
+
 [tool.mypy]
 plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
 

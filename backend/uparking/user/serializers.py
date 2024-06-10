@@ -6,11 +6,16 @@ from uparking.authentication.models import CustomUser
 
 
 class ShortUserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CustomUser
         fields = ["email", "p_nombre", "s_nombre", "p_apellido", "s_apellido"]
-        read_only_fields = ["email", "p_nombre", "s_nombre", "p_apellido", "s_apellido"]
+        read_only_fields = [
+            "email",
+            "p_nombre",
+            "s_nombre",
+            "p_apellido",
+            "s_apellido",
+        ]
 
 
 class UserNotificationsSerializer(serializers.ModelSerializer):

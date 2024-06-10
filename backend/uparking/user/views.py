@@ -1,11 +1,13 @@
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from uparking.administration.models import (Estacionamiento, Vehiculo,
-                                            VigilanteNotifica)
+from uparking.administration.models import (
+    Estacionamiento,
+    Vehiculo,
+    VigilanteNotifica,
+)
 from uparking.administration.serializers import EstacionamientoSerializer
-from uparking.user.permissions import (IsNotificacionPatenteOwner,
-                                       IsPatenteOwner)
+from uparking.user.permissions import IsNotificacionPatenteOwner, IsPatenteOwner
 from uparking.user.serializers import VehiculoSerializer
 
 from .serializers import UserNotificationsSerializer
@@ -30,7 +32,9 @@ class NotificacionesView(
     permission_classes = [IsAuthenticated, IsNotificacionPatenteOwner]
 
     def get_queryset(self):
-        return VigilanteNotifica.objects.filter(vehiculo__usuario=self.request.user)
+        return VigilanteNotifica.objects.filter(
+            vehiculo__usuario=self.request.user
+        )
 
 
 class VehiculosView(viewsets.ModelViewSet):

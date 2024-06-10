@@ -1,20 +1,24 @@
-from dataclasses import fields
-
 from rest_framework import serializers
-from rest_framework.fields import CurrentUserDefault
 
-from uparking.administration.models import (Estacionamiento, Vehiculo,
-                                            VigilanteNotifica)
+from uparking.administration.models import (
+    Estacionamiento,
+    Vehiculo,
+    VigilanteNotifica,
+)
 
 
-class SingleValueUpdateEstacionamientoCapacidadSerializer(serializers.ModelSerializer):
+class SingleValueUpdateEstacionamientoCapacidadSerializer(
+    serializers.ModelSerializer
+):
     class Meta:
         model = Estacionamiento
         fields = ["id", "capacidad", "capacidad_max"]
         read_only_fields = ["id", "capacidad", "capacidad_max"]
 
 
-class AnyValueUpdateEstacionamientoCapacidadSerializer(serializers.ModelSerializer):
+class AnyValueUpdateEstacionamientoCapacidadSerializer(
+    serializers.ModelSerializer
+):
     class Meta:
         model = Estacionamiento
         fields = ["id", "capacidad", "capacidad_max"]
@@ -22,7 +26,6 @@ class AnyValueUpdateEstacionamientoCapacidadSerializer(serializers.ModelSerializ
 
 
 class NotificacionSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = VigilanteNotifica
         fields = [
@@ -52,7 +55,6 @@ class NotificacionSerializer(serializers.ModelSerializer):
 
 
 class PatentesSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Vehiculo
         fields = ["patente"]
