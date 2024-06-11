@@ -116,6 +116,10 @@ WSGI_APPLICATION = "uparking.wsgi.app"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+print(os.environ.get("POSTGRES_DB"))
+print(os.environ.get("POSTGRES_USER"))
+print(os.environ.get("POSTGRES_PASSWORD"))
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",

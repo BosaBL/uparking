@@ -1,6 +1,8 @@
 from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 
+from uparking.authentication.models import CustomUser
+
 from .utils import check_rut
 
 try:
@@ -42,7 +44,7 @@ class RegisterSerializer(serializers.Serializer):
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
         if allauth_account_settings.UNIQUE_EMAIL:
-            if email and EmailAddress.objects.is_verified(email):
+            if email and CustomUser.objects.filter(email=email).exists():
                 raise serializers.ValidationError(
                     ("A user is already registered with this e-mail address."),
                 )
@@ -64,7 +66,10 @@ class RegisterSerializer(serializers.Serializer):
             check_rut(rut, dv)
             rut = int(rut)
         except:
-            raise serializers.ValidationError("Rut inválido.")
+            raise serializers.ValidationError("Invalid RUT.")
+
+        if CustomUser.objects.filter(rut=rut).exists():
+            raise serializers.ValidationError("RUT is already in use.")
 
         return rut
 

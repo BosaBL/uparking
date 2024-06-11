@@ -1,12 +1,17 @@
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from uparking.administration.models import Sede
 from uparking.administration.serializers import UserSerializer
 from uparking.authentication.models import CustomUser
 
 from .models import Estacionamiento
 from .permissions import IsAdministrator, IsVigilante
-from .serializers import EstacionamientoSerializer, VigilanteSerializer
+from .serializers import (
+    EstacionamientoSerializer,
+    SedeSerializer,
+    VigilanteSerializer,
+)
 
 
 class VigilanteViewSet(viewsets.ModelViewSet):
@@ -27,4 +32,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator]
+
+
+class SedeViewset(viewsets.ModelViewSet):
+
+    queryset = Sede.objects.all()
+    serializer_class = SedeSerializer
     permission_classes = [IsAuthenticated, IsAdministrator]

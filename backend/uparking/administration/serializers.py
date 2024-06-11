@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from uparking.administration.models import Sede
 from uparking.authentication.models import CustomUser
 
 from .models import Estacionamiento
@@ -40,3 +41,10 @@ class UserSerializer(serializers.ModelSerializer):
             "rol",
         ]
         read_only_fields = ["id", "rut", "email"]
+
+
+class SedeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sede
+        fields = "__all__"
+        read_only_fields = ["id"]

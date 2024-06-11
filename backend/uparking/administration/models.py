@@ -52,8 +52,7 @@ class Estacionamiento(models.Model):
             )
 
     def save(self, *args, **kwargs):
-        for i in self.area_espacio:
-            print(i)
+
         self.full_clean()
         super().save(*args, **kwargs)
 
