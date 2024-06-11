@@ -3,8 +3,8 @@ import { User, useAuthStore } from '../stores/auth';
 import Nav from '../components/home/nav';
 
 function Component() {
-  const { userData, getUserData } = useAuthStore();
-  return <Nav user={userData} getUserData={getUserData} />;
+  const { userData, logout } = useAuthStore();
+  return <Nav user={userData} logout={logout} />;
 }
 
 export const Route = createFileRoute('/_home')({
@@ -12,4 +12,5 @@ export const Route = createFileRoute('/_home')({
     useAuthStore.getState().getUserData();
   },
   component: Component,
+  shouldReload: true,
 });

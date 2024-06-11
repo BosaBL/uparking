@@ -14,7 +14,9 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as HomeImport } from './routes/_home'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AdminImport } from './routes/_admin'
+import { Route as IndexImport } from './routes/index'
 import { Route as HomeHomeIndexImport } from './routes/_home/home.index'
+import { Route as HomeHomeUserImport } from './routes/_home/home.user'
 import { Route as AuthAuthRegisterImport } from './routes/_auth/auth.register'
 import { Route as AuthAuthLoginImport } from './routes/_auth/auth.login'
 
@@ -35,8 +37,18 @@ const AdminRoute = AdminImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const IndexRoute = IndexImport.update({
+  path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const HomeHomeIndexRoute = HomeHomeIndexImport.update({
   path: '/home/',
+  getParentRoute: () => HomeRoute,
+} as any)
+
+const HomeHomeUserRoute = HomeHomeUserImport.update({
+  path: '/home/user',
   getParentRoute: () => HomeRoute,
 } as any)
 
@@ -54,6 +66,13 @@ const AuthAuthLoginRoute = AuthAuthLoginImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_admin': {
       id: '/_admin'
       path: ''
@@ -89,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthRegisterImport
       parentRoute: typeof AuthImport
     }
+    '/_home/home/user': {
+      id: '/_home/home/user'
+      path: '/home/user'
+      fullPath: '/home/user'
+      preLoaderRoute: typeof HomeHomeUserImport
+      parentRoute: typeof HomeImport
+    }
     '/_home/home/': {
       id: '/_home/home/'
       path: '/home'
@@ -102,11 +128,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
+  IndexRoute,
   AuthRoute: AuthRoute.addChildren({
     AuthAuthLoginRoute,
     AuthAuthRegisterRoute,
   }),
-  HomeRoute: HomeRoute.addChildren({ HomeHomeIndexRoute }),
+  HomeRoute: HomeRoute.addChildren({ HomeHomeUserRoute, HomeHomeIndexRoute }),
 })
 
 /* prettier-ignore-end */
@@ -117,10 +144,14 @@ export const routeTree = rootRoute.addChildren({
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/",
         "/_admin",
         "/_auth",
         "/_home"
       ]
+    },
+    "/": {
+      "filePath": "index.tsx"
     },
     "/_admin": {
       "filePath": "_admin.tsx"
@@ -135,6 +166,7 @@ export const routeTree = rootRoute.addChildren({
     "/_home": {
       "filePath": "_home.tsx",
       "children": [
+        "/_home/home/user",
         "/_home/home/"
       ]
     },
@@ -145,6 +177,10 @@ export const routeTree = rootRoute.addChildren({
     "/_auth/auth/register": {
       "filePath": "_auth/auth.register.tsx",
       "parent": "/_auth"
+    },
+    "/_home/home/user": {
+      "filePath": "_home/home.user.tsx",
+      "parent": "/_home"
     },
     "/_home/home/": {
       "filePath": "_home/home.index.tsx",

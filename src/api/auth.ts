@@ -1,3 +1,4 @@
+import { UserUpdateDataFormType } from '../components/home/UpdateUserDataForm';
 import axios from '../libs/axiosAuthBearer';
 
 export type RegisterFormType = {
@@ -25,4 +26,8 @@ export const userDataRequest = async () => {
 
 export const blacklistRequest = async (refresh: string) => {
   return axios.post('/auth/blacklist/', { refresh });
+};
+
+export const updateUserDataRequest = async (data: UserUpdateDataFormType) => {
+  return axios.patch('/auth/user/', data);
 };

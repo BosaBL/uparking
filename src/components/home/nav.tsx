@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren, ReactChild, ReactNode } from 'react';
 import {
   IconButton,
   Avatar,
@@ -25,42 +25,82 @@ import {
   Button,
 } from '@chakra-ui/react';
 import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
   FiMenu,
   FiBell,
   FiChevronDown,
   FiUser,
   FiLogIn,
+  FiMap,
+  FiVoicemail,
+  FiMail,
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
-import { Link, Outlet } from '@tanstack/react-router';
+import { Link, Outlet, useRouter } from '@tanstack/react-router';
 import { User, useAuthStore } from '../../stores/auth';
 import useUpdatableToast from '../hooks/useUpdatableToast';
 import { blacklistRequest } from '../../api/auth';
 import { Logo } from '../../assets/logo';
 import Footer from './footer';
+import { FaCommentAlt, FaRegComment } from 'react-icons/fa';
+import { INVALID } from 'zod';
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  url: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
+  { name: 'Mapa', icon: FiMap, url: '/home' },
+  { name: 'Notificaciones', icon: FiBell, url: '/home/notifications' },
+  {
+    name: 'Deja tus sugerencias',
+    icon: FaRegComment,
+    url: '/home/feedback',
+  },
 ];
+
+const LastItem: LinkItemProps = LinkItems.pop();
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
+  user: User | string;
 }
 
-function SidebarContent({ onClose, ...rest }: SidebarProps) {
+interface NavItemProps extends FlexProps {
+  icon: IconType;
+  url: string;
+  children: ReactNode;
+}
+function NavItem({ icon, children, url, ...rest }: NavItemProps) {
+  return (
+    <ChakraLink
+      as={Link}
+      to={url}
+      style={{ textDecoration: 'none' }}
+      _focus={{ boxShadow: 'none' }}
+    >
+      <Flex
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+        _hover={{
+          bg: 'gray.200',
+        }}
+        {...rest}
+      >
+        {icon && <Icon mr="4" fontSize="16" as={icon} />}
+        {children}
+      </Flex>
+    </ChakraLink>
+  );
+}
+
+function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
+  const userData = user === '' ? null : (user as User);
+
   return (
     <Box
       transition="3s ease"
@@ -78,64 +118,37 @@ function SidebarContent({ onClose, ...rest }: SidebarProps) {
         </Box>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))}
-    </Box>
-  );
-}
-
-interface NavItemProps extends FlexProps {
-  icon: IconType;
-  children: ReactText;
-}
-function NavItem({ icon, children, ...rest }: NavItemProps) {
-  return (
-    <Link
-      href="#"
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}
-    >
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
-        {...rest}
+      {LinkItems.map((link) =>
+        link.name !== 'Notificaciones' || user ? (
+          <NavItem key={link.name} icon={link.icon} url={link.url}>
+            {link.name}
+          </NavItem>
+        ) : null
+      )}
+      <NavItem
+        pos="absolute"
+        bottom={0}
+        key={LastItem.name}
+        icon={LastItem.icon}
+        url={LastItem.url}
       >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
+        {LastItem.name}
+      </NavItem>
+    </Box>
   );
 }
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
   user: User | string;
+  logout: () => void;
 }
 
-function MobileNav({ onOpen, user, ...rest }: MobileProps) {
+function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
   const userData = user === '' ? null : (user as User);
-  const { refreshToken, logout } = useAuthStore();
   const { addToast, updateToast } = useUpdatableToast(5000);
+  const { invalidate } = useRouter();
+  const { refreshToken } = useAuthStore();
 
   if (userData) {
     if (userData.rol === 'admin') {
@@ -155,10 +168,10 @@ function MobileNav({ onOpen, user, ...rest }: MobileProps) {
         status: 'loading',
         description: 'Cerrando sesión...',
       });
-      const res = await blacklistRequest(refreshToken);
-      console.log(res);
+      await blacklistRequest(refreshToken);
       updateToast({ status: 'success', description: 'Sesión cerrada.' });
       logout();
+      invalidate();
     } catch {
       updateToast({ status: 'error', description: 'Error al cerrar sesión.' });
     }
@@ -175,6 +188,8 @@ function MobileNav({ onOpen, user, ...rest }: MobileProps) {
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent={{ base: 'space-between', md: 'flex-end' }}
       {...rest}
+      pr="8"
+      pl="8"
     >
       <IconButton
         display={{ base: 'flex', md: 'none' }}
@@ -229,7 +244,7 @@ function MobileNav({ onOpen, user, ...rest }: MobileProps) {
         </>
       )}
       {userData && (
-        <HStack spacing={{ base: '0', md: '6' }}>
+        <HStack spacing={{ base: '0', md: '0' }}>
           <IconButton
             size="lg"
             variant="ghost"
@@ -267,7 +282,9 @@ function MobileNav({ onOpen, user, ...rest }: MobileProps) {
                 bg={useColorModeValue('white', 'gray.900')}
                 borderColor={useColorModeValue('gray.200', 'gray.700')}
               >
-                <MenuItem>Mis datos</MenuItem>
+                <MenuItem as={Link} to="/home/user">
+                  Mis datos
+                </MenuItem>
                 <MenuDivider />
                 <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
               </MenuList>
@@ -281,15 +298,16 @@ function MobileNav({ onOpen, user, ...rest }: MobileProps) {
 
 type NavPropsType = {
   user: User | string;
-  getUserData: () => void;
+  logout: () => void;
 };
 
-export default function Nav({ user, getUserData }: NavPropsType) {
+export default function Nav({ user, logout }: NavPropsType) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent
         onClose={() => onClose}
+        user={user}
         display={{ base: 'none', md: 'block' }}
       />
       <Drawer
@@ -302,15 +320,16 @@ export default function Nav({ user, getUserData }: NavPropsType) {
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} user={user} />
         </DrawerContent>
       </Drawer>
-      <Stack minH="100vh">
-        <MobileNav onOpen={onOpen} user={user} />
+      <Stack minH="100vh" gap="0">
+        <MobileNav onOpen={onOpen} user={user} logout={logout} />
         <Stack
           background="white"
           ml={{ base: 4, md: 64 }}
           m="4"
+          p="4"
           rounded="lg"
           flex="1 1 auto"
         >

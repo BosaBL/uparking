@@ -10,8 +10,8 @@ export type User = {
   s_nombre: string;
   p_apellido: string;
   s_apellido: string;
+  telefono: string | null;
   rol: string;
-  telefono?: string;
 };
 
 type State = {

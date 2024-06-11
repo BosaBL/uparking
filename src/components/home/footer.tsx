@@ -48,7 +48,7 @@ function SocialButton({
 export default function Footer(props: ChakraProps) {
   return (
     <Box
-      bg={useColorModeValue('gray.50', 'gray.900')}
+      bg="white"
       color={useColorModeValue('gray.700', 'gray.200')}
       {...props}
     >
@@ -91,7 +91,9 @@ export default function Footer(props: ChakraProps) {
           justify={{ base: 'center', md: 'space-between' }}
           align={{ base: 'center', md: 'center' }}
         >
-          <Text>© 2024 Proyecto UParking. Derechos reservados</Text>
+          <Text textAlign={{ base: 'center', md: 'left' }}>
+            © 2024 Proyecto UParking. Derechos reservados
+          </Text>
           <Stack direction="row" spacing={6}>
             <SocialButton label="Twitter" href="#">
               <FaTwitter />
