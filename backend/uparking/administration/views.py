@@ -1,3 +1,5 @@
+from venv import create
+
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -8,8 +10,9 @@ from uparking.authentication.models import CustomUser
 from .models import Estacionamiento
 from .permissions import IsAdministrator, IsVigilante
 from .serializers import (
+    CreateSedeSerializer,
     EstacionamientoSerializer,
-    SedeSerializer,
+    UpdateSedeSerializer,
     VigilanteSerializer,
 )
 
@@ -38,5 +41,12 @@ class UserViewSet(viewsets.ModelViewSet):
 class SedeViewset(viewsets.ModelViewSet):
 
     queryset = Sede.objects.all()
-    serializer_class = SedeSerializer
+    serializer_class = CreateSedeSerializer
     permission_classes = [IsAuthenticated, IsAdministrator]
+
+    def get_serializer_class(self):
+        return (
+            CreateSedeSerializer
+            if self.action == "create"
+            else UpdateSedeSerializer
+        )

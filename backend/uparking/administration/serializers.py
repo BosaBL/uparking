@@ -43,7 +43,13 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "rut", "email"]
 
 
-class SedeSerializer(serializers.ModelSerializer):
+class CreateSedeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sede
+        fields = "__all__"
+
+
+class UpdateSedeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sede
         fields = "__all__"
