@@ -112,20 +112,15 @@ export default function UpdateUserDataForm() {
       bg={useColorModeValue('gray.50', 'gray.800')}
     >
       <Stack spacing={0} mx="auto" maxW="xl" w="xl" py={12} px={6}>
-        <HStack alignContent="space-between">
-          <Heading fontSize={{ base: '2xl', sm: '4xl' }} width="50%">
-            Mis datos
-          </Heading>
-          <Box width="50%">
-            <Logo color="var(--chakra-colors-blue-600)" />
-          </Box>
-        </HStack>
         <Box
           rounded="lg"
           bg={useColorModeValue('white', 'gray.600')}
           boxShadow="lg"
           p={8}
         >
+          <Heading pb={8} fontSize={{ base: '2xl', sm: '2xl' }} width="50%">
+            Mis datos
+          </Heading>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <Stack direction={['column', 'row']}>
@@ -209,6 +204,7 @@ export default function UpdateUserDataForm() {
               </FormControl>
               <Stack direction={['column', 'row']}>
                 <Button
+                  colorScheme={!editing ? 'gray' : 'blue'}
                   onClick={() => {
                     if (!editing) {
                       setEditing(true);

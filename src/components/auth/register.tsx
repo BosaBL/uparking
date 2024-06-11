@@ -30,6 +30,7 @@ import { Logo } from '../../assets/logo';
 import { checkRut } from '../../utils/rut';
 import PasswordStrengthBar from './PasswordStrength';
 import useUpdatableToast from '../hooks/useUpdatableToast';
+import { AxiosError } from 'axios';
 
 export default function Register() {
   const { addToast, updateToast } = useUpdatableToast(5000, true);
@@ -62,6 +63,7 @@ export default function Register() {
     handleSubmit,
     register,
     control,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<SchemaProps>({ resolver: zodResolver(validationSchema) });
 
@@ -92,12 +94,27 @@ export default function Register() {
         description: 'Te has registrado correctamente.',
       });
       navigate({ to: '/' });
-    } catch (error) {
+    } catch (err) {
+      const error = err as AxiosError;
+      const rutError = error?.response.data.rut as string;
+      const emailError = error?.response.data.rut as string;
       updateToast({
         status: 'error',
         title: 'Error',
         description: 'Hubo un error al registrarte.',
       });
+      if (rutError) {
+        setError('rut', {
+          type: 'server',
+          message: 'Este RUT ya se encuentra registrado.',
+        });
+      }
+      if (emailError) {
+        setError('email', {
+          type: 'server',
+          message: 'Este email ya se encuentra registrado.',
+        });
+      }
     }
   };
 
@@ -108,9 +125,8 @@ export default function Register() {
       justify="center"
       bg={useColorModeValue('gray.50', 'gray.800')}
     >
-      <Stack spacing={8} mx="auto" maxW="xl" w="xl" py={12} px={6}>
+      <Stack spacing={4} mx="auto" maxW="xl" w="xl" px={6}>
         <Stack align="center">
-          <Heading fontSize="4xl">Regístrate</Heading>
           <Box width="100%">
             <Logo color="var(--chakra-colors-blue-600)" />
           </Box>
@@ -121,6 +137,9 @@ export default function Register() {
           boxShadow="lg"
           p={8}
         >
+          <Heading fontSize="2xl" pb={8}>
+            Regístrate
+          </Heading>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <Stack direction={['column', 'row']}>
@@ -154,7 +173,7 @@ export default function Register() {
                       {...register('lastName')}
                     />
                     <FormErrorMessage>
-                      {errors?.firstName?.message}
+                      {errors?.lastName?.message}
                     </FormErrorMessage>
                   </FormControl>
                 </Box>
@@ -175,7 +194,7 @@ export default function Register() {
                   type="email"
                   {...register('email')}
                 />
-                <FormErrorMessage>{errors?.rut?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={Boolean(errors?.password)} id="password">
                 <FormLabel>Contraseña</FormLabel>
@@ -203,6 +222,7 @@ export default function Register() {
                   shortScoreWord="Muy corta"
                   password={password}
                 />
+                <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
               </FormControl>
               <FormControl
                 isInvalid={Boolean(errors?.repeat_password)}
@@ -212,6 +232,7 @@ export default function Register() {
                 <InputGroup>
                   <Input
                     placeholder="contraseña"
+                    type="password"
                     {...register('repeat_password')}
                   />
                 </InputGroup>

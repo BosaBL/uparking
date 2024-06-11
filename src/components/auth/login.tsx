@@ -93,7 +93,6 @@ export default function Login() {
     >
       <Stack spacing={8} mx="auto" maxW="lg" py={12} px={6}>
         <Stack align="center">
-          <Heading fontSize="4xl">Ingresa a tu cuenta</Heading>
           <Box width="100%">
             <Logo color="var(--chakra-colors-blue-600)" />
           </Box>
@@ -104,6 +103,9 @@ export default function Login() {
           boxShadow="lg"
           p={8}
         >
+          <Heading textAlign="center" pb={8} fontSize="2xl">
+            Ingresa a tu cuenta
+          </Heading>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <FormControl id="email">
