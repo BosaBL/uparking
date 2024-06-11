@@ -1,60 +1,46 @@
-import React, { PropsWithChildren, ReactChild, ReactNode } from 'react';
 import {
-  IconButton,
-  Avatar,
   Box,
-  CloseButton,
-  Flex,
-  HStack,
-  VStack,
-  Icon,
-  useColorModeValue,
+  BoxProps,
+  Button,
   Link as ChakraLink,
+  CloseButton,
   Drawer,
   DrawerContent,
-  Text,
-  useDisclosure,
-  BoxProps,
+  Flex,
   FlexProps,
+  HStack,
+  Icon,
+  IconButton,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
   Stack,
-  Button,
+  Text,
+  VStack,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
+import { Link, Outlet, useRouter } from '@tanstack/react-router';
+import { ReactNode } from 'react';
+import { IconType } from 'react-icons';
+import { FaRegComment } from 'react-icons/fa';
 import {
-  FiMenu,
   FiBell,
   FiChevronDown,
-  FiUser,
   FiLogIn,
   FiMap,
-  FiVoicemail,
-  FiMail,
-  FiHome,
+  FiMenu,
+  FiUser,
 } from 'react-icons/fi';
-import { IconType } from 'react-icons';
-import { Link, Outlet, useRouter } from '@tanstack/react-router';
-import {
-  FaCommentAlt,
-  FaParking,
-  FaRegBuilding,
-  FaRegComment,
-} from 'react-icons/fa';
-import { RiParkingBoxLine } from 'react-icons/ri';
-import {
-  PiBuildingOffice,
-  PiFlashlight,
-  PiMedalMilitary,
-} from 'react-icons/pi';
 import { LuParkingSquare } from 'react-icons/lu';
-import { User, useAuthStore } from '../../stores/auth';
-import useUpdatableToast from '../hooks/useUpdatableToast';
+import { PiBuildingOffice, PiFlashlight } from 'react-icons/pi';
 import { blacklistRequest } from '../../api/auth';
 import { Logo } from '../../assets/logo';
+import { User, useAuthStore } from '../../stores/auth';
 import Footer from '../home/footer';
+import useUpdatableToast from '../hooks/useUpdatableToast';
 
 interface LinkItemProps {
   name: string;

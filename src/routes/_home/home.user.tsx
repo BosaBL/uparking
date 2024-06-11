@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { useAuthStore } from '../../stores/auth';
 import UpdateUserDataForm from '../../components/home/UpdateUserDataForm';
+import { useAuthStore } from '../../stores/auth';
 
 export const Route = createFileRoute('/_home/home/user')({
   beforeLoad: () => {

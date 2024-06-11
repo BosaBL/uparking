@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
 import { ToastId, ToastProps, useToast } from '@chakra-ui/react';
+import { useRef } from 'react';
 
 export default function useUpdatableToast(duration: number, isClosable = true) {
   const toast = useToast();

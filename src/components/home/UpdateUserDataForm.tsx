@@ -1,34 +1,26 @@
-import { useState, usestate } from 'react';
 import {
+  Box,
+  Button,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
-  Link as ChakraLink,
-  Stack,
-  useColorModeValue,
-  Box,
-  FormErrorMessage,
-  HStack,
   InputGroup,
   InputLeftAddon,
-  Button,
+  Stack,
+  useColorModeValue,
 } from '@chakra-ui/react';
-import {
-  Link,
-  useLoaderData,
-  useNavigate,
-  useRouter,
-} from '@tanstack/react-router';
-import { useForm, useWatch } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Logo } from '../../assets/logo';
+import { useLoaderData, useRouter } from '@tanstack/react-router';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { updateUserDataRequest } from '../../api/auth';
+import { User } from '../../stores/auth';
 import { checkRut, getVerifierDigit } from '../../utils/rut';
 import useUpdatableToast from '../hooks/useUpdatableToast';
-import { User } from '../../stores/auth';
-import { RegisterFormType, updateUserDataRequest } from '../../api/auth';
 
 export type UserUpdateDataFormType = {
   p_nombre: string;

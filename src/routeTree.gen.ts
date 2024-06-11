@@ -10,172 +10,172 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as HomeImport } from './routes/_home'
-import { Route as AuthImport } from './routes/_auth'
-import { Route as AdminImport } from './routes/_admin'
-import { Route as IndexImport } from './routes/index'
-import { Route as HomeHomeIndexImport } from './routes/_home/home.index'
-import { Route as AdminAdminIndexImport } from './routes/_admin/admin.index'
-import { Route as HomeHomeUserImport } from './routes/_home/home.user'
-import { Route as AuthAuthRegisterImport } from './routes/_auth/auth.register'
-import { Route as AuthAuthLoginImport } from './routes/_auth/auth.login'
-import { Route as AdminAdminVigilantesImport } from './routes/_admin/admin.vigilantes'
-import { Route as AdminAdminSedesImport } from './routes/_admin/admin.sedes'
-import { Route as AdminAdminEstacionamientosImport } from './routes/_admin/admin.estacionamientos'
+import { Route as rootRoute } from './routes/__root';
+import { Route as AdminImport } from './routes/_admin';
+import { Route as AdminAdminEstacionamientosImport } from './routes/_admin/admin.estacionamientos';
+import { Route as AdminAdminIndexImport } from './routes/_admin/admin.index';
+import { Route as AdminAdminSedesImport } from './routes/_admin/admin.sedes';
+import { Route as AdminAdminVigilantesImport } from './routes/_admin/admin.vigilantes';
+import { Route as AuthImport } from './routes/_auth';
+import { Route as AuthAuthLoginImport } from './routes/_auth/auth.login';
+import { Route as AuthAuthRegisterImport } from './routes/_auth/auth.register';
+import { Route as HomeImport } from './routes/_home';
+import { Route as HomeHomeIndexImport } from './routes/_home/home.index';
+import { Route as HomeHomeUserImport } from './routes/_home/home.user';
+import { Route as IndexImport } from './routes/index';
 
 // Create/Update Routes
 
 const HomeRoute = HomeImport.update({
   id: '/_home',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const AuthRoute = AuthImport.update({
   id: '/_auth',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const AdminRoute = AdminImport.update({
   id: '/_admin',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const HomeHomeIndexRoute = HomeHomeIndexImport.update({
   path: '/home/',
   getParentRoute: () => HomeRoute,
-} as any)
+} as any);
 
 const AdminAdminIndexRoute = AdminAdminIndexImport.update({
   path: '/admin/',
   getParentRoute: () => AdminRoute,
-} as any)
+} as any);
 
 const HomeHomeUserRoute = HomeHomeUserImport.update({
   path: '/home/user',
   getParentRoute: () => HomeRoute,
-} as any)
+} as any);
 
 const AuthAuthRegisterRoute = AuthAuthRegisterImport.update({
   path: '/auth/register',
   getParentRoute: () => AuthRoute,
-} as any)
+} as any);
 
 const AuthAuthLoginRoute = AuthAuthLoginImport.update({
   path: '/auth/login',
   getParentRoute: () => AuthRoute,
-} as any)
+} as any);
 
 const AdminAdminVigilantesRoute = AdminAdminVigilantesImport.update({
   path: '/admin/vigilantes',
   getParentRoute: () => AdminRoute,
-} as any)
+} as any);
 
 const AdminAdminSedesRoute = AdminAdminSedesImport.update({
   path: '/admin/sedes',
   getParentRoute: () => AdminRoute,
-} as any)
+} as any);
 
 const AdminAdminEstacionamientosRoute = AdminAdminEstacionamientosImport.update(
   {
     path: '/admin/estacionamientos',
     getParentRoute: () => AdminRoute,
-  } as any,
-)
+  } as any
+);
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
     '/_admin': {
-      id: '/_admin'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AdminImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/_admin';
+      path: '';
+      fullPath: '';
+      preLoaderRoute: typeof AdminImport;
+      parentRoute: typeof rootRoute;
+    };
     '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/_auth';
+      path: '';
+      fullPath: '';
+      preLoaderRoute: typeof AuthImport;
+      parentRoute: typeof rootRoute;
+    };
     '/_home': {
-      id: '/_home'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof HomeImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/_home';
+      path: '';
+      fullPath: '';
+      preLoaderRoute: typeof HomeImport;
+      parentRoute: typeof rootRoute;
+    };
     '/_admin/admin/estacionamientos': {
-      id: '/_admin/admin/estacionamientos'
-      path: '/admin/estacionamientos'
-      fullPath: '/admin/estacionamientos'
-      preLoaderRoute: typeof AdminAdminEstacionamientosImport
-      parentRoute: typeof AdminImport
-    }
+      id: '/_admin/admin/estacionamientos';
+      path: '/admin/estacionamientos';
+      fullPath: '/admin/estacionamientos';
+      preLoaderRoute: typeof AdminAdminEstacionamientosImport;
+      parentRoute: typeof AdminImport;
+    };
     '/_admin/admin/sedes': {
-      id: '/_admin/admin/sedes'
-      path: '/admin/sedes'
-      fullPath: '/admin/sedes'
-      preLoaderRoute: typeof AdminAdminSedesImport
-      parentRoute: typeof AdminImport
-    }
+      id: '/_admin/admin/sedes';
+      path: '/admin/sedes';
+      fullPath: '/admin/sedes';
+      preLoaderRoute: typeof AdminAdminSedesImport;
+      parentRoute: typeof AdminImport;
+    };
     '/_admin/admin/vigilantes': {
-      id: '/_admin/admin/vigilantes'
-      path: '/admin/vigilantes'
-      fullPath: '/admin/vigilantes'
-      preLoaderRoute: typeof AdminAdminVigilantesImport
-      parentRoute: typeof AdminImport
-    }
+      id: '/_admin/admin/vigilantes';
+      path: '/admin/vigilantes';
+      fullPath: '/admin/vigilantes';
+      preLoaderRoute: typeof AdminAdminVigilantesImport;
+      parentRoute: typeof AdminImport;
+    };
     '/_auth/auth/login': {
-      id: '/_auth/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthAuthLoginImport
-      parentRoute: typeof AuthImport
-    }
+      id: '/_auth/auth/login';
+      path: '/auth/login';
+      fullPath: '/auth/login';
+      preLoaderRoute: typeof AuthAuthLoginImport;
+      parentRoute: typeof AuthImport;
+    };
     '/_auth/auth/register': {
-      id: '/_auth/auth/register'
-      path: '/auth/register'
-      fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthAuthRegisterImport
-      parentRoute: typeof AuthImport
-    }
+      id: '/_auth/auth/register';
+      path: '/auth/register';
+      fullPath: '/auth/register';
+      preLoaderRoute: typeof AuthAuthRegisterImport;
+      parentRoute: typeof AuthImport;
+    };
     '/_home/home/user': {
-      id: '/_home/home/user'
-      path: '/home/user'
-      fullPath: '/home/user'
-      preLoaderRoute: typeof HomeHomeUserImport
-      parentRoute: typeof HomeImport
-    }
+      id: '/_home/home/user';
+      path: '/home/user';
+      fullPath: '/home/user';
+      preLoaderRoute: typeof HomeHomeUserImport;
+      parentRoute: typeof HomeImport;
+    };
     '/_admin/admin/': {
-      id: '/_admin/admin/'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminAdminIndexImport
-      parentRoute: typeof AdminImport
-    }
+      id: '/_admin/admin/';
+      path: '/admin';
+      fullPath: '/admin';
+      preLoaderRoute: typeof AdminAdminIndexImport;
+      parentRoute: typeof AdminImport;
+    };
     '/_home/home/': {
-      id: '/_home/home/'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeHomeIndexImport
-      parentRoute: typeof HomeImport
-    }
+      id: '/_home/home/';
+      path: '/home';
+      fullPath: '/home';
+      preLoaderRoute: typeof HomeHomeIndexImport;
+      parentRoute: typeof HomeImport;
+    };
   }
 }
 
@@ -194,7 +194,7 @@ export const routeTree = rootRoute.addChildren({
     AuthAuthRegisterRoute,
   }),
   HomeRoute: HomeRoute.addChildren({ HomeHomeUserRoute, HomeHomeIndexRoute }),
-})
+});
 
 /* prettier-ignore-end */
 

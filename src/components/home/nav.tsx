@@ -1,47 +1,43 @@
-import React, { PropsWithChildren, ReactChild, ReactNode } from 'react';
 import {
-  IconButton,
-  Avatar,
   Box,
-  CloseButton,
-  Flex,
-  HStack,
-  VStack,
-  Icon,
-  useColorModeValue,
+  BoxProps,
+  Button,
   Link as ChakraLink,
+  CloseButton,
   Drawer,
   DrawerContent,
-  Text,
-  useDisclosure,
-  BoxProps,
+  Flex,
   FlexProps,
+  HStack,
+  Icon,
+  IconButton,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
   Stack,
-  Button,
+  Text,
+  VStack,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
+import { Link, Outlet, useRouter } from '@tanstack/react-router';
+import { ReactNode } from 'react';
+import { IconType } from 'react-icons';
+import { FaRegComment } from 'react-icons/fa';
 import {
-  FiMenu,
   FiBell,
   FiChevronDown,
-  FiUser,
   FiLogIn,
   FiMap,
-  FiVoicemail,
-  FiMail,
+  FiMenu,
+  FiUser,
 } from 'react-icons/fi';
-import { IconType } from 'react-icons';
-import { Link, Outlet, useRouter } from '@tanstack/react-router';
-import { FaCommentAlt, FaRegComment } from 'react-icons/fa';
-import { INVALID } from 'zod';
-import { User, useAuthStore } from '../../stores/auth';
-import useUpdatableToast from '../hooks/useUpdatableToast';
 import { blacklistRequest } from '../../api/auth';
 import { Logo } from '../../assets/logo';
+import { User, useAuthStore } from '../../stores/auth';
+import useUpdatableToast from '../hooks/useUpdatableToast';
 import Footer from './footer';
 
 interface LinkItemProps {

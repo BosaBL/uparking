@@ -1,4 +1,4 @@
-import React, { Fragment, CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties, Fragment, ReactNode } from 'react';
 import zxcvbn from 'zxcvbn';
 
 // components

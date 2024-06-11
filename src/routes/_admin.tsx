@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { useAuthStore } from '../stores/auth';
 import Nav from '../components/admin/nav';
+import { useAuthStore } from '../stores/auth';
 
 function Component() {
   const { userData, logout } = useAuthStore();

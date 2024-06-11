@@ -1,29 +1,29 @@
-import { useState } from 'react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
+  Box,
   Button,
+  Link as ChakraLink,
   Checkbox,
   Flex,
   FormControl,
   FormLabel,
   Heading,
   Input,
-  Link as ChakraLink,
-  Stack,
-  useColorModeValue,
   InputGroup,
   InputRightElement,
+  Stack,
   Text,
-  Box,
+  useColorModeValue,
 } from '@chakra-ui/react';
-import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { loginRequest } from '../../api/auth';
-import { LoginFormData } from './types';
-import { useAuthStore } from '../../stores/auth';
 import { Logo } from '../../assets/logo';
+import { useAuthStore } from '../../stores/auth';
 import useUpdatableToast from '../hooks/useUpdatableToast';
+import { LoginFormData } from './types';
 
 export default function Login() {
   const navigate = useNavigate();

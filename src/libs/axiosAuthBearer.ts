@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useAuthStore } from '../stores/auth';
 import { APIS } from '../constants';
+import { useAuthStore } from '../stores/auth';
 
 const authApiWithBearer = axios.create({
   baseURL: APIS.auth,
