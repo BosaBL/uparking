@@ -1,7 +1,9 @@
+import { EditIcon } from '@chakra-ui/icons';
 import {
   Button,
   FormControl,
   FormLabel,
+  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -17,22 +19,24 @@ import { useRouter } from '@tanstack/react-router';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { capitalizeFirstLetter } from '../../utils/rut';
-import { addSedeRequest } from './api';
+import { updateSedeRequest } from './api';
 import { SedeT } from './sedes.d';
 
-export default function AddSedeModal(fields: SedeT) {
+export default function UpdateSedeModal(fields: SedeT) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const toastIdRef = useRef();
   const initialRef = useRef(null);
-  const { register, handleSubmit, reset } = useForm({});
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: fields,
+    ...fields,
+  });
   const { invalidate } = useRouter();
 
   const { onChange, onBlur, name, ref } = register('id');
 
   function onSubmit(sede: SedeT) {
     toast.closeAll();
-    const sederq = addSedeRequest(sede);
+    const sederq = updateSedeRequest(sede.id, { ...sede });
 
     toast.promise(sederq, {
       success: {
@@ -62,10 +66,12 @@ export default function AddSedeModal(fields: SedeT) {
 
   return (
     <>
-      <Button w="100%" mt="5" colorScheme="green" onClick={onOpen}>
-        Añadir
-      </Button>
-
+      <IconButton
+        colorScheme="blue"
+        aria-label="Editar"
+        onClick={onOpen}
+        icon={<EditIcon />}
+      />
       <Modal
         isOpen={isOpen}
         onClose={() => {

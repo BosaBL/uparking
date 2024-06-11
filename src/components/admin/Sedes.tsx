@@ -1,10 +1,9 @@
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 import {
   Box,
-  Button,
   Icon,
   Input,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
@@ -14,29 +13,22 @@ import {
   Tr,
   chakra,
 } from '@chakra-ui/react';
-import { useLoaderData, useRouter } from '@tanstack/react-router';
-import { SedeT } from './sedes.d';
-import { useEffect, useMemo, useState } from 'react';
+import { useLoaderData } from '@tanstack/react-router';
 import {
-  ArrowUpIcon,
-  TriangleDownIcon,
-  TriangleUpIcon,
-} from '@chakra-ui/icons';
-import {
-  useReactTable,
-  getSortedRowModel,
-  getPaginationRowModel,
-  getCoreRowModel,
-  createColumnHelper,
-  flexRender,
   ColumnDef,
   ColumnFiltersState,
-  getFilteredRowModel,
+  flexRender,
+  getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
 } from '@tanstack/react-table';
+import { useEffect, useMemo, useState } from 'react';
 import ActionButtons from './ActionButtons';
 import AddSedeModal from './AddSedeModal';
+import { SedeT } from './sedes.d';
 
 // A typical debounced input react component
 function DebouncedInput({
@@ -82,14 +74,14 @@ function Filter({ column }: { column: Column<any, unknown> }) {
       filterVariant === 'range'
         ? []
         : Array.from(column.getFacetedUniqueValues().keys())
-          .sort()
-          .slice(0, 5000),
+            .sort()
+            .slice(0, 5000),
     [column.getFacetedUniqueValues(), filterVariant]
   );
 
   return (
     <>
-      <chakra.datalist id={column.id + 'list'}>
+      <chakra.datalist id={`${column.id}list`}>
         {sortedUniqueValues.map((value: any) => (
           <chakra.option value={value} key={value} />
         ))}
@@ -110,7 +102,6 @@ export default function Sedes() {
   // const router = useRouter();
   const data = useLoaderData({ from: '/_admin/admin/sedes' }) as SedeT[];
 
-  const columnHelper = createColumnHelper<SedeT>();
   const columns = useMemo<ColumnDef<SedeT, any>[]>(
     () => [
       {
@@ -125,7 +116,9 @@ export default function Sedes() {
       {
         accessorKey: 'accion',
         cell: (info) => <ActionButtons {...info.row.original} />,
-        header: (info) => <AddSedeModal {info.column.id, data[0]} />,
+        header: (info) => (
+          <AddSedeModal {...{ id: '', nombre: '', direccion: '' }} />
+        ),
       },
     ],
     []
@@ -184,7 +177,7 @@ export default function Sedes() {
                           )}
                         </Box>
                         {header.column.getCanFilter() &&
-                          header.column.id !== 'accion' ? (
+                        header.column.id !== 'accion' ? (
                           <chakra.div>
                             <Filter column={header.column} />
                           </chakra.div>

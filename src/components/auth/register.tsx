@@ -1,36 +1,35 @@
-import { useRef, useState } from 'react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Box,
   Button,
-  Checkbox,
+  Link as ChakraLink,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
-  Link as ChakraLink,
-  Stack,
-  Alert,
-  useColorModeValue,
-  AlertIcon,
-  AlertDescription,
   InputGroup,
   InputRightElement,
+  Stack,
   Text,
-  Box,
-  FormErrorMessage,
+  useColorModeValue,
 } from '@chakra-ui/react';
-import zxcvbn from 'zxcvbn';
-import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from '@tanstack/react-router';
+import { AxiosError } from 'axios';
+import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import zxcvbn from 'zxcvbn';
 import { RegisterFormType, registerRequest } from '../../api/auth';
 import { Logo } from '../../assets/logo';
 import { checkRut } from '../../utils/rut';
-import PasswordStrengthBar from './PasswordStrength';
 import useUpdatableToast from '../hooks/useUpdatableToast';
-import { AxiosError } from 'axios';
+import PasswordStrengthBar from './PasswordStrength';
 
 export default function Register() {
   const { addToast, updateToast } = useUpdatableToast(5000, true);

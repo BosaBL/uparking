@@ -1,15 +1,10 @@
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { ChakraProps, IconButton, Stack, useToast } from '@chakra-ui/react';
-import React, {
-  ButtonHTMLAttributes,
-  HtmlHTMLAttributes,
-  Ref,
-  useRef,
-  useState,
-} from 'react';
-import { SedeT } from './sedes.d';
-import { deleteSedeRequest } from './api';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { IconButton, Stack, useToast } from '@chakra-ui/react';
 import { useRouter } from '@tanstack/react-router';
+import { useState } from 'react';
+import UpdateSedeModal from './UpdateSedeModal';
+import { deleteSedeRequest } from './api';
+import { SedeT } from './sedes.d';
 
 export default function ActionButtons(sede: SedeT) {
   const { invalidate } = useRouter();
@@ -18,14 +13,22 @@ export default function ActionButtons(sede: SedeT) {
 
   const handleDelete = async () => {
     setEnabled(false);
+    toast.closeAll();
     const deleterq = deleteSedeRequest(sede.id);
 
     toast.promise(deleterq, {
-      success: { title: `Se está eliminó el elemento ${sede.id}.` },
+      success: {
+        title: `Se está eliminó el elemento ${sede.id}.`,
+        isClosable: true,
+      },
       error: {
         title: `Ha ocurrido un error al tratar de eliminar el elemento ${sede.id}.`,
+        isClosable: true,
       },
-      loading: { title: `Eliminando el elemento ${sede.id}...` },
+      loading: {
+        title: `Eliminando el elemento ${sede.id}...`,
+        isClosable: true,
+      },
     });
 
     deleterq
@@ -44,12 +47,7 @@ export default function ActionButtons(sede: SedeT) {
         onClick={handleDelete}
         isDisabled={enabled}
       />
-      <IconButton
-        onClick={() => console.log(sede)}
-        colorScheme="blue"
-        aria-label="Editar"
-        icon={<EditIcon />}
-      />
+      <UpdateSedeModal {...sede} />
     </Stack>
   );
 }
