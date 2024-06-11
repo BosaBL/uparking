@@ -97,7 +97,7 @@ export default function Register() {
     } catch (err) {
       const error = err as AxiosError;
       const rutError = error?.response.data.rut as string;
-      const emailError = error?.response.data.rut as string;
+      const emailError = error?.response.data.email as string;
       updateToast({
         status: 'error',
         title: 'Error',
@@ -266,7 +266,7 @@ export default function Register() {
                     Ya tienes una cuenta?{' '}
                     <ChakraLink
                       as={Link}
-                      to="/auth/register"
+                      to="/auth/login"
                       color="blue.600"
                       style={{ textDecoration: 'underline' }}
                     >

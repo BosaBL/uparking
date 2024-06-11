@@ -4,7 +4,7 @@ import Nav from '../components/home/nav';
 
 function Component() {
   const { userData, logout } = useAuthStore();
-  return <Nav user={userData} logout={logout} />;
+  return <Nav user={structuredClone(userData)} logout={logout} />;
 }
 
 export const Route = createFileRoute('/_home')({

@@ -1,9 +1,10 @@
-import axios from 'axios';
-import { useAuthStore } from '../stores/auth';
-import { APIS } from '../constants';
+import axios, { AxiosResponse } from 'axios';
+import { useAuthStore } from '../../stores/auth';
+import { APIS } from '../../constants';
+import { SedeT } from './sedes.d';
 
 const authApiWithBearer = axios.create({
-  baseURL: APIS.auth,
+  baseURL: APIS.admin,
   withCredentials: true,
 });
 
@@ -41,4 +42,12 @@ authApiWithBearer.interceptors.response.use(
   }
 );
 
-export default authApiWithBearer;
+export async function getSedesRequest(): Promise<AxiosResponse<SedeT[]>> {
+  return authApiWithBearer.get('/sedes');
+}
+
+export async function deleteSedeRequest(
+  id: SedeT['id']
+): Promise<AxiosResponse> {
+  return authApiWithBearer.delete(`/sedes/${id}`);
+}

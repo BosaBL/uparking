@@ -16,9 +16,13 @@ import { Route as AuthImport } from './routes/_auth'
 import { Route as AdminImport } from './routes/_admin'
 import { Route as IndexImport } from './routes/index'
 import { Route as HomeHomeIndexImport } from './routes/_home/home.index'
+import { Route as AdminAdminIndexImport } from './routes/_admin/admin.index'
 import { Route as HomeHomeUserImport } from './routes/_home/home.user'
 import { Route as AuthAuthRegisterImport } from './routes/_auth/auth.register'
 import { Route as AuthAuthLoginImport } from './routes/_auth/auth.login'
+import { Route as AdminAdminVigilantesImport } from './routes/_admin/admin.vigilantes'
+import { Route as AdminAdminSedesImport } from './routes/_admin/admin.sedes'
+import { Route as AdminAdminEstacionamientosImport } from './routes/_admin/admin.estacionamientos'
 
 // Create/Update Routes
 
@@ -47,6 +51,11 @@ const HomeHomeIndexRoute = HomeHomeIndexImport.update({
   getParentRoute: () => HomeRoute,
 } as any)
 
+const AdminAdminIndexRoute = AdminAdminIndexImport.update({
+  path: '/admin/',
+  getParentRoute: () => AdminRoute,
+} as any)
+
 const HomeHomeUserRoute = HomeHomeUserImport.update({
   path: '/home/user',
   getParentRoute: () => HomeRoute,
@@ -61,6 +70,23 @@ const AuthAuthLoginRoute = AuthAuthLoginImport.update({
   path: '/auth/login',
   getParentRoute: () => AuthRoute,
 } as any)
+
+const AdminAdminVigilantesRoute = AdminAdminVigilantesImport.update({
+  path: '/admin/vigilantes',
+  getParentRoute: () => AdminRoute,
+} as any)
+
+const AdminAdminSedesRoute = AdminAdminSedesImport.update({
+  path: '/admin/sedes',
+  getParentRoute: () => AdminRoute,
+} as any)
+
+const AdminAdminEstacionamientosRoute = AdminAdminEstacionamientosImport.update(
+  {
+    path: '/admin/estacionamientos',
+    getParentRoute: () => AdminRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -94,6 +120,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeImport
       parentRoute: typeof rootRoute
     }
+    '/_admin/admin/estacionamientos': {
+      id: '/_admin/admin/estacionamientos'
+      path: '/admin/estacionamientos'
+      fullPath: '/admin/estacionamientos'
+      preLoaderRoute: typeof AdminAdminEstacionamientosImport
+      parentRoute: typeof AdminImport
+    }
+    '/_admin/admin/sedes': {
+      id: '/_admin/admin/sedes'
+      path: '/admin/sedes'
+      fullPath: '/admin/sedes'
+      preLoaderRoute: typeof AdminAdminSedesImport
+      parentRoute: typeof AdminImport
+    }
+    '/_admin/admin/vigilantes': {
+      id: '/_admin/admin/vigilantes'
+      path: '/admin/vigilantes'
+      fullPath: '/admin/vigilantes'
+      preLoaderRoute: typeof AdminAdminVigilantesImport
+      parentRoute: typeof AdminImport
+    }
     '/_auth/auth/login': {
       id: '/_auth/auth/login'
       path: '/auth/login'
@@ -115,6 +162,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeHomeUserImport
       parentRoute: typeof HomeImport
     }
+    '/_admin/admin/': {
+      id: '/_admin/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminAdminIndexImport
+      parentRoute: typeof AdminImport
+    }
     '/_home/home/': {
       id: '/_home/home/'
       path: '/home'
@@ -129,6 +183,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  AdminRoute: AdminRoute.addChildren({
+    AdminAdminEstacionamientosRoute,
+    AdminAdminSedesRoute,
+    AdminAdminVigilantesRoute,
+    AdminAdminIndexRoute,
+  }),
   AuthRoute: AuthRoute.addChildren({
     AuthAuthLoginRoute,
     AuthAuthRegisterRoute,
@@ -154,7 +214,13 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "index.tsx"
     },
     "/_admin": {
-      "filePath": "_admin.tsx"
+      "filePath": "_admin.tsx",
+      "children": [
+        "/_admin/admin/estacionamientos",
+        "/_admin/admin/sedes",
+        "/_admin/admin/vigilantes",
+        "/_admin/admin/"
+      ]
     },
     "/_auth": {
       "filePath": "_auth.tsx",
@@ -170,6 +236,18 @@ export const routeTree = rootRoute.addChildren({
         "/_home/home/"
       ]
     },
+    "/_admin/admin/estacionamientos": {
+      "filePath": "_admin/admin.estacionamientos.tsx",
+      "parent": "/_admin"
+    },
+    "/_admin/admin/sedes": {
+      "filePath": "_admin/admin.sedes.tsx",
+      "parent": "/_admin"
+    },
+    "/_admin/admin/vigilantes": {
+      "filePath": "_admin/admin.vigilantes.tsx",
+      "parent": "/_admin"
+    },
     "/_auth/auth/login": {
       "filePath": "_auth/auth.login.tsx",
       "parent": "/_auth"
@@ -181,6 +259,10 @@ export const routeTree = rootRoute.addChildren({
     "/_home/home/user": {
       "filePath": "_home/home.user.tsx",
       "parent": "/_home"
+    },
+    "/_admin/admin/": {
+      "filePath": "_admin/admin.index.tsx",
+      "parent": "/_admin"
     },
     "/_home/home/": {
       "filePath": "_home/home.index.tsx",

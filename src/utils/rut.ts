@@ -26,3 +26,7 @@ export function checkRut(rut: string): boolean {
   const [rutt, dv] = rut.toLowerCase().replace(/\./g, '').split('-');
   return dv === getVerifierDigit(rutt);
 }
+
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

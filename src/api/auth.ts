@@ -13,21 +13,21 @@ export type RegisterFormType = {
 };
 
 export const loginRequest = async (email: string, password: string) => {
-  return axios.post('/auth/login/', { email, password });
+  return axios.post('/login/', { email, password });
 };
 
 export const registerRequest = async (data: RegisterFormType) => {
-  return axios.post('/auth/registration/', data);
+  return axios.post('/registration/', data);
 };
 
 export const userDataRequest = async () => {
-  return axios.get('/auth/user/');
+  return axios.get('/user/');
 };
 
 export const blacklistRequest = async (refresh: string) => {
-  return axios.post('/auth/blacklist/', { refresh });
+  return axios.post('/blacklist/', { refresh });
 };
 
 export const updateUserDataRequest = async (data: UserUpdateDataFormType) => {
-  return axios.patch('/auth/user/', data);
+  return axios.patch('/user/', data);
 };

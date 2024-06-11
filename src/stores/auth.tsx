@@ -58,6 +58,7 @@ export const useAuthStore = create(
               },
             });
             set(() => ({ userData: res.data }));
+            return res.data;
           } catch {
             get().logout();
           }
