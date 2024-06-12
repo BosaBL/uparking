@@ -14,6 +14,7 @@ static_volume/
 pgadmin-data/
 db-data/
 volumes/
+django_volumes/
 
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/

@@ -8,7 +8,8 @@ COPY . .
 RUN npm run build
 
 FROM nginx:stable-alpine
-WORKDIR /usr/share/nginx/html
+WORKDIR /var/www/csep/html
+
 RUN rm -rf ./*
 
 COPY  --from=builder /app/buildd .
