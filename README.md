@@ -2,14 +2,49 @@
 
 Este proyecto tiene como propósito crear una aplicación de estacionamientos, entre las funcionalidad de esta aplicación están:
 
-- Visualización de espacios de estacionamientos.
+- Visualización de espacios de estacionamientos en tiempo real.
 - Administración.
 - Notificaciones de siniestros.
 - Interfaces para guardias de seguridad.
 
 En particular este repositorio consta del backend del proyecto, donde el principal motor es Django junto a DjangoRestFramework.
 
-## Instalación Local
+## Instalación Local (PREVISUALIZACIÓN, NO USAR PARA DESARROLLO!)
+
+> [!IMPORTANT]
+> Para poder correr el proyecto de manera local es necesaria la utilización de [Docker](https://docs.docker.com/engine/install/).
+
+Para poder correr el servidor de manera local es necesario ejecutar la siguiente serie de comandos en una terminal
+
+```shell
+git clone https://github.com/BosaBL/uparking
+cd uparking
+docker compose -f dev-compose.yml up --build
+```
+
+el servidor debería haber inciado luego de 1 o 2 minutos.
+
+> [!IMPORTANT]
+> Es posible que docker muestre de manera constante errores relacionados a `PG_ADMIN`, este error no afecta el funcionamiento total de la aplicación, sin embargo si se quiere eliminar el error es necesario darle permisos a `pg_admin` para administrar el volúmen creado por este mismo, para dar los permisos necesarios es necesario detener el contenedor con `CTRL + C` o utilizando el comando
+>
+> ```
+> docker compose -f dev-compose.yml down
+> ```
+>
+> si se quiere solucionar el error es necesario utilizar el comando
+
+```
+sudo chown -R 5050:5050 volumes/pgadmin-data
+```
+
+### URLs importantes
+
+Para acceder a distintas interfaces del usuario se recomienda utilizar `localhost`, algunas urls de interés son
+
+- `localhost/api/docs/` documentación de la api.
+- `localhost/` página principal.
+
+## Instalación Local (PARA DESARROLLO)
 
 > [!IMPORTANT]
 > El proyecto utilizará [Docker](https://docs.docker.com/engine/install/) para containerizar todas las dependencias y levantar diversos servicios necesarios por el proyecto, es necesario instalarlo y aprender a usarlo y trabajar con él.
@@ -26,7 +61,7 @@ En particular este repositorio consta del backend del proyecto, donde el princip
 Clonar el repositorio en la carpeta de desarrollo
 
 ```shell
-git clone https://github.com/BosaBL/uparking-backend
+git clone https://github.com/BosaBL/uparking
 ```
 
 luego, navegar a la carpeta del proyecto e instalar las dependencias
@@ -48,4 +83,5 @@ finalmente, construir el contenedor docker y levantarlo
 ```shell
 docker compose -f dev-compose.yml up --build
 ```
+
 el servidor debería estar corriendo.
