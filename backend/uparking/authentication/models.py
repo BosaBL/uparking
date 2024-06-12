@@ -7,13 +7,20 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    rol_choices = {
+        "user": "user",
+        "vigilante": "vigilante",
+        "admin": "admin",
+    }
+
     email = models.EmailField(_("email address"), unique=True)
     rut = models.CharField(max_length=15, unique=True)
     p_nombre = models.CharField(max_length=50)
-    s_nombre = models.CharField(max_length=50)
+    s_nombre = models.CharField(max_length=50, null=True, blank=True)
     p_apellido = models.CharField(max_length=50)
-    s_apellido = models.CharField(max_length=50)
-    rol = models.CharField(max_length=10, default="user")
+    s_apellido = models.CharField(max_length=50, null=True, blank=True)
+    rol = models.CharField(max_length=10, default="user", choices=rol_choices)
+    telefono = models.CharField(max_length=15, null=True, blank=True)
 
     # Django defaults
     is_staff = models.BooleanField(default=False)
@@ -24,12 +31,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = [
         "rut",
         "p_nombre",
-        "s_nombre",
         "p_apellido",
-        "s_apellido",
     ]
 
     objects = CustomUserManager()
+
+    @property
+    def is_admin(self):
+        return self.rol == "admin"
+
+    @property
+    def is_vigilante(self):
+        return self.rol == "vigilante"
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -42,7 +55,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-
-def validate_rut(value):
-    ...

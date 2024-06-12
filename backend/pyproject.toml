@@ -1,0 +1,62 @@
+[tool.poetry]
+name = "uparking"
+version = "0.1.0"
+description = ""
+authors = ["Christopher Sepúlveda <christopheralexander.sepulveda@alumnos.ulagos.cl>"]
+package-mode = false
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.6"
+djangorestframework = "^3.15.1"
+psycopg = "^3.1.19"
+python-dotenv = "^1.0.1"
+psycopg-binary = "^3.1.19"
+dj-rest-auth = {extras = ["with-social"], version = "^6.0.0"}
+djangorestframework-simplejwt = "^5.3.1"
+drf-spectacular = {extras = ["sidecar"], version = "^0.27.2"}
+djangorestframework-gis = "^1.0"
+uvicorn = "^0.30.1"
+gunicorn = "^22.0.0"
+django-cors-headers = "^4.3.1"
+
+[tool.poetry.group.dev.dependencies]
+python-lsp-isort = "^0.1"
+pre-commit = "^3.7.1"
+pylsp-mypy = "^0.6.8"
+python-lsp-server = {extras = ["all"], version = "^1.11.0"}
+python-lsp-black = "^2.0.0"
+django-stubs = {extras = ["compatible-mypy"], version = "^5.0.0"}
+djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.15.0"}
+pylsp-rope = "^0.1.16"
+pylint-django = "^2.5.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+line_length = 80
+profile="black"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+
+[tool.pylint.main]
+load-plugins = ["pylint_django"]
+
+[tool.pylint.'DJANGO FOREIGN KEYS REFERENCED BY STRINGS']
+django-settings-module="uparking.settings"
+
+[tool.pylint.messages_control]
+disable = ["missing-module-docstring","missing-class-docstring","missing-function-docstring"]
+
+[tool.pylint.format]
+max-line-length = 80 
+
+[tool.django-stubs]
+django_settings_module = "uparking.settings"
