@@ -25,17 +25,16 @@ docker compose -f dev-compose.yml up --build
 el servidor debería haber inciado luego de 1 o 2 minutos.
 
 > [!IMPORTANT]
-> Es posible que docker muestre de manera constante errores relacionados a `PG_ADMIN`, este error no afecta el funcionamiento total de la aplicación, sin embargo si se quiere eliminar el error es necesario darle permisos a `pg_admin` para administrar el volúmen creado por este mismo, para dar los permisos necesarios es necesario detener el contenedor con `CTRL + C` o utilizando el comando
+> Es posible que docker muestre de manera constante errores relacionados a `pg_admin`, este error no afecta el funcionamiento total de la aplicación, sin embargo si se quiere eliminar el error es necesario darle permisos a `pg_admin` para administrar el volúmen creado por este mismo, para dar los permisos necesarios es necesario detener el contenedor con `CTRL + C` o utilizando el comando
 >
 > ```
 > docker compose -f dev-compose.yml down
 > ```
 >
 > si se quiere solucionar el error es necesario utilizar el comando
-
-```
-sudo chown -R 5050:5050 volumes/pgadmin-data
-```
+>```
+>sudo chown -R 5050:5050 volumes/pgadmin-data
+>```
 
 ### URLs importantes
 
