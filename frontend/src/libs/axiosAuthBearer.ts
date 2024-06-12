@@ -4,7 +4,6 @@ import { useAuthStore } from '../stores/auth';
 
 const authApiWithBearer = axios.create({
   baseURL: APIS.auth,
-  withCredentials: true,
 });
 
 authApiWithBearer.interceptors.request.use((config) => {

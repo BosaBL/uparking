@@ -1,4 +1,4 @@
-const BASEAPI = 'http://localhost/api/';
+const BASEAPI = 'http://app/api';
 
 export const APIS = {
   auth: BASEAPI.concat('/auth/'),
