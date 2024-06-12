@@ -8,7 +8,8 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { routeTree } from './routeTree.gen';
 
 // Create a new router instance
-const router = createRouter({ routeTree });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const router: any = createRouter({ routeTree });
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {

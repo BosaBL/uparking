@@ -23,12 +23,13 @@ import { SedeT } from './sedes.d';
 export default function AddSedeModal(fields: SedeT) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const toastIdRef = useRef();
-  const initialRef = useRef(null);
-  const { register, handleSubmit, reset } = useForm({});
+  const initialRef = useRef<HTMLInputElement | null>(null);
+  const { register, handleSubmit, reset } = useForm<SedeT>({});
   const { invalidate } = useRouter();
 
   const { onChange, onBlur, name, ref } = register('id');
+
+  const keys = Object.keys(fields) as (keyof SedeT)[];
 
   function onSubmit(sede: SedeT) {
     toast.closeAll();
@@ -80,7 +81,7 @@ export default function AddSedeModal(fields: SedeT) {
           <ModalCloseButton />
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody pb={6}>
-              {Object.keys(fields).map((field, index) => {
+              {keys.map((field, index) => {
                 if (index === 0) {
                   return (
                     <FormControl isRequired key={field} mt={4}>
@@ -92,7 +93,9 @@ export default function AddSedeModal(fields: SedeT) {
                         name={name}
                         ref={(el) => {
                           ref(el);
-                          initialRef.current = el;
+                          if (initialRef.current !== null) {
+                            initialRef.current = el;
+                          }
                         }}
                       />
                     </FormControl>

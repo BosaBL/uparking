@@ -32,15 +32,17 @@ el servidor debería haber inciado luego de 1 o 2 minutos.
 > ```
 >
 > si se quiere solucionar el error es necesario utilizar el comando
->```
->sudo chown -R 5050:5050 volumes/pgadmin-data
->```
+>
+> ```
+> sudo chown -R 5050:5050 volumes/pgadmin-data
+> ```
 
 ### URLs importantes
 
 Para acceder a distintas interfaces del usuario se recomienda utilizar `localhost`, algunas urls de interés son
 
 - `localhost/api/docs/` documentación de la api.
+- `localhost/admin` página para administradores.
 - `localhost/` página principal.
 
 ## Instalación Local (PARA DESARROLLO)

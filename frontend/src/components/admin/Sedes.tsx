@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { useLoaderData } from '@tanstack/react-router';
 import {
+  Column,
   ColumnDef,
   ColumnFiltersState,
   flexRender,
@@ -74,8 +75,8 @@ function Filter({ column }: { column: Column<any, unknown> }) {
       filterVariant === 'range'
         ? []
         : Array.from(column.getFacetedUniqueValues().keys())
-            .sort()
-            .slice(0, 5000),
+          .sort()
+          .slice(0, 5000),
     [column.getFacetedUniqueValues(), filterVariant]
   );
 
@@ -116,7 +117,7 @@ export default function Sedes() {
       {
         accessorKey: 'accion',
         cell: (info) => <ActionButtons {...info.row.original} />,
-        header: (info) => (
+        header: () => (
           <AddSedeModal {...{ id: '', nombre: '', direccion: '' }} />
         ),
       },
@@ -177,7 +178,7 @@ export default function Sedes() {
                           )}
                         </Box>
                         {header.column.getCanFilter() &&
-                        header.column.id !== 'accion' ? (
+                          header.column.id !== 'accion' ? (
                           <chakra.div>
                             <Filter column={header.column} />
                           </chakra.div>

@@ -10,6 +10,4 @@ RUN npm run build
 FROM nginx:stable-alpine
 WORKDIR /var/www/csep/html
 
-RUN rm -rf ./*
-
 COPY  --from=builder /app/buildd .

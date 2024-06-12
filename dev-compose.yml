@@ -11,8 +11,8 @@ services:
           target: ./
     volumes:
       - ./django_volume/:/staticfiles/
-    ports:
-      - 8000:8000
+    expose:
+      - "8000"
     env_file:
       - .env
     environment:
