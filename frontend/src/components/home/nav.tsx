@@ -95,6 +95,7 @@ function NavItem({ icon, children, url, ...rest }: NavItemProps) {
 }
 
 function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
+
   const userData = user === '' ? null : (user as User);
 
   return (
@@ -115,7 +116,7 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) =>
-        link.name !== 'Notificaciones' || user ? (
+        link.name !== 'Notificaciones' || userData ? (
           <NavItem key={link.name} icon={link.icon} url={link.url}>
             {link.name}
           </NavItem>

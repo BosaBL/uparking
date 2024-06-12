@@ -31,8 +31,9 @@ services:
       - ./volumes/db-data/:/var/lib/postgresql/data/
 
   nginx:
-    image: nginx:latest
-    container_name: uparking_nginx
+    build:
+      context: ./backend
+      dockerfile: ./env.dockerfile
     ports:
       - 80:8080
     volumes:
@@ -40,6 +41,7 @@ services:
       - ./static_volume/:/staticfiles/
     depends_on:
       - app
+    command: nginx -g daemon off;
 
 volumes:
   static_volume:
