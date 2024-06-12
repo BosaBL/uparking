@@ -1,0 +1,135 @@
+import { EditIcon } from '@chakra-ui/icons';
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  IconButton,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/react';
+import { useRouter } from '@tanstack/react-router';
+import { useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { capitalizeFirstLetter } from '../../utils/rut';
+import { updateSedeRequest } from './api';
+import { SedeT } from './sedes.d';
+
+export default function UpdateSedeModal(fields: SedeT) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const initialRef = useRef(null);
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: fields,
+    ...fields,
+  });
+  const { invalidate } = useRouter();
+
+  const { onChange, onBlur, name, ref } = register('id');
+
+  function onSubmit(sede: SedeT) {
+    toast.closeAll();
+    const sederq = updateSedeRequest(sede.id, { ...sede });
+
+    toast.promise(sederq, {
+      success: {
+        title: `Se añadió el elemento ${sede.id}.`,
+        isClosable: true,
+      },
+      error: {
+        title: `Ha ocurrido un error al tratar de añadir el elemento ${sede.id}.`,
+        isClosable: true,
+      },
+      loading: {
+        title: `Elemento ${sede.id} añadido...`,
+        isClosable: true,
+      },
+    });
+
+    sederq
+      .then(() => {
+        reset();
+        onClose();
+      })
+      .catch(() => {
+        reset();
+      })
+      .finally(invalidate);
+  }
+
+  return (
+    <>
+      <IconButton
+        colorScheme="blue"
+        aria-label="Editar"
+        onClick={onOpen}
+        icon={<EditIcon />}
+      />
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+        }}
+        initialFocusRef={initialRef}
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Añadir Sede</ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ModalBody pb={6}>
+              {Object.keys(fields).map((field, index) => {
+                if (index === 0) {
+                  return (
+                    <FormControl isRequired key={field} mt={4}>
+                      <FormLabel>{capitalizeFirstLetter(field)}</FormLabel>
+                      <Input
+                        placeholder={capitalizeFirstLetter(field)}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        name={name}
+                        ref={(el) => {
+                          ref(el);
+                          initialRef.current = el;
+                        }}
+                      />
+                    </FormControl>
+                  );
+                }
+                return (
+                  <FormControl key={field} mt={4}>
+                    <FormLabel>{capitalizeFirstLetter(field)}</FormLabel>
+                    <Input
+                      placeholder={capitalizeFirstLetter(field)}
+                      {...register(field)}
+                    />
+                  </FormControl>
+                );
+              })}
+            </ModalBody>
+            <ModalFooter>
+              <Button type="submit" colorScheme="blue" mr={3}>
+                Agregar
+              </Button>
+              <Button
+                onClick={() => {
+                  onClose();
+                }}
+              >
+                Cancel
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}

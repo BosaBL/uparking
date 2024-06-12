@@ -48,5 +48,4 @@ finalmente, construir el contenedor docker y levantarlo
 ```shell
 docker compose -f dev-compose.yml up --build
 ```
-
 el servidor debería estar corriendo.
