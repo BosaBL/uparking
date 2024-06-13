@@ -34,10 +34,7 @@ FORCE_SCRIPT_NAME = "/api/"
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    "django-insecure-@gk5+*hw1qz+95x-%9165kf5*t^(8o3hj_*_94x45#(qn+#8ha"
-)
-
+SECRET_KEY = os.getenv("DJANGO_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DOCKER_CONTAINER = bool(int(os.getenv("DOCKER_CONTAINER", 0)))
 DEBUG = bool(int(os.getenv("DEV", 0)))
@@ -214,9 +211,9 @@ if DEBUG:
     logger.warning("RUNNING AS DEVELOPMENT MODE")
 
     INSTALLED_APPS += ["drf_spectacular", "drf_spectacular_sidecar"]
-    REST_FRAMEWORK[
-        "DEFAULT_SCHEMA_CLASS"
-    ] = "drf_spectacular.openapi.AutoSchema"
+    REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = (
+        "drf_spectacular.openapi.AutoSchema"
+    )
     SPECTACULAR_SETTINGS = {
         "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
         "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
