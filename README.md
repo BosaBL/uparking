@@ -9,8 +9,8 @@ Este proyecto tiene como propósito crear una aplicación de estacionamientos, e
 
 En particular este repositorio consta del backend del proyecto, donde el principal motor es Django junto a DjangoRestFramework.
 
-## Progreso en Jira Sprin A (Entrega 1)
-[Imágen Progreso en Jira](https://raw.githubusercontent.com/BosaBL/uparking/main/artifacts/jira_avance_1.png)
+## Progreso en Jira Sprint A (Entrega 1)
+[Imágen Progreso en Jira](https://github.com/BosaBL/uparking/main/artifacts/jira_avance_1.png?raw=true)
 
 ## Instalación Local (PREVISUALIZACIÓN, NO USAR PARA DESARROLLO!)
 
