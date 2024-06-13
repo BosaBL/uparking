@@ -11,6 +11,7 @@ En particular este repositorio consta del backend del proyecto, donde el princip
 
 ## Progreso en Jira Sprint A (Entrega 1)
 ![Imágen Progreso en Jira](https://raw.githubusercontent.com/BosaBL/uparking/main/artifacts/jira_avance_1.png)
+Este progreso corresponde tanto a la aplicación móvil como al web y backend. Por otro lado hay algunas tareas que contienen sub-tareas, sin embargo jira no permite mostrarlas de una manera amigable para la visualización.
 
 ## Instalación Local (PREVISUALIZACIÓN, NO USAR PARA DESARROLLO!)
 
