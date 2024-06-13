@@ -47,6 +47,7 @@ Para acceder a distintas interfaces del usuario se recomienda utilizar `localhos
 
 - `localhost/api/docs/` documentación de la api.
 - `localhost/admin` página para administradores.
+  - Actualmente solo se encuentra funcional el CRUD de sedes `localhost/admin/sedes`.
 - `localhost/` página principal.
 
 ## Instalación Local (PARA DESARROLLO)
