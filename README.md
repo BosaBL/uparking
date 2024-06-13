@@ -43,7 +43,7 @@ el servidor debería haber inciado luego de 1 o 2 minutos.
 
 ### URLs importantes
 
-Para acceder a distintas interfaces del usuario se recomienda utilizar `localhost`, algunas urls de interés son
+Para acceder a distintas interfaces del usuario se recomienda utilizar `localhost` (si se quiere utilizar la web desplegada, cambiar `localhost` por [https://csep.dev/home](https://csep.dev/home)), algunas urls de interés son
 
 - `localhost/api/docs/` documentación de la api.
 - `localhost/admin` página para administradores.
