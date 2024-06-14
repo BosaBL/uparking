@@ -9,6 +9,10 @@ Este proyecto tiene como propósito crear una aplicación de estacionamientos, e
 
 En particular este repositorio consta del backend del proyecto, donde el principal motor es Django junto a DjangoRestFramework.
 
+## Progreso en Jira Sprint A (Entrega 1)
+![Imágen Progreso en Jira](https://raw.githubusercontent.com/BosaBL/uparking/main/artifacts/jira_avance_1.png)
+Este progreso corresponde tanto a la aplicación móvil como al web y backend. Por otro lado hay algunas tareas que contienen sub-tareas, sin embargo jira no permite mostrarlas de una manera amigable para la visualización.
+
 ## Instalación Local (PREVISUALIZACIÓN, NO USAR PARA DESARROLLO!)
 
 > [!IMPORTANT]
@@ -39,10 +43,11 @@ el servidor debería haber inciado luego de 1 o 2 minutos.
 
 ### URLs importantes
 
-Para acceder a distintas interfaces del usuario se recomienda utilizar `localhost`, algunas urls de interés son
+Para acceder a distintas interfaces del usuario se recomienda utilizar `localhost` (si se quiere utilizar la web desplegada, cambiar `localhost` por [https://csep.dev/](https://csep.dev/)). Algunas urls de interés son
 
 - `localhost/api/docs/` documentación de la api.
 - `localhost/admin` página para administradores.
+  - Actualmente solo se encuentra funcional el CRUD de sedes `localhost/admin/sedes`.
 - `localhost/` página principal.
 
 ## Instalación Local (PARA DESARROLLO)
