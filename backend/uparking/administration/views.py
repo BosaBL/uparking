@@ -1,5 +1,3 @@
-from venv import create
-
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -13,28 +11,55 @@ from .serializers import (
     CreateSedeSerializer,
     EstacionamientoSerializer,
     UpdateSedeSerializer,
-    VigilanteSerializer,
+    UpdateUserSerializer,
+    UserSerializer,
 )
 
 
-class VigilanteViewSet(viewsets.ModelViewSet):
+class UserViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+):
+
+    queryset = CustomUser.objects.filter()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator]
+
+    def get_serializer_class(self):
+        if self.action in ["retrieve", "list"]:
+            return UserSerializer
+        if self.action in ["update", "partial_update"]:
+            return UpdateUserSerializer
+
+        return None
+
+
+class VigilanteViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+):
 
     queryset = CustomUser.objects.filter(rol="vigilante")
-    serializer_class = VigilanteSerializer
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsAdministrator]
+
+    def get_serializer_class(self):
+        if self.action in ["retrieve", "list"]:
+            return UserSerializer
+        if self.action in ["update", "partial_update"]:
+            return UpdateUserSerializer
+
+        return None
 
 
 class EstacionamientoViewSet(viewsets.ModelViewSet):
 
     queryset = Estacionamiento.objects.all()
     serializer_class = EstacionamientoSerializer
-    permission_classes = [IsAuthenticated, IsAdministrator]
-
-
-class UserViewSet(viewsets.ModelViewSet):
-
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsAdministrator]
 
 

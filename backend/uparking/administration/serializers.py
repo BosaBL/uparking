@@ -6,21 +6,6 @@ from uparking.authentication.models import CustomUser
 from .models import Estacionamiento
 
 
-class VigilanteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = [
-            "id",
-            "rut",
-            "p_nombre",
-            "s_nombre",
-            "p_apellido",
-            "s_apellido",
-            "email",
-            "rol",
-        ]
-
-
 class EstacionamientoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estacionamiento
@@ -41,6 +26,30 @@ class UserSerializer(serializers.ModelSerializer):
             "rol",
         ]
         read_only_fields = ["id", "rut", "email"]
+
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "rut",
+            "p_nombre",
+            "s_nombre",
+            "p_apellido",
+            "s_apellido",
+            "email",
+            "rol",
+        ]
+        read_only_fields = [
+            "id",
+            "rut",
+            "email",
+            "p_nombre",
+            "s_nombre",
+            "p_apellido",
+            "s_apellido",
+        ]
 
 
 class CreateSedeSerializer(serializers.ModelSerializer):
