@@ -1,8 +1,9 @@
 import { ToastId, ToastProps, useToast } from '@chakra-ui/react';
 import { useRef } from 'react';
 
-export default function useUpdatableToast(duration: number, isClosable = true) {
+export default function useUpdatableToast(duration = 5000, isClosable = true) {
   const toast = useToast();
+  const clearToasts = toast.closeAll;
   const toastIdRef = useRef<ToastId>();
 
   function updateToast(props: ToastProps) {
@@ -18,5 +19,5 @@ export default function useUpdatableToast(duration: number, isClosable = true) {
     });
   }
 
-  return { addToast, updateToast };
+  return { addToast, updateToast, clearToasts };
 }

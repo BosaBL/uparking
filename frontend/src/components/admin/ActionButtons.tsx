@@ -1,53 +1,63 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { IconButton, Stack, useToast } from '@chakra-ui/react';
+import { IconButton, Stack } from '@chakra-ui/react';
 import { useRouter } from '@tanstack/react-router';
+import { ColumnDef } from '@tanstack/react-table';
 import { useState } from 'react';
-import UpdateSedeModal from './UpdateSedeModal';
-import { deleteSedeRequest } from './api';
-import { SedeT } from './sedes.d';
+import useUpdatableToast from '../hooks/useUpdatableToast';
+import { HandleDeleteT, HandleUpdateT } from './handlers.d';
+import { UpdateModalT } from './modals.d';
 
-export default function ActionButtons(sede: SedeT) {
+export default function ActionButtons<Data>({
+  data,
+  UpdateModal,
+  columns,
+  handleDelete,
+  handleUpdate,
+}: {
+  data: Data;
+  UpdateModal: UpdateModalT<Data>;
+  columns: ColumnDef<Data>[];
+  handleDelete: HandleDeleteT<Data>;
+  handleUpdate: HandleUpdateT<Data>;
+}) {
+  const [disabled, setDisabled] = useState(false);
+  const { addToast, updateToast, clearToasts } = useUpdatableToast();
   const { invalidate } = useRouter();
-  const [enabled, setEnabled] = useState(false);
-  const toast = useToast();
 
-  const handleDelete = async () => {
-    setEnabled(false);
-    toast.closeAll();
-    const deleterq = deleteSedeRequest(sede.id);
-
-    toast.promise(deleterq, {
-      success: {
-        title: `Se está eliminó el elemento ${sede.id}.`,
-        isClosable: true,
-      },
-      error: {
-        title: `Ha ocurrido un error al tratar de eliminar el elemento ${sede.id}.`,
-        isClosable: true,
-      },
-      loading: {
-        title: `Eliminando el elemento ${sede.id}...`,
-        isClosable: true,
-      },
+  const handleClick = () => {
+    clearToasts();
+    addToast({
+      status: 'loading',
+      description: `Se está eliminando el elemento.`,
     });
-
-    deleterq
+    setDisabled(true);
+    handleDelete(data)
       .then(() => {
-        invalidate();
+        updateToast({
+          status: 'success',
+          description: `Se ha eliminado el elemento.`,
+        });
       })
-      .catch(() => setEnabled(true));
+      .catch(() => {
+        updateToast({
+          status: 'error',
+          description: 'Ha ocurrido un error inesperado.',
+        });
+      })
+      .finally(invalidate);
+    setDisabled(false);
   };
 
   return (
     <Stack direction="row">
       <IconButton
+        isDisabled={disabled}
         colorScheme="red"
         aria-label="Eliminar"
         icon={<DeleteIcon />}
-        onClick={handleDelete}
-        isDisabled={enabled}
+        onClick={handleClick}
       />
-      <UpdateSedeModal {...sede} />
+      <UpdateModal data={data} columns={columns} handleUpdate={handleUpdate} />
     </Stack>
   );
 }

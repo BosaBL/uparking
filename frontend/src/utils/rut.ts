@@ -27,6 +27,6 @@ export function checkRut(rut: string): boolean {
   return dv === getVerifierDigit(rutt);
 }
 
-export function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+export function capitalizeFirstLetter(string: string | undefined) {
+  return string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
 }

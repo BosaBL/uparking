@@ -28,6 +28,23 @@ services:
           python manage.py collectstatic --no-input &&
           gunicorn uparking.wsgi:app --bind 0.0.0.0:8000 --reload --log-level debug --capture-output"
 
+  dev-frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./dev.dockerfile
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/
+          target: ./app
+    env_file:
+      - .env
+    ports:
+      - "5173:5173"
+    depends_on:
+      - app
+    command: npm run dev
+
   database:
     image: "postgis/postgis"
     container_name: uparking_database
@@ -57,7 +74,7 @@ services:
   nginx:
     build:
       context: ./frontend
-      dockerfile: ./env.dockerfile
+      dockerfile: ./prod.dockerfile
     ports:
       - 80:8080
     volumes:

@@ -13,55 +13,55 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
-  useToast,
 } from '@chakra-ui/react';
 import { useRouter } from '@tanstack/react-router';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { capitalizeFirstLetter } from '../../utils/rut';
-import { updateSedeRequest } from './api';
+import { capitalizeFirstLetter } from '../../../utils/rut';
+import useUpdatableToast from '../../hooks/useUpdatableToast';
+import { UpdateModalPropsT } from '../modals';
 import { SedeT } from './sedes.d';
 
-export default function UpdateSedeModal(fields: SedeT) {
+export default function UpdateSedeModal({
+  data,
+  columns,
+  handleUpdate,
+}: UpdateModalPropsT<SedeT>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
-  const initialRef = useRef(null);
+  const initialRef = useRef<HTMLInputElement | null>(null);
   const { register, handleSubmit, reset } = useForm({
-    defaultValues: fields,
-    ...fields,
+    defaultValues: data,
+    ...data,
   });
+  const { addToast, updateToast, clearToasts } = useUpdatableToast();
   const { invalidate } = useRouter();
 
   const { onChange, onBlur, name, ref } = register('id');
 
-  function onSubmit(sede: SedeT) {
-    toast.closeAll();
-    const sederq = updateSedeRequest(sede.id, { ...sede });
-
-    toast.promise(sederq, {
-      success: {
-        title: `Se añadió el elemento ${sede.id}.`,
-        isClosable: true,
-      },
-      error: {
-        title: `Ha ocurrido un error al tratar de añadir el elemento ${sede.id}.`,
-        isClosable: true,
-      },
-      loading: {
-        title: `Elemento ${sede.id} añadido...`,
-        isClosable: true,
-      },
+  function onSubmit() {
+    clearToasts();
+    addToast({
+      status: 'loading',
+      description: 'Se está actualizando el elemento.',
     });
-
-    sederq
+    handleUpdate(data)
       .then(() => {
+        updateToast({
+          status: 'success',
+          description: 'El elemento ha sido actualizado.}',
+        });
+      })
+      .catch(() =>
+        updateToast({
+          status: 'error',
+          description: 'Ha ocurrido un error inesperado.',
+        })
+      )
+      .finally(() => {
         reset();
+        invalidate();
         onClose();
-      })
-      .catch(() => {
-        reset();
-      })
-      .finally(invalidate);
+      });
   }
 
   return (
@@ -86,30 +86,32 @@ export default function UpdateSedeModal(fields: SedeT) {
           <ModalCloseButton />
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody pb={6}>
-              {Object.keys(fields).map((field, index) => {
-                if (index === 0) {
+              {columns.map((element, index) => {
+                if (index === 0 && element.id) {
                   return (
-                    <FormControl isRequired key={field} mt={4}>
-                      <FormLabel>{capitalizeFirstLetter(field)}</FormLabel>
+                    <FormControl isDisabled isRequired key={element.id} mt={4}>
+                      <FormLabel>{capitalizeFirstLetter(element.id)}</FormLabel>
                       <Input
-                        placeholder={capitalizeFirstLetter(field)}
+                        placeholder={capitalizeFirstLetter(element.id)}
                         onChange={onChange}
                         onBlur={onBlur}
                         name={name}
                         ref={(el) => {
                           ref(el);
-                          initialRef.current = el;
+                          if (el !== null) {
+                            initialRef.current = el;
+                          }
                         }}
                       />
                     </FormControl>
                   );
                 }
                 return (
-                  <FormControl key={field} mt={4}>
-                    <FormLabel>{capitalizeFirstLetter(field)}</FormLabel>
+                  <FormControl key={element.id} mt={4}>
+                    <FormLabel>{capitalizeFirstLetter(element.id)}</FormLabel>
                     <Input
-                      placeholder={capitalizeFirstLetter(field)}
-                      {...register(field)}
+                      placeholder={capitalizeFirstLetter(element.id)}
+                      {...register(element.id as keyof SedeT)}
                     />
                   </FormControl>
                 );
