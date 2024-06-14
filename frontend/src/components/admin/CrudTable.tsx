@@ -117,7 +117,7 @@ export default function CrudTable<Data>({
 
   return (
     <TableContainer>
-      <Table variant="striped" colorScheme="blue">
+      <Table minW="6xl" variant="striped" colorScheme="blue">
         <Thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
