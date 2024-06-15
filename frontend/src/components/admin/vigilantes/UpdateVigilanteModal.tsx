@@ -1,7 +1,9 @@
+import { EditIcon } from '@chakra-ui/icons';
 import {
   Button,
   FormControl,
   FormLabel,
+  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -17,55 +19,59 @@ import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { capitalizeFirstLetter } from '../../../utils/rut';
 import useUpdatableToast from '../../hooks/useUpdatableToast';
-import { CreateModalPropsT } from '../modals.d';
-import { SedeT } from './sedes.d';
+import { UpdateModalPropsT } from '../modals';
+import { VigilanteSimpleT } from './vigilantes';
 
-export default function AddSedeModal({
-  dataArray,
+export default function UpdateVigilanteModal({
+  data,
   columns,
-  handleCreate,
-}: CreateModalPropsT<SedeT>) {
+  handleUpdate,
+}: UpdateModalPropsT<VigilanteSimpleT>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef<HTMLInputElement | null>(null);
-  const { register, handleSubmit, reset } = useForm<SedeT>({});
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: data,
+    ...data,
+  });
   const { addToast, updateToast, clearToasts } = useUpdatableToast();
   const { invalidate } = useRouter();
 
   const { onChange, onBlur, name, ref } = register('id');
 
-  const onSubmit = (data: SedeT) => {
+  function onSubmit() {
     clearToasts();
-    addToast({ status: 'loading', description: 'Añadiendo sede...' });
-    if (dataArray.filter((el) => data.id === el.id).length) {
-      updateToast({
-        status: 'error',
-        description: `La sede con código ${data.id} ya existe.`,
-      });
-      return;
-    }
-    handleCreate(data)
+    addToast({
+      status: 'loading',
+      description: 'Se está actualizando el elemento.',
+    });
+    handleUpdate(data)
       .then(() => {
         updateToast({
           status: 'success',
-          description: `La sede código ${data.id} fue agregada.`,
+          description: 'El elemento ha sido actualizado.}',
         });
       })
-      .catch(() => {
-        reset();
-        invalidate();
+      .catch(() =>
         updateToast({
           status: 'error',
           description: 'Ha ocurrido un error inesperado.',
-        });
+        })
+      )
+      .finally(() => {
+        reset();
+        invalidate();
         onClose();
       });
-  };
+  }
+
   return (
     <>
-      <Button w="100%" colorScheme="green" onClick={onOpen}>
-        Añadir
-      </Button>
-
+      <IconButton
+        colorScheme="blue"
+        aria-label="Editar"
+        onClick={onOpen}
+        icon={<EditIcon />}
+      />
       <Modal
         isOpen={isOpen}
         onClose={() => {
@@ -83,7 +89,7 @@ export default function AddSedeModal({
               {columns.map((element, index) => {
                 if (index === 0 && element.id) {
                   return (
-                    <FormControl isRequired key={element.id} mt={4}>
+                    <FormControl isDisabled isRequired key={element.id} mt={4}>
                       <FormLabel>{capitalizeFirstLetter(element.id)}</FormLabel>
                       <Input
                         placeholder={capitalizeFirstLetter(element.id)}

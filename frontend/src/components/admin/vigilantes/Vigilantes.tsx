@@ -2,8 +2,8 @@ import { useLoaderData } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import CrudTable from '../CrudTable';
-import CreateSedeModal from './CreateSedeModal';
-import UpdateSedeModal from './UpdateSedeModal';
+import AddVigilanteModal from './CreateVigilanteModal';
+import UpdateVigilanteModal from './UpdateVigilanteModal';
 import { handleCreate, handleDelete, handleUpdate } from './handlers';
 import { VigilanteSimpleT, VigilanteT } from './vigilantes';
 
@@ -27,8 +27,6 @@ function Vigilantes() {
 
     return simplifiedDataArray;
   }, [loaderData]);
-  console.log(loaderData);
-  console.log(simplifiedData);
 
   const columns = useMemo<ColumnDef<VigilanteSimpleT>[]>(
     () => [
@@ -46,10 +44,10 @@ function Vigilantes() {
     <CrudTable<VigilanteSimpleT>
       data={simplifiedData}
       columns={columns}
-      UpdateModal={UpdateSedeModal}
+      UpdateModal={UpdateVigilanteModal}
       addModal={
-        <CreateSedeModal
-          dataArray={loaderData}
+        <AddVigilanteModal
+          dataArray={simplifiedData}
           columns={columns}
           handleCreate={handleCreate}
         />

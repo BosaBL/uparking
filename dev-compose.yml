@@ -37,6 +37,10 @@ services:
         - action: sync
           path: ./frontend/
           target: ./app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./frontend/package.json
     env_file:
       - .env
     ports:

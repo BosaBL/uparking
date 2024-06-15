@@ -91,6 +91,7 @@ export default function CrudTable<Data>({
   UpdateModal,
   handleDelete,
   handleUpdate,
+  isDeletable = true,
 }: {
   data: Data[];
   columns: ColumnDef<Data>[];
@@ -98,6 +99,7 @@ export default function CrudTable<Data>({
   UpdateModal: UpdateModalT<Data>;
   handleDelete: HandleDeleteT<Data>;
   handleUpdate: HandleUpdateT<Data>;
+  isDeletable?: boolean;
 }) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 

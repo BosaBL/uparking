@@ -13,12 +13,14 @@ export default function ActionButtons<Data>({
   columns,
   handleDelete,
   handleUpdate,
+  isDeletable = true,
 }: {
   data: Data;
   UpdateModal: UpdateModalT<Data>;
   columns: ColumnDef<Data>[];
   handleDelete: HandleDeleteT<Data>;
   handleUpdate: HandleUpdateT<Data>;
+  isDeletable?: boolean;
 }) {
   const [disabled, setDisabled] = useState(false);
   const { addToast, updateToast, clearToasts } = useUpdatableToast();
@@ -50,13 +52,15 @@ export default function ActionButtons<Data>({
 
   return (
     <Stack direction="row">
-      <IconButton
-        isDisabled={disabled}
-        colorScheme="red"
-        aria-label="Eliminar"
-        icon={<DeleteIcon />}
-        onClick={handleClick}
-      />
+      {isDeletable && (
+        <IconButton
+          isDisabled={disabled}
+          colorScheme="red"
+          aria-label="Eliminar"
+          icon={<DeleteIcon />}
+          onClick={handleClick}
+        />
+      )}
       <UpdateModal data={data} columns={columns} handleUpdate={handleUpdate} />
     </Stack>
   );
