@@ -39,7 +39,10 @@ SECRET_KEY = os.getenv("DJANGO_KEY")
 DOCKER_CONTAINER = bool(int(os.getenv("DOCKER_CONTAINER", 0)))
 DEBUG = bool(int(os.getenv("DEV", 0)))
 
-ALLOWED_HOSTS = ["*", "127.0.0.1", ".vercel.app", ".csep.dev"]
+ALLOWED_HOSTS = [
+    "*",
+    ".csep.dev",
+]
 
 
 # Application definition
@@ -211,9 +214,9 @@ if DEBUG:
     logger.warning("RUNNING AS DEVELOPMENT MODE")
 
     INSTALLED_APPS += ["drf_spectacular", "drf_spectacular_sidecar"]
-    REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = (
-        "drf_spectacular.openapi.AutoSchema"
-    )
+    REST_FRAMEWORK[
+        "DEFAULT_SCHEMA_CLASS"
+    ] = "drf_spectacular.openapi.AutoSchema"
     SPECTACULAR_SETTINGS = {
         "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
         "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
@@ -227,7 +230,7 @@ if DEBUG:
     Increased token lifetimes for user development testing purposes
     """
     SIMPLE_JWT = {
-        "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+        "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
         "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     }
 

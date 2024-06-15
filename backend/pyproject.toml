@@ -48,9 +48,7 @@ plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
 
 [tool.pylint.main]
 load-plugins = ["pylint_django"]
-
-[tool.pylint.'DJANGO FOREIGN KEYS REFERENCED BY STRINGS']
-django-settings-module="uparking.settings"
+django-settings-module = "uparking.settings"
 
 [tool.pylint.messages_control]
 disable = ["missing-module-docstring","missing-class-docstring","missing-function-docstring"]
