@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from '@tanstack/react-router';
@@ -66,12 +67,14 @@ export default function UpdateSedeModal({
 
   return (
     <>
-      <IconButton
-        colorScheme="blue"
-        aria-label="Editar"
-        onClick={onOpen}
-        icon={<EditIcon />}
-      />
+      <Tooltip label="Editar">
+        <IconButton
+          colorScheme="blue"
+          aria-label="Editar"
+          onClick={onOpen}
+          icon={<EditIcon />}
+        />
+      </Tooltip>
       <Modal
         isOpen={isOpen}
         onClose={() => {

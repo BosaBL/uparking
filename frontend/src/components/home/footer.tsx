@@ -60,7 +60,7 @@ export default function Footer(props: ChakraProps) {
         justify="center"
         align="center"
       >
-        <Box w="sm" pl="8" pr="8">
+        <Box w="100%" maxW="sm" pl="8" pr="8">
           <Logo color="var(--chakra-colors-blue-600)" />
         </Box>
         <Stack

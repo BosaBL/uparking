@@ -45,18 +45,20 @@ export default function AddSedeModal({
     }
     handleCreate(data)
       .then(() => {
+        reset();
         updateToast({
           status: 'success',
           description: `La sede código ${data.id} fue agregada.`,
         });
       })
       .catch(() => {
-        reset();
-        invalidate();
         updateToast({
           status: 'error',
           description: 'Ha ocurrido un error inesperado.',
         });
+      })
+      .finally(() => {
+        invalidate();
         onClose();
       });
   };

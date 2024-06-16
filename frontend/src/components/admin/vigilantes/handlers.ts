@@ -1,29 +1,19 @@
+import { APIS } from '../../../constants';
 import axios from '../../../libs/axiosBaseBearer';
-import { SedeT } from './sedes';
+import { VigilanteSimpleT } from './vigilantes';
 
-export const handleCreate = async (data: SedeT) => {
+export const handleCreate = async (data: VigilanteSimpleT) => {
+  const url = new URL(`users/${data.id}/`, APIS.admin);
   const reqObj = {
-    id: data.id,
-    nombre: data.nombre,
-    direccion: data.direccion,
+    rol: 'vigilante',
   };
-  return axios.post('/api/admin/sedes/', reqObj);
+  return axios.patch(url.toString(), reqObj);
 };
-export const handleDelete = async (data: SedeT) => {
-  const reqObj = {
-    id: data.id,
-    nombre: data.nombre,
-    direccion: data.direccion,
-  };
 
-  return axios.delete(`/api/admin/sedes/${reqObj.id}/`);
-};
-export const handleUpdate = async (data: SedeT) => {
-  const { id } = data;
+export const handleDelete = async (data: VigilanteSimpleT) => {
+  const url = new URL(`vigilantes/${data.id}/`, APIS.admin);
   const reqObj = {
-    nombre: data.nombre,
-    direccion: data.direccion,
+    rol: 'user',
   };
-
-  return axios.patch(`/api/admin/sedes/${id}/`, reqObj);
+  return axios.patch(url.toString(), reqObj);
 };

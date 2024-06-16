@@ -1,5 +1,5 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { IconButton, Stack } from '@chakra-ui/react';
+import { IconButton, Stack, Tooltip } from '@chakra-ui/react';
 import { useRouter } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table';
 import { useState } from 'react';
@@ -13,14 +13,16 @@ export default function ActionButtons<Data>({
   columns,
   handleDelete,
   handleUpdate,
-  isDeletable = true,
+  isDeletable,
+  isUpdatable,
 }: {
   data: Data;
   UpdateModal: UpdateModalT<Data>;
   columns: ColumnDef<Data>[];
   handleDelete: HandleDeleteT<Data>;
   handleUpdate: HandleUpdateT<Data>;
-  isDeletable?: boolean;
+  isDeletable: boolean;
+  isUpdatable: boolean;
 }) {
   const [disabled, setDisabled] = useState(false);
   const { addToast, updateToast, clearToasts } = useUpdatableToast();
@@ -51,17 +53,25 @@ export default function ActionButtons<Data>({
   };
 
   return (
-    <Stack direction="row">
+    <Stack direction="row" justifyContent="center">
       {isDeletable && (
-        <IconButton
-          isDisabled={disabled}
-          colorScheme="red"
-          aria-label="Eliminar"
-          icon={<DeleteIcon />}
-          onClick={handleClick}
+        <Tooltip label="Eliminar">
+          <IconButton
+            isDisabled={disabled}
+            colorScheme="red"
+            aria-label="Eliminar"
+            icon={<DeleteIcon />}
+            onClick={handleClick}
+          />
+        </Tooltip>
+      )}
+      {isUpdatable && (
+        <UpdateModal
+          data={data}
+          columns={columns}
+          handleUpdate={handleUpdate}
         />
       )}
-      <UpdateModal data={data} columns={columns} handleUpdate={handleUpdate} />
     </Stack>
   );
 }

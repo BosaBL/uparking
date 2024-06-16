@@ -1,11 +1,24 @@
 import { useLoaderData } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react';
+import { formatRut } from '../../../utils/rut';
+import { capitalize } from '../../../utils/strings';
 import CrudTable from '../CrudTable';
 import AddVigilanteModal from './CreateVigilanteModal';
 import UpdateVigilanteModal from './UpdateVigilanteModal';
-import { handleCreate, handleDelete, handleUpdate } from './handlers';
+import { handleCreate, handleDelete } from './handlers';
 import { VigilanteSimpleT, VigilanteT } from './vigilantes';
+
+function displayRol(rol: string): string {
+  switch (rol) {
+    case 'user':
+      return 'Usuario';
+    case 'vigilante':
+      return 'Vigilante';
+    default:
+      return '';
+  }
+}
 
 function Vigilantes() {
   const loaderData = useLoaderData({
@@ -31,11 +44,31 @@ function Vigilantes() {
   const columns = useMemo<ColumnDef<VigilanteSimpleT>[]>(
     () => [
       { header: 'id ', accessorKey: 'id', id: 'id' },
-      { header: 'RUT', accessorKey: 'rut', id: 'rut' },
-      { header: 'Nombres', accessorKey: 'nombres', id: 'nombres' },
-      { header: 'Apellidos', accessorKey: 'apellidos', id: 'apellidos' },
+      {
+        header: 'RUT',
+        accessorKey: 'rut',
+        id: 'rut',
+        cell: (info) => formatRut(info.getValue() as string),
+      },
+      {
+        header: 'Nombres',
+        accessorKey: 'nombres',
+        id: 'nombres',
+        cell: (info) => capitalize(info.getValue() as string),
+      },
+      {
+        header: 'Apellidos',
+        accessorKey: 'apellidos',
+        id: 'apellidos',
+        cell: (info) => capitalize(info.getValue() as string),
+      },
       { header: 'Email', accessorKey: 'email', id: 'email' },
-      { header: 'Rol', accessorKey: 'rol', id: 'rol' },
+      {
+        header: 'Rol',
+        accessorKey: 'rol',
+        id: 'rol',
+        cell: (info) => displayRol(info.getValue() as string),
+      },
     ],
     []
   );
@@ -45,6 +78,7 @@ function Vigilantes() {
       data={simplifiedData}
       columns={columns}
       UpdateModal={UpdateVigilanteModal}
+      isUpdatable={false}
       addModal={
         <AddVigilanteModal
           dataArray={simplifiedData}
@@ -52,7 +86,7 @@ function Vigilantes() {
           handleCreate={handleCreate}
         />
       }
-      handleUpdate={handleUpdate}
+      handleUpdate={handleDelete}
       handleDelete={handleDelete}
     />
   );
