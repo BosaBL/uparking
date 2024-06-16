@@ -94,9 +94,13 @@ export default function Register() {
       });
       navigate({ to: '/' });
     } catch (err) {
-      const error = err as AxiosError;
-      const rutError = error?.response.data.rut as string;
-      const emailError = error?.response.data.email as string;
+      type ErrorRes = {
+        rut: string;
+        email: string;
+      };
+      const error = err as AxiosError<ErrorRes>;
+      const rutError = error.response?.data.rut;
+      const emailError = error.response?.data.email;
       updateToast({
         status: 'error',
         title: 'Error',

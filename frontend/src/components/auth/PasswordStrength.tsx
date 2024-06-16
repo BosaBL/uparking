@@ -18,11 +18,7 @@ const itemStyle: CSSProperties = {
   height: 4,
 };
 
-const Item: React.FunctionComponent<PasswordStrengthBarItemProps> = ({
-  score,
-  itemNum,
-  barColors,
-}) => {
+function Item({ score, itemNum, barColors }: PasswordStrengthBarItemProps) {
   let bgColor = barColors[0];
   if (score >= itemNum) {
     bgColor = barColors[score];
@@ -36,7 +32,7 @@ const Item: React.FunctionComponent<PasswordStrengthBarItemProps> = ({
       }}
     />
   );
-};
+}
 
 export interface PasswordFeedback {
   warning?: string;
@@ -52,7 +48,7 @@ export interface PasswordStrengthBarProps {
   style?: CSSProperties;
   scoreWordClassName?: string;
   scoreWordStyle?: CSSProperties;
-  password: string;
+  password?: string;
   userInputs?: string[];
   barColors?: string[];
   scoreWords?: ReactNode[];
@@ -89,7 +85,8 @@ class PasswordStrengthBar extends React.Component<
   PasswordStrengthBarProps,
   PasswordStrengthBarState
 > {
-  public static defaultProps: PasswordStrengthBarProps = {
+  // eslint-disable-next-line react/static-property-placement
+  static defaultProps: PasswordStrengthBarProps = {
     className: undefined,
     style: undefined,
     scoreWordClassName: undefined,
@@ -103,9 +100,10 @@ class PasswordStrengthBar extends React.Component<
     onChangeScore: undefined,
   };
 
-  public state = {
-    score: 0,
-  };
+  constructor(props: PasswordStrengthBarProps) {
+    super(props);
+    this.state = { score: 0 };
+  }
 
   public componentDidMount(): void {
     this.setScore();
@@ -123,7 +121,7 @@ class PasswordStrengthBar extends React.Component<
     let result = null;
     let score = 0;
     let feedback: PasswordFeedback = {};
-    if (password.length >= minLength) {
+    if (password && minLength && password.length >= minLength) {
       result = zxcvbn(password, userInputs);
       ({ score, feedback } = result);
     }
@@ -152,8 +150,11 @@ class PasswordStrengthBar extends React.Component<
       shortScoreWord,
     } = this.props;
     const { score } = this.state;
+    const pass = password as string;
+    const min = minLength as number;
+    const sWords = scoreWords as ReactNode[];
     const newShortScoreWord =
-      password.length >= minLength ? scoreWords[score] : shortScoreWord;
+      pass.length >= min ? sWords[score] : shortScoreWord;
 
     return (
       <div className={className} style={{ ...rootStyle, ...style }}>
@@ -161,7 +162,7 @@ class PasswordStrengthBar extends React.Component<
           {[1, 2, 3, 4].map((el: number) => (
             <Fragment key={`password-strength-bar-item-${el}`}>
               {el > 1 && <div style={spaceStyle} />}
-              <Item score={score} itemNum={el} barColors={barColors} />
+              <Item score={score} itemNum={el} barColors={barColors ?? []} />
             </Fragment>
           ))}
         </div>

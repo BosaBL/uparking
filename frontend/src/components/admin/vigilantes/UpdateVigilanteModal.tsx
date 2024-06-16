@@ -111,7 +111,7 @@ export default function UpdateVigilanteModal({
                     <FormLabel>{capitalizeFirstLetter(element.id)}</FormLabel>
                     <Input
                       placeholder={capitalizeFirstLetter(element.id)}
-                      {...register(element.id as keyof SedeT)}
+                      {...register(element.id as keyof VigilanteSimpleT)}
                     />
                   </FormControl>
                 );

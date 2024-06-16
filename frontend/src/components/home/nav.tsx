@@ -55,7 +55,7 @@ const LinkItems: Array<LinkItemProps> = [
   },
 ];
 
-const LastItem: LinkItemProps = LinkItems.pop();
+const LastItem = LinkItems.pop() as LinkItemProps;
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
@@ -95,7 +95,6 @@ function NavItem({ icon, children, url, ...rest }: NavItemProps) {
 }
 
 function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
-
   const userData = user === '' ? null : (user as User);
 
   return (
@@ -146,6 +145,8 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
   const { addToast, updateToast } = useUpdatableToast(5000);
   const { invalidate } = useRouter();
   const { refreshToken } = useAuthStore();
+  const color = useColorModeValue('white', 'gray.900');
+  const colorTwo = useColorModeValue('gray.200', 'gray.700');
 
   if (userData) {
     if (userData.rol === 'admin') {
@@ -221,10 +222,7 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
                   <Icon as={FiLogIn} fontSize="3xl" />
                 </Flex>
               </MenuButton>
-              <MenuList
-                bg={useColorModeValue('white', 'gray.900')}
-                borderColor={useColorModeValue('gray.200', 'gray.700')}
-              >
+              <MenuList bg={color} borderColor={colorTwo}>
                 <MenuItem
                   as={Link}
                   to="/auth/login"
@@ -275,10 +273,7 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
                   </Box>
                 </HStack>
               </MenuButton>
-              <MenuList
-                bg={useColorModeValue('white', 'gray.900')}
-                borderColor={useColorModeValue('gray.200', 'gray.700')}
-              >
+              <MenuList bg={color} borderColor={colorTwo}>
                 <MenuItem as={Link} to="/home/user">
                   Mis datos
                 </MenuItem>

@@ -17,18 +17,10 @@ import { useLoaderData, useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { updateUserDataRequest } from '../../api/auth';
+import { UserUpdateDataFormType, updateUserDataRequest } from '../../api/auth';
 import { User } from '../../stores/auth';
 import { checkRut, getVerifierDigit } from '../../utils/rut';
 import useUpdatableToast from '../hooks/useUpdatableToast';
-
-export type UserUpdateDataFormType = {
-  p_nombre: string;
-  s_nombre: string;
-  p_apellido: string;
-  s_apellido: string;
-  telefono: string;
-};
 
 export default function UpdateUserDataForm() {
   const { addToast, updateToast } = useUpdatableToast(5000, true);
@@ -42,7 +34,7 @@ export default function UpdateUserDataForm() {
     lastName: [loader.p_apellido, loader.s_apellido].join(' '),
     rut: [loader.rut, getVerifierDigit(loader.rut)].join('-'),
     email: loader.email,
-    telefono: loader.telefono,
+    telefono: loader.telefono ?? '',
   };
 
   const validationSchema = z.object({
