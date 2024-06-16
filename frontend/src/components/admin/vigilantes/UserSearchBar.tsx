@@ -20,6 +20,7 @@ import {
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { APIS } from '../../../constants';
 import authApiWithBearer from '../../../libs/axiosAuthBearer';
+import { User } from '../../../stores/auth';
 import { formatRut } from '../../../utils/rut';
 import useDebounce from '../../hooks/useDebounce';
 import { VigilanteSimpleT } from './vigilantes';
@@ -36,7 +37,7 @@ function MatchRole({ role }: { role: string }) {
 
 const searchUser = (
   searchParam: string,
-  setData: Dispatch<SetStateAction<VigilanteSimpleT[]>>,
+  setData: Dispatch<SetStateAction<User[]>>,
   setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   const url = new URL('users', APIS.admin);
@@ -59,7 +60,7 @@ function UserSearchBar({
   initialRef: MutableRefObject<HTMLInputElement | null>;
 }) {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<VigilanteSimpleT[]>([]);
+  const [data, setData] = useState<User[]>([]);
   const updateSearch = useDebounce(searchUser);
 
   return (
@@ -74,7 +75,6 @@ function UserSearchBar({
           <Input
             ref={initialRef}
             type="search"
-            autoComplete="off"
             onChange={(e) => {
               if (e.target.value.length > 3)
                 updateSearch(e.target.value, setData, setLoading);
@@ -105,10 +105,24 @@ function UserSearchBar({
                       ? {}
                       : { background: 'gray.100', transition: '0.3s' }
                   }
-                  onClick={() => setSelected(el)}
+                  onClick={() =>
+                    setSelected({
+                      id: el.id,
+                      rut: el.rut,
+                      nombres: [el.p_nombre, el.s_nombre].join(' '),
+                      apellidos: [el.p_apellido, el.s_apellido].join(' '),
+                      email: el.email,
+                      rol: el.rol,
+                    })
+                  }
                 >
                   <Heading size="xs" textTransform="capitalize">
-                    {[el.nombres, el.apellidos].join(' ')}
+                    {[
+                      el.p_nombre,
+                      el.s_nombre,
+                      el.p_apellido,
+                      el.s_apellido,
+                    ].join(' ')}
                   </Heading>
                   <MatchRole role={el.rol} />
                   <Text>{el.email}</Text>

@@ -60,6 +60,7 @@ export default function CreateVigilanteModal({
         description: 'Ha ocurrido un error inesperado.',
       });
     } finally {
+      setSelected(null);
       invalidate();
     }
   };
