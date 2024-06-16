@@ -30,7 +30,7 @@ class UserViewSet(
     mixins.UpdateModelMixin,
 ):
 
-    queryset = CustomUser.objects
+    queryset = CustomUser.objects.filter(rol="user")
     serializer_class = UserSerializer
     filter_backends = [FTS]
     permission_classes = [IsAuthenticated, IsAdministrator]
