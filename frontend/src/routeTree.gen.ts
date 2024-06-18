@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ResendVerifyEmailImport } from './routes/resend-verify-email'
 import { Route as HomeImport } from './routes/_home'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AdminImport } from './routes/_admin'
@@ -26,6 +27,11 @@ import { Route as AdminAdminSedesImport } from './routes/_admin/admin.sedes'
 import { Route as AdminAdminEstacionamientosImport } from './routes/_admin/admin.estacionamientos'
 
 // Create/Update Routes
+
+const ResendVerifyEmailRoute = ResendVerifyEmailImport.update({
+  path: '/resend-verify-email',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const HomeRoute = HomeImport.update({
   id: '/_home',
@@ -126,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeImport
       parentRoute: typeof rootRoute
     }
+    '/resend-verify-email': {
+      id: '/resend-verify-email'
+      path: '/resend-verify-email'
+      fullPath: '/resend-verify-email'
+      preLoaderRoute: typeof ResendVerifyEmailImport
+      parentRoute: typeof rootRoute
+    }
     '/verify-account/$uid': {
       id: '/verify-account/$uid'
       path: '/verify-account/$uid'
@@ -207,6 +220,7 @@ export const routeTree = rootRoute.addChildren({
     AuthAuthRegisterRoute,
   }),
   HomeRoute: HomeRoute.addChildren({ HomeHomeUserRoute, HomeHomeIndexRoute }),
+  ResendVerifyEmailRoute,
   VerifyAccountUidRoute,
 })
 
@@ -222,6 +236,7 @@ export const routeTree = rootRoute.addChildren({
         "/_admin",
         "/_auth",
         "/_home",
+        "/resend-verify-email",
         "/verify-account/$uid"
       ]
     },
@@ -250,6 +265,9 @@ export const routeTree = rootRoute.addChildren({
         "/_home/home/user",
         "/_home/home/"
       ]
+    },
+    "/resend-verify-email": {
+      "filePath": "resend-verify-email.tsx"
     },
     "/verify-account/$uid": {
       "filePath": "verify-account.$uid.tsx"

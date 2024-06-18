@@ -23,7 +23,6 @@ function Component() {
   const toast = useToast();
   const [isLoading, setIsloading] = useState(true);
 
-  console.log('A');
   useEffect(() => {
     const url = new URL('registration/verify-email/', APIS.auth).toString();
     axios
@@ -38,8 +37,13 @@ function Component() {
         });
         navigate({ to: '/auth/login/', replace: true });
       })
-      .catch(() => console.log('ops'));
-  }, [params, navigate]);
+      .catch(() => {
+        toast({
+          status: 'error',
+          description: 'Su cuenta no ha podido ser validada.',
+        });
+      });
+  }, [params, navigate, toast]);
 
   return (
     <Flex
@@ -71,6 +75,9 @@ function Component() {
               />
               <Heading fontSize="3xl">Se está verificando tu cuenta</Heading>
             </Stack>
+          )}
+          {!isLoading && (
+            <Heading fontSize="3xl">Se está verificando tu cuenta</Heading>
           )}
         </Box>
       </Stack>
