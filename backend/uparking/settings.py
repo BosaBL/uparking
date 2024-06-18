@@ -30,6 +30,7 @@ USE_X_FORWARDED_HOST = True
 FORCE_SCRIPT_NAME = "/api/"
 
 
+print(BASE_DIR / "templates")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -98,7 +99,7 @@ CORS_ALLOW_CREDENTIALS = True
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -110,6 +111,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = "uparking.wsgi.app"
 
@@ -197,17 +199,29 @@ REST_AUTH = {
     "JWT_AUTH_HTTPONLY": False,
 }
 
+# SMTP CONFIG
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+
+print(os.getenv("EMAIL_HOST_USER", ""))
+print(os.getenv("EMAIL_HOST_PASSWORD", ""))
 
 # AUTHENTICATION SETTINGS
 AUTH_USER_MODEL = "authentication.CustomUser"
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
+ACCOUNT_ADAPTER = "uparking.authentication.adapters.CustomAccountAdapter"
 
 # DEV DOC SETTINGS
 if DEBUG:
