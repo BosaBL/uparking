@@ -55,7 +55,7 @@ function Component() {
         <ModalContent>
           <ModalHeader />
           <ModalCloseButton />
-          <ModalBody pb={6}>
+          <ModalBody>
             <Stack alignItems="center" gap="6">
               <Icon as={CheckCircleIcon} color="green.500" boxSize="16" />
               <Heading size="md">

@@ -38,9 +38,11 @@ function Component() {
         navigate({ to: '/auth/login/', replace: true });
       })
       .catch(() => {
+        navigate({ to: '/resend-verify-email/' });
         toast({
           status: 'error',
-          description: 'Su cuenta no ha podido ser validada.',
+          description:
+            'Su cuenta no ha podido ser validada. Intenta reenviar el correo de activación.',
         });
       });
   }, [params, navigate, toast]);
