@@ -1,6 +1,6 @@
 services:
   app:
-    restart: unless-stopped
+    restart: on-failure
     build:
       context: ./backend
       dockerfile: ./env.dockerfile
