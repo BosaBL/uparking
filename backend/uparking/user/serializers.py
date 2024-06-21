@@ -1,7 +1,9 @@
+from dataclasses import fields
+
 from rest_framework import serializers
 from rest_framework.fields import ModelField
 
-from uparking.administration.models import Vehiculo, VigilanteNotifica
+from uparking.administration.models import FeedBack, Vehiculo, VigilanteNotifica
 from uparking.authentication.models import CustomUser
 
 

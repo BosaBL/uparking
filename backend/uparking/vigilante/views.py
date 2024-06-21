@@ -75,6 +75,7 @@ class NotificacionViewset(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
 ):
 
     serializer_class = NotificacionSerializer

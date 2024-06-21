@@ -3,14 +3,28 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from uparking.administration.models import (
     Estacionamiento,
+    FeedBack,
+    Sede,
     Vehiculo,
     VigilanteNotifica,
 )
-from uparking.administration.serializers import EstacionamientoSerializer
+from uparking.administration.serializers import (
+    EstacionamientoSerializer,
+    FeedbackSerializer,
+    UpdateSedeSerializer,
+)
 from uparking.user.permissions import IsNotificacionPatenteOwner, IsPatenteOwner
 from uparking.user.serializers import VehiculoSerializer
 
 from .serializers import UserNotificationsSerializer
+
+
+class UserSedesViewset(
+    viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin
+):
+    queryset = Sede.objects.all()
+    serializer_class = UpdateSedeSerializer
+    permission_classes = [AllowAny]
 
 
 class EstacionamientoViewset(
@@ -46,3 +60,9 @@ class VehiculosView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(usuario=self.request.user)
+
+
+class FeedbackViewset(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    queryset = FeedBack.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = FeedbackSerializer
