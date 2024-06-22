@@ -1,9 +1,12 @@
+from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.contrib.gis.db import models as geo_models
 from django.contrib.gis.geos import Polygon
 from django.db import models
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
+
+from uparking.user.channel_senders import update_estacionamientos
 
 
 class Sede(models.Model):
@@ -52,8 +55,9 @@ class Estacionamiento(models.Model):
             )
 
     def save(self, *args, **kwargs):
-
         self.full_clean()
+        async_to_sync(update_estacionamientos)()
+        print("should be sent")
         super().save(*args, **kwargs)
 
 

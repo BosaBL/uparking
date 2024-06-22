@@ -49,6 +49,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -74,6 +75,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "dj_rest_auth.registration",
     "rest_framework_simplejwt.token_blacklist",
+    # REAL TIME WS
+    "channels",
 ]
 
 SITE_ID = 1
@@ -113,15 +116,13 @@ TEMPLATES = [
 ]
 
 
+ASGI_APPLICATION = "uparking.asgi.application"
 WSGI_APPLICATION = "uparking.wsgi.app"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-print(os.environ.get("POSTGRES_DB"))
-print(os.environ.get("POSTGRES_USER"))
-print(os.environ.get("POSTGRES_PASSWORD"))
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -131,6 +132,15 @@ DATABASES = {
         "HOST": os.environ.get("POSTGRES_HOST"),
         "PORT": "",
     }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
 }
 
 # Password validation
