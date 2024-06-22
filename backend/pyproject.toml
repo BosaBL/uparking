@@ -17,9 +17,11 @@ dj-rest-auth = {extras = ["with-social"], version = "^6.0.0"}
 djangorestframework-simplejwt = "^5.3.1"
 drf-spectacular = {extras = ["sidecar"], version = "^0.27.2"}
 djangorestframework-gis = "^1.0"
-uvicorn = "^0.30.1"
+uvicorn = {extras = ["standard"], version = "^0.30.1"}
 gunicorn = "^22.0.0"
 django-cors-headers = "^4.3.1"
+channels-redis = "^4.2.0"
+channels = {extras = ["daphne"], version = "^4.1.0"}
 
 [tool.poetry.group.dev.dependencies]
 python-lsp-isort = "^0.1"

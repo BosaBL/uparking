@@ -23,12 +23,17 @@ from django.urls import URLPattern, URLResolver, include, path
 
 from .settings import DEBUG
 
+urls = [
+    path("", include("uparking.user.urls")),
+    path("admin/", include("uparking.administration.urls")),
+    path("vigilante/", include("uparking.vigilante.urls")),
+]
+
 urlpatterns: List[Union[URLPattern, URLResolver]] = [
     path("auth/", include("uparking.authentication.urls")),
-    path("api/", include("uparking.user.urls")),
-    path("api/admin/", include("uparking.administration.urls")),
-    path("api/vigilante/", include("uparking.vigilante.urls")),
+    path("v1/", include(urls)),
 ]
+
 
 # DEV SETTINGS
 if DEBUG:
