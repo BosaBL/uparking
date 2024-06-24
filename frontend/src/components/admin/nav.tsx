@@ -128,7 +128,12 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
       </Flex>
       {LinkItems.map((link) =>
         link.name !== 'Notificaciones' || user ? (
-          <NavItem key={link.name} icon={link.icon} url={link.url}>
+          <NavItem
+            onClick={onClose}
+            key={link.name}
+            icon={link.icon}
+            url={link.url}
+          >
             {link.name}
           </NavItem>
         ) : null
@@ -138,11 +143,17 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
       </Text>
       <Divider />
       {AdminItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} url={link.url}>
+        <NavItem
+          onClick={onClose}
+          key={link.name}
+          icon={link.icon}
+          url={link.url}
+        >
           {link.name}
         </NavItem>
       ))}
       <NavItem
+        onClick={onClose}
         pos="absolute"
         bottom={0}
         icon={LastItem.icon}

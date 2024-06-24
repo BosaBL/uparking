@@ -1,9 +1,6 @@
-export type CoordT = {
-  lat: number;
-  lng: number;
-};
-
-export function getPaths(polygon: google.maps.Polygon): CoordT[] {
+export function getLatLngFromPolygon(
+  polygon: google.maps.Polygon
+): google.maps.LatLngLiteral[] {
   const polygonBounds = polygon.getPath();
   const bounds = [];
   for (let i = 0; i < polygonBounds.getLength(); i += 1) {

@@ -116,13 +116,19 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
       </Flex>
       {LinkItems.map((link) =>
         link.name !== 'Notificaciones' || userData ? (
-          <NavItem key={link.name} icon={link.icon} url={link.url}>
+          <NavItem
+            onClick={onClose}
+            key={link.name}
+            icon={link.icon}
+            url={link.url}
+          >
             {link.name}
           </NavItem>
         ) : null
       )}
       <NavItem
         pos="absolute"
+        onClick={onClose}
         bottom={0}
         key={LastItem.name}
         icon={LastItem.icon}

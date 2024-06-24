@@ -1,4 +1,4 @@
-import {Dispatch, MutableRefObject, useEffect} from 'react';
+import { Dispatch, MutableRefObject, useEffect } from 'react';
 
 import {
   Action,
@@ -11,7 +11,7 @@ import {
   isMarker,
   isPolygon,
   isPolyline,
-  isRectangle
+  isRectangle,
 } from './types';
 
 export default function reducer(state: State, action: Action) {
@@ -22,7 +22,7 @@ export default function reducer(state: State, action: Action) {
     case DrawingActionKind.UPDATE_OVERLAYS: {
       const overlays = state.now.map((overlay: Overlay) => {
         const snapshot: Snapshot = {};
-        const {geometry} = overlay;
+        const { geometry } = overlay;
 
         if (isCircle(geometry)) {
           snapshot.center = geometry.getCenter()?.toJSON();
@@ -37,14 +37,14 @@ export default function reducer(state: State, action: Action) {
 
         return {
           ...overlay,
-          snapshot
+          snapshot,
         };
       });
 
       return {
         now: [...overlays],
         past: [...state.past, state.now],
-        future: []
+        future: [],
       };
     }
 
@@ -52,7 +52,7 @@ export default function reducer(state: State, action: Action) {
     // We then take a snapshot of the relevant values of the new overlay and
     // add it to the "now" state. The old "now" is added to the "past" stack
     case DrawingActionKind.SET_OVERLAY: {
-      const {overlay} = action.payload;
+      const { overlay } = action.payload;
 
       const snapshot: Snapshot = {};
 
@@ -74,10 +74,10 @@ export default function reducer(state: State, action: Action) {
           {
             type: action.payload.type,
             geometry: action.payload.overlay,
-            snapshot
-          }
+            snapshot,
+          },
         ],
-        future: []
+        future: [],
       };
     }
 
@@ -92,7 +92,7 @@ export default function reducer(state: State, action: Action) {
       return {
         past: [...state.past].slice(0, -1),
         now: last,
-        future: state.now ? [...state.future, state.now] : state.future
+        future: state.now ? [...state.future, state.now] : state.future,
       };
     }
 
@@ -107,7 +107,15 @@ export default function reducer(state: State, action: Action) {
       return {
         past: state.now ? [...state.past, state.now] : state.past,
         now: next,
-        future: [...state.future].slice(0, -1)
+        future: [...state.future].slice(0, -1),
+      };
+    }
+
+    case DrawingActionKind.RESET: {
+      return {
+        past: [],
+        now: [],
+        future: [],
       };
     }
   }
@@ -138,7 +146,7 @@ export function useDrawingManagerEvents(
           }
 
           if (overlaysShouldUpdateRef.current) {
-            dispatch({type: DrawingActionKind.UPDATE_OVERLAYS});
+            dispatch({ type: DrawingActionKind.UPDATE_OVERLAYS });
           }
         }
       );
@@ -152,13 +160,13 @@ export function useDrawingManagerEvents(
       (drawResult: DrawResult) => {
         switch (drawResult.type) {
           case google.maps.drawing.OverlayType.CIRCLE:
-            ['center_changed', 'radius_changed'].forEach(eventName =>
+            ['center_changed', 'radius_changed'].forEach((eventName) =>
               addUpdateListener(eventName, drawResult)
             );
             break;
 
           case google.maps.drawing.OverlayType.MARKER:
-            ['dragend'].forEach(eventName =>
+            ['dragend'].forEach((eventName) =>
               addUpdateListener(eventName, drawResult)
             );
 
@@ -166,26 +174,26 @@ export function useDrawingManagerEvents(
 
           case google.maps.drawing.OverlayType.POLYGON:
           case google.maps.drawing.OverlayType.POLYLINE:
-            ['mouseup'].forEach(eventName =>
+            ['mouseup'].forEach((eventName) =>
               addUpdateListener(eventName, drawResult)
             );
 
           case google.maps.drawing.OverlayType.RECTANGLE:
-            ['bounds_changed', 'dragstart', 'dragend'].forEach(eventName =>
+            ['bounds_changed', 'dragstart', 'dragend'].forEach((eventName) =>
               addUpdateListener(eventName, drawResult)
             );
 
             break;
         }
 
-        dispatch({type: DrawingActionKind.SET_OVERLAY, payload: drawResult});
+        dispatch({ type: DrawingActionKind.SET_OVERLAY, payload: drawResult });
       }
     );
 
     eventListeners.push(overlayCompleteListener);
 
     return () => {
-      eventListeners.forEach(listener =>
+      eventListeners.forEach((listener) =>
         google.maps.event.removeListener(listener)
       );
     };
@@ -206,7 +214,7 @@ export function useOverlaySnapshots(
 
       overlay.geometry.setMap(map);
 
-      const {radius, center, position, path, bounds} = overlay.snapshot;
+      const { radius, center, position, path, bounds } = overlay.snapshot;
 
       if (isCircle(overlay.geometry)) {
         overlay.geometry.setRadius(radius ?? 0);

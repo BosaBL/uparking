@@ -6,3 +6,5 @@ export const APIS = {
   vigilante: new URL('v1/vigilante/', BASEAPI).toString(),
   user: new URL('v1/', BASEAPI).toString(),
 };
+
+export const MAP_API_KEY = '';

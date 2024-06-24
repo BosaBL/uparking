@@ -11,7 +11,7 @@ export function useDrawingManager(
     useState<google.maps.drawing.DrawingManager | null>(initialValue);
 
   useEffect(() => {
-    if (!map || !drawing) return;
+    if (!map || !drawing) return undefined;
 
     // https://developers.google.com/maps/documentation/javascript/reference/drawing
     const newDrawingManager = new drawing.DrawingManager({
@@ -19,11 +19,7 @@ export function useDrawingManager(
       drawingControl: true,
       drawingControlOptions: {
         position: google.maps.ControlPosition.TOP_CENTER,
-        drawingModes: [
-          google.maps.drawing.OverlayType.MARKER,
-          google.maps.drawing.OverlayType.POLYGON,
-          google.maps.drawing.OverlayType.RECTANGLE,
-        ],
+        drawingModes: [google.maps.drawing.OverlayType.POLYGON],
       },
     });
 
