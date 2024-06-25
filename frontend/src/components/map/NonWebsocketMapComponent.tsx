@@ -1,50 +1,33 @@
 import {
   AdvancedMarker,
-  ControlPosition,
   Map,
-  MapControl,
   Pin,
+  useMap,
   useMapsLibrary,
 } from '@vis.gl/react-google-maps';
 
 import { Box, Stack } from '@chakra-ui/react';
-import { Dispatch, SetStateAction } from 'react';
 import { Polygon } from './Polygon';
 import { Estacionamiento } from './types';
-import { UndoRedoControl } from './undo-redo-control';
-import { useDrawingManager } from './use-drawing-manager';
-import {
-  getLatLngFromArray,
-  getLatLngFromPolygon,
-  getTreshholdColor,
-} from './utils';
+import { getLatLngFromArray, getTreshholdColor } from './utils';
 
-type DrawableMapComponentProps = {
+type NonDrawableMapComponentProps = {
   defaultZoom?: number;
   maxZoom?: number;
   minZoom?: number;
   defaultCenter?: google.maps.LatLngLiteral;
-  onAction: Dispatch<SetStateAction<google.maps.LatLngLiteral[] | null>>;
   dataArray: Estacionamiento[];
 };
 
-function DrawableMapComponent({
+function NonWebsockerMapComponents({
   defaultZoom = 18,
   maxZoom = 19.5,
   minZoom = 17.5,
   defaultCenter = { lat: -40.58718881060938, lng: -73.08907589274496 },
-  onAction,
   dataArray,
-}: DrawableMapComponentProps) {
-  const drawingManager = useDrawingManager();
+}: NonDrawableMapComponentProps) {
+  const map = useMap();
   const coreLib = useMapsLibrary('core');
-
-  if (drawingManager) {
-    drawingManager.addListener('polygoncomplete', (e: google.maps.Polygon) => {
-      onAction(getLatLngFromPolygon(e));
-      drawingManager.setOptions({ drawingControl: false });
-    });
-  }
 
   return (
     <Stack
@@ -62,9 +45,10 @@ function DrawableMapComponent({
         mapId="d1d387488b4410d4"
         defaultCenter={defaultCenter}
         gestureHandling="greedy"
-        // disableDefaultUI
+      // disableDefaultUI
       >
         {coreLib &&
+          map &&
           dataArray &&
           dataArray.map((el) => {
             const bounds = new coreLib.LatLngBounds();
@@ -73,6 +57,7 @@ function DrawableMapComponent({
             );
             const colors = getTreshholdColor(el);
             const centroid = bounds.getCenter();
+            map.setCenter(centroid);
             return (
               <Box key={el.id}>
                 <AdvancedMarker position={centroid}>
@@ -93,12 +78,8 @@ function DrawableMapComponent({
             );
           })}
       </Map>
-
-      <MapControl position={ControlPosition.BOTTOM_CENTER}>
-        <UndoRedoControl onAction={onAction} drawingManager={drawingManager} />
-      </MapControl>
     </Stack>
   );
 }
 
-export default DrawableMapComponent;
+export default NonWebsockerMapComponents;

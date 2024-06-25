@@ -1,50 +1,50 @@
 import {
   AdvancedMarker,
-  ControlPosition,
   Map,
-  MapControl,
   Pin,
   useMapsLibrary,
 } from '@vis.gl/react-google-maps';
 
 import { Box, Stack } from '@chakra-ui/react';
-import { Dispatch, SetStateAction } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import useWebSocket from 'react-use-websocket';
+import { APIS, WEBSOCKET } from '../../constants';
 import { Polygon } from './Polygon';
 import { Estacionamiento } from './types';
-import { UndoRedoControl } from './undo-redo-control';
-import { useDrawingManager } from './use-drawing-manager';
-import {
-  getLatLngFromArray,
-  getLatLngFromPolygon,
-  getTreshholdColor,
-} from './utils';
+import { getLatLngFromArray, getTreshholdColor } from './utils';
 
-type DrawableMapComponentProps = {
+type NonDrawableMapComponentProps = {
   defaultZoom?: number;
   maxZoom?: number;
   minZoom?: number;
   defaultCenter?: google.maps.LatLngLiteral;
-  onAction: Dispatch<SetStateAction<google.maps.LatLngLiteral[] | null>>;
-  dataArray: Estacionamiento[];
 };
 
-function DrawableMapComponent({
+function NonDrawableMapComponents({
   defaultZoom = 18,
   maxZoom = 19.5,
   minZoom = 17.5,
   defaultCenter = { lat: -40.58718881060938, lng: -73.08907589274496 },
-  onAction,
-  dataArray,
-}: DrawableMapComponentProps) {
-  const drawingManager = useDrawingManager();
+}: NonDrawableMapComponentProps) {
   const coreLib = useMapsLibrary('core');
 
-  if (drawingManager) {
-    drawingManager.addListener('polygoncomplete', (e: google.maps.Polygon) => {
-      onAction(getLatLngFromPolygon(e));
-      drawingManager.setOptions({ drawingControl: false });
-    });
-  }
+  const [dataArray, setDataArray] = useState<Estacionamiento[] | null>(null);
+
+  const { lastMessage } = useWebSocket(WEBSOCKET.toString());
+
+  useEffect(() => {
+    const fetchEstacionamientos = async () => {
+      const url = new URL('estacionamientos/', APIS.user).toString();
+      const res = await axios.get(url);
+
+      setDataArray(res.data);
+    };
+
+    console.log('UPDATED');
+
+    fetchEstacionamientos();
+  }, [setDataArray, lastMessage]);
 
   return (
     <Stack
@@ -62,7 +62,7 @@ function DrawableMapComponent({
         mapId="d1d387488b4410d4"
         defaultCenter={defaultCenter}
         gestureHandling="greedy"
-        // disableDefaultUI
+      // disableDefaultUI
       >
         {coreLib &&
           dataArray &&
@@ -93,12 +93,8 @@ function DrawableMapComponent({
             );
           })}
       </Map>
-
-      <MapControl position={ControlPosition.BOTTOM_CENTER}>
-        <UndoRedoControl onAction={onAction} drawingManager={drawingManager} />
-      </MapControl>
     </Stack>
   );
 }
 
-export default DrawableMapComponent;
+export default NonDrawableMapComponents;

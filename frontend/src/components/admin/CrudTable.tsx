@@ -29,7 +29,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useCallback, useEffect, useState } from 'react';
-import ActionButtons from './ActionButtons';
 import { HandleDeleteT, HandleUpdateT } from './handlers';
 import { CreateModalT, UpdateModalT } from './modals.d';
 
@@ -192,15 +191,15 @@ export default function CrudTable<Data>({
                   </Td>
                 ))}
                 <Td>
-                  <ActionButtons<Data>
-                    data={row.original}
-                    columns={columns}
-                    UpdateModal={UpdateModal}
-                    handleUpdate={handleUpdate}
-                    handleDelete={handleDelete}
-                    isUpdatable={isUpdatable}
-                    isDeletable={isDeletable}
-                  />
+                  {/* <ActionButtons<Data> */}
+                  {/*   data={row.original} */}
+                  {/*   columns={columns} */}
+                  {/*   UpdateModal={UpdateModal} */}
+                  {/*   handleUpdate={handleUpdate} */}
+                  {/*   handleDelete={handleDelete} */}
+                  {/*   isUpdatable={isUpdatable} */}
+                  {/*   isDeletable={isDeletable} */}
+                  {/* /> */}
                 </Td>
               </Tr>
             ))}

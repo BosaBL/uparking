@@ -21,6 +21,9 @@ export function useDrawingManager(
         position: google.maps.ControlPosition.TOP_CENTER,
         drawingModes: [google.maps.drawing.OverlayType.POLYGON],
       },
+      polygonOptions: {
+        strokeWeight: 2,
+      },
     });
 
     setDrawingManager(newDrawingManager);

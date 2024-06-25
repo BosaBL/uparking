@@ -1,4 +1,5 @@
 export const BASEAPI = new URL('http://localhost/api/').toString();
+export const WEBSOCKET = new URL('ws://localhost/ws/estacionamientos');
 
 export const APIS = {
   auth: new URL('auth/', BASEAPI).toString(),

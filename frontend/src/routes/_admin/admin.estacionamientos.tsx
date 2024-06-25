@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/react';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
@@ -6,6 +5,7 @@ import { useMemo } from 'react';
 import CrudTable from '../../components/admin/CrudTable';
 import { SedeT } from '../../components/admin/sedes/sedes';
 import CreateEstacionamientoModal from '../../components/map/CreateEstacionamientoModal';
+import ViewLocation from '../../components/map/ViewLocation';
 import { Estacionamiento } from '../../components/map/types';
 import { APIS } from '../../constants';
 
@@ -38,24 +38,27 @@ function Component() {
         header: 'ubicación',
         accessorKey: 'area_espacio',
         id: 'area_espacio',
-        cell: () => 'ola',
+        cell: (info) => {
+          return <ViewLocation dataArray={[info.row.original]} />;
+        },
         form: 'Ubicación (dibuje un polígono)',
       },
     ],
     []
   );
 
-  const handleUpdate = () => {};
-  const handleDelete = () => {};
+  const handleUpdate = () => { };
+  const handleDelete = () => { };
 
   return (
     <CrudTable<Estacionamiento>
       data={loaderData.estacionamientos}
       columns={columns}
-      UpdateModal={<Box> asd</Box>}
+      UpdateModal={null}
       addModal={
         <CreateEstacionamientoModal
           sedes={loaderData.sedes}
+          dataArray={loaderData.estacionamientos}
           columns={columns}
         />
       }
