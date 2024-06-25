@@ -1,5 +1,5 @@
 import { useMap } from '@vis.gl/react-google-maps';
-import { useReducer, useRef } from 'react';
+import { Dispatch, SetStateAction, useReducer, useRef } from 'react';
 
 import reducer, {
   useDrawingManagerEvents,
@@ -12,9 +12,10 @@ import { DrawingActionKind } from './types';
 
 interface Props {
   drawingManager: google.maps.drawing.DrawingManager | null;
+  onAction: Dispatch<SetStateAction<google.maps.LatLngLiteral[] | null>>;
 }
 
-export function UndoRedoControl({ drawingManager }: Props) {
+export function UndoRedoControl({ drawingManager, onAction }: Props) {
   const map = useMap();
 
   const [state, dispatch] = useReducer(reducer, {
@@ -38,7 +39,11 @@ export function UndoRedoControl({ drawingManager }: Props) {
       <Tooltip label="Eliminar Areas">
         <IconButton
           aria-label="Eliminar Areas"
-          onClick={() => dispatch({ type: DrawingActionKind.RESET })}
+          onClick={() => {
+            dispatch({ type: DrawingActionKind.RESET });
+            onAction(null);
+            drawingManager?.setOptions({ drawingControl: true });
+          }}
           background="white"
           disabled={!state.past.length}
           height="32px"

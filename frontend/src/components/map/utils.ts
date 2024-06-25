@@ -13,3 +13,11 @@ export function getLatLngFromPolygon(
 
   return bounds;
 }
+
+export function getLatLngArray(
+  polygons: google.maps.LatLngLiteral[]
+): number[][][] {
+  const coords = polygons.map((el) => [el.lat, el.lng]);
+  coords.push([polygons[0].lat, polygons[0].lng]);
+  return [coords];
+}

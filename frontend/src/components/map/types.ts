@@ -78,3 +78,17 @@ export function isRectangle(
 ): overlay is google.maps.Rectangle {
   return (overlay as google.maps.Rectangle).getBounds !== undefined;
 }
+
+export type Areaespacio = {
+  type: string;
+  coordinates: number[][][];
+};
+
+export type Estacionamiento = {
+  id: string;
+  nombre: string;
+  capacidad: number;
+  capacidad_max: number;
+  area_espacio: Areaespacio;
+  sede: string;
+};

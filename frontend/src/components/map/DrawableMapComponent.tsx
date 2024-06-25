@@ -1,6 +1,14 @@
-import { ControlPosition, Map, MapControl } from '@vis.gl/react-google-maps';
+import {
+  AdvancedMarker,
+  ControlPosition,
+  Map,
+  MapControl,
+  Pin,
+  useMapsLibrary,
+} from '@vis.gl/react-google-maps';
 
-import { Stack } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
+import { Dispatch, SetStateAction } from 'react';
 import { Polygon } from './Polygon';
 import { UndoRedoControl } from './undo-redo-control';
 import { useDrawingManager } from './use-drawing-manager';
@@ -8,258 +16,77 @@ import { getLatLngFromPolygon } from './utils';
 
 const pol = [
   {
-    lat: -40.586952528090514,
-    lng: -73.08942994431331,
-  },
-  {
-    lat: -40.58710326013861,
-    lng: -73.08947285965495,
-  },
-  {
-    lat: -40.58713585080701,
-    lng: -73.08879157860673,
-  },
-  {
-    lat: -40.58700548803803,
-    lng: -73.08877548535365,
-  },
-  {
-    lat: -40.586952528090514,
-    lng: -73.08942994431331,
-  },
-];
-
-const mapStyle = [
-  {
-    featureType: 'administrative',
-    stylers: [
+    key: 1,
+    polygon: [
       {
-        visibility: 'off',
+        lat: -40.58659333106507,
+        lng: -73.08928054998279,
+      },
+      {
+        lat: -40.586764433194915,
+        lng: -73.0892993254459,
+      },
+      {
+        lat: -40.586835725619835,
+        lng: -73.08843297193408,
+      },
+      {
+        lat: -40.58666258674179,
+        lng: -73.08840614984393,
       },
     ],
   },
   {
-    featureType: 'landscape',
-    stylers: [
+    key: 2,
+    polygon: [
       {
-        hue: '#0066ff',
+        lat: -40.58652916765352,
+        lng: -73.08926982114673,
       },
       {
-        saturation: 75,
+        lat: -40.586380471256795,
+        lng: -73.08925372789264,
       },
       {
-        lightness: 100,
+        lat: -40.58645583796495,
+        lng: -73.08833909461856,
       },
       {
-        visibility: 'simplified',
-      },
-    ],
-  },
-  {
-    featureType: 'poi',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi',
-    elementType: 'labels',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.park',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'geometry.fill',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'geometry.stroke',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'labels',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.place_of_worship',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.school',
-    elementType: 'geometry',
-    stylers: [
-      {
-        visibility: 'on',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.school',
-    elementType: 'labels',
-    stylers: [
-      {
-        visibility: 'on',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.school',
-    elementType: 'labels.icon',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.sports_complex',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.sports_complex',
-    elementType: 'geometry',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.sports_complex',
-    elementType: 'geometry.fill',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.sports_complex',
-    elementType: 'geometry.stroke',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'road',
-    stylers: [
-      {
-        visibility: 'simplified',
-      },
-    ],
-  },
-  {
-    featureType: 'road.arterial',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'road.highway',
-    stylers: [
-      {
-        saturation: -85,
+        lat: -40.58651287217412,
+        lng: -73.08828545043826,
       },
       {
-        lightness: 61,
-      },
-      {
-        visibility: 'off',
-      },
-      {
-        weight: 0.6,
-      },
-    ],
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'geometry',
-    stylers: [
-      {
-        visibility: 'on',
-      },
-    ],
-  },
-  {
-    featureType: 'road.local',
-    stylers: [
-      {
-        visibility: 'on',
-      },
-    ],
-  },
-  {
-    featureType: 'transit',
-    stylers: [
-      {
-        visibility: 'simplified',
-      },
-    ],
-  },
-  {
-    featureType: 'water',
-    stylers: [
-      {
-        color: '#5f94ff',
-      },
-      {
-        lightness: 26,
-      },
-      {
-        gamma: 5.86,
-      },
-      {
-        visibility: 'simplified',
+        lat: -40.58661268192313,
+        lng: -73.08834982345462,
       },
     ],
   },
 ];
 
-function MapComponent() {
+type MapComponentProps = {
+  defaultZoom?: number;
+  maxZoom?: number;
+  minZoom?: number;
+  defaultCenter?: google.maps.LatLngLiteral;
+  onAction: Dispatch<SetStateAction<google.maps.LatLngLiteral[] | null>>;
+};
+
+function MapComponent({
+  defaultZoom = 18,
+  maxZoom = 19.5,
+  minZoom = 17.5,
+  defaultCenter = { lat: -40.58718881060938, lng: -73.08907589274496 },
+  onAction,
+}: MapComponentProps) {
   const drawingManager = useDrawingManager();
+  const coreLib = useMapsLibrary('core');
 
-  drawingManager?.addListener('polygoncomplete', (e) => {
-    console.log(getLatLngFromPolygon(e));
-  });
+  if (drawingManager) {
+    drawingManager.addListener('polygoncomplete', (e: google.maps.Polygon) => {
+      onAction(getLatLngFromPolygon(e));
+      drawingManager.setOptions({ drawingControl: false });
+    });
+  }
 
   return (
     <Stack
@@ -271,22 +98,48 @@ function MapComponent() {
       background="gray.100"
     >
       <Map
-        defaultZoom={18}
-        defaultCenter={{ lat: -40.58718881060938, lng: -73.08907589274496 }}
-        styles={mapStyle}
+        defaultZoom={defaultZoom}
+        maxZoom={maxZoom}
+        minZoom={minZoom}
+        mapId="d1d387488b4410d4"
+        defaultCenter={defaultCenter}
         gestureHandling="greedy"
-        disableDefaultUI
+        // disableDefaultUI
       >
-        <Polygon
-          paths={pol}
-          strokeColor="#22543D"
-          fillColor="#48BB78"
-          strokeWeight={1}
-        />
+        {coreLib &&
+          pol.map((el) => {
+            const bounds = new coreLib.LatLngBounds();
+
+            el.polygon.forEach((coord) => bounds.extend(coord));
+
+            const centroid = bounds.getCenter();
+
+            return (
+              <Box key={el.key}>
+                <AdvancedMarker
+                  onClick={() => console.log(el.key)}
+                  position={centroid}
+                >
+                  <Pin
+                    borderColor="green"
+                    glyphColor="white"
+                    background="green"
+                  />
+                </AdvancedMarker>
+                <Polygon
+                  paths={el.polygon}
+                  onClick={() => console.log(el.key)}
+                  strokeColor="#22543D"
+                  fillColor="#48BB78"
+                  strokeWeight={1.25}
+                />
+              </Box>
+            );
+          })}
       </Map>
 
       <MapControl position={ControlPosition.BOTTOM_CENTER}>
-        <UndoRedoControl drawingManager={drawingManager} />
+        <UndoRedoControl onAction={onAction} drawingManager={drawingManager} />
       </MapControl>
     </Stack>
   );

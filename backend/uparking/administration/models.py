@@ -1,7 +1,6 @@
 from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.contrib.gis.db import models as geo_models
-from django.contrib.gis.geos import Polygon
 from django.db import models
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
@@ -31,7 +30,7 @@ class Estacionamiento(models.Model):
     nombre = models.CharField(max_length=50, null=False)
     capacidad = models.PositiveIntegerField(default=0)
     capacidad_max = models.PositiveIntegerField(default=0)
-    area_espacio = geo_models.PolygonField(null=False)
+    area_espacio = geo_models.PolygonField()
 
     def increment_capacity(self, increment):
         self.capacidad += increment

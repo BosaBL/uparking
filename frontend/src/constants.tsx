@@ -7,4 +7,4 @@ export const APIS = {
   user: new URL('v1/', BASEAPI).toString(),
 };
 
-export const MAP_API_KEY = '';
+export const MAP_API_KEY = 'AIzaSyBBLeLuoqQfdGl8kIqsDcTzo-2fDmI8LG4';
