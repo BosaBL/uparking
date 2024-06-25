@@ -32,24 +32,23 @@ export default function UpdateSedeModal({
   const initialRef = useRef<HTMLInputElement | null>(null);
   const { register, handleSubmit, reset } = useForm({
     defaultValues: data,
-    ...data,
   });
   const { addToast, updateToast, clearToasts } = useUpdatableToast();
   const { invalidate } = useRouter();
 
   const { onChange, onBlur, name, ref } = register('id');
 
-  function onSubmit() {
+  function onSubmit(vals: SedeT) {
     clearToasts();
     addToast({
       status: 'loading',
       description: 'Se está actualizando el elemento.',
     });
-    handleUpdate(data)
+    handleUpdate(vals)
       .then(() => {
         updateToast({
           status: 'success',
-          description: 'El elemento ha sido actualizado.}',
+          description: 'El elemento ha sido actualizado.',
         });
       })
       .catch(() =>
@@ -59,9 +58,9 @@ export default function UpdateSedeModal({
         })
       )
       .finally(() => {
-        reset();
         invalidate();
         onClose();
+        reset(vals);
       });
   }
 

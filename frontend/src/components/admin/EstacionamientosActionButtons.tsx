@@ -1,13 +1,15 @@
 import { DeleteIcon } from '@chakra-ui/icons';
 import { IconButton, Stack, Tooltip } from '@chakra-ui/react';
-import { useRouter } from '@tanstack/react-router'; import { ColumnDef } from '@tanstack/react-table';
+import { useRouter } from '@tanstack/react-router';
+import { ColumnDef } from '@tanstack/react-table';
 import { useState } from 'react';
 import useUpdatableToast from '../hooks/useUpdatableToast';
 import { HandleDeleteT, HandleUpdateT } from './handlers.d';
-import { UpdateModalT } from './modals.d';
+import { UpdateModalT, UpdateModalTS } from './modals.d';
 import { SedeT } from './sedes/sedes';
+import UpdateSedeModal from './sedes/UpdateSedeModal';
 
-export default function ActionButtons<Data>({
+export default function EstacionamientosActionButtons<Data>({
   data,
   UpdateModal,
   columns,
@@ -15,14 +17,16 @@ export default function ActionButtons<Data>({
   handleUpdate,
   isDeletable,
   isUpdatable,
+  sedes,
 }: {
   data: Data;
-  UpdateModal: UpdateModalT<Data>;
+  UpdateModal: UpdateModalTS<Data>;
   columns: ColumnDef<Data>[];
   handleDelete: HandleDeleteT<Data>;
   handleUpdate: HandleUpdateT<Data>;
   isDeletable: boolean;
   isUpdatable: boolean;
+  sedes: SedeT[];
 }) {
   const [disabled, setDisabled] = useState(false);
   const { addToast, updateToast, clearToasts } = useUpdatableToast();
@@ -70,6 +74,7 @@ export default function ActionButtons<Data>({
           data={data}
           columns={columns}
           handleUpdate={handleUpdate}
+          sedes={sedes}
         />
       )}
     </Stack>

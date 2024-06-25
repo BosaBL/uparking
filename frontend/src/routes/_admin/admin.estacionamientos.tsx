@@ -4,10 +4,24 @@ import axios from 'axios';
 import { useMemo } from 'react';
 import CrudTable from '../../components/admin/CrudTable';
 import { SedeT } from '../../components/admin/sedes/sedes';
-import CreateEstacionamientoModal from '../../components/map/CreateEstacionamientoModal';
-import ViewLocation from '../../components/map/ViewLocation';
-import { Estacionamiento } from '../../components/map/types';
+import CreateEstacionamientoModal from '../../components/map/CreateEstacionamientoModal'; import ViewLocation from '../../components/map/ViewLocation';
+import { Estacionamiento, OptEstacionamiento } from '../../components/map/types';
 import { APIS } from '../../constants';
+import UpdateEstacionamientoModal from '../../components/map/UpdateEstacionamientoModal';
+import EstacionamientosCrudTable from '../../components/admin/EstacionamientosCrudTable';
+import authApiWithBearer from '../../libs/axiosAuthBearer';
+
+
+const handleDelete = async (data: OptEstacionamiento) => {
+  const url = new URL('estacionamientos/', APIS.admin);
+
+  return authApiWithBearer.delete(`${url}${data.id}/`);
+};
+const handleUpdate = async (data: SedeT) => {
+  const url = new URL('estacionamientos/', APIS.admin);
+
+  return authApiWithBearer.patch(`${url}${data.id}/`, data);
+};
 
 function Component() {
   const loaderData = useLoaderData({
@@ -47,14 +61,12 @@ function Component() {
     []
   );
 
-  const handleUpdate = () => { };
-  const handleDelete = () => { };
 
   return (
-    <CrudTable<Estacionamiento>
+    <EstacionamientosCrudTable<Estacionamiento>
       data={loaderData.estacionamientos}
       columns={columns}
-      UpdateModal={null}
+      UpdateModal={UpdateEstacionamientoModal}
       addModal={
         <CreateEstacionamientoModal
           sedes={loaderData.sedes}
@@ -64,6 +76,7 @@ function Component() {
       }
       handleUpdate={handleUpdate}
       handleDelete={handleDelete}
+      sedes={loaderData.sedes}
     />
   );
 }

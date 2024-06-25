@@ -30,8 +30,10 @@ import {
 } from '@tanstack/react-table';
 import { useCallback, useEffect, useState } from 'react';
 import { HandleDeleteT, HandleUpdateT } from './handlers';
-import { CreateModalT, UpdateModalT } from './modals.d';
+import { CreateModalT, UpdateModalT, UpdateModalTS } from './modals.d';
 import ActionButtons from './ActionButtons';
+import { SedeT } from './sedes/sedes';
+import EstacionamientosActionButtons from './EstacionamientosActionButtons';
 
 // A typical debounced input react component
 function DebouncedInput({
@@ -84,7 +86,7 @@ function Filter<Data>({ column }: { column: Column<Data> }) {
   );
 }
 
-export default function CrudTable<Data>({
+export default function EstacionamientosCrudTable<Data>({
   data,
   columns,
   addModal,
@@ -93,15 +95,17 @@ export default function CrudTable<Data>({
   handleUpdate,
   isDeletable = true,
   isUpdatable = true,
+  sedes,
 }: {
   data: Data[];
   columns: ColumnDef<Data>[];
   addModal: CreateModalT;
-  UpdateModal: UpdateModalT<Data>;
+  UpdateModal: UpdateModalTS<Data>;
   handleDelete: HandleDeleteT<Data>;
   handleUpdate: HandleUpdateT<Data>;
   isDeletable?: boolean;
   isUpdatable?: boolean;
+  sedes: SedeT[];
 }) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -192,7 +196,7 @@ export default function CrudTable<Data>({
                   </Td>
                 ))}
                 <Td>
-                  <ActionButtons<Data>
+                  <EstacionamientosActionButtons<Data>
                     data={row.original}
                     columns={columns}
                     UpdateModal={UpdateModal}
@@ -200,6 +204,7 @@ export default function CrudTable<Data>({
                     handleDelete={handleDelete}
                     isUpdatable={isUpdatable}
                     isDeletable={isDeletable}
+                    sedes={sedes}
                   />
                 </Td>
               </Tr>

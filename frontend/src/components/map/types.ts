@@ -92,3 +92,12 @@ export type Estacionamiento = {
   area_espacio: Areaespacio;
   sede: string;
 };
+
+export type OptEstacionamiento = {
+  id: string;
+  nombre: string;
+  capacidad: number;
+  capacidad_max: number;
+  area_espacio?: Areaespacio;
+  sede: string;
+};

@@ -53,10 +53,13 @@ class Estacionamiento(models.Model):
                 {"capacidad": "capacidad can't be less than 0."}
             )
 
+    def delete(self, *args, **kwargs):
+        async_to_sync(update_estacionamientos)()
+        super().delete(*args, **kwargs)
+
     def save(self, *args, **kwargs):
         self.full_clean()
         async_to_sync(update_estacionamientos)()
-        print("should be sent")
         super().save(*args, **kwargs)
 
 

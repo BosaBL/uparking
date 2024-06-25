@@ -1,8 +1,10 @@
+import { EditIcon } from '@chakra-ui/icons';
 import {
   AspectRatio,
   Button,
   FormControl,
   FormLabel,
+  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -12,36 +14,38 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from '@tanstack/react-router';
-import { ColumnDef } from '@tanstack/react-table';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { APIS, MAP_API_KEY } from '../../constants';
-import authApiWithBearer from '../../libs/axiosAuthBearer';
+import { MAP_API_KEY } from '../../constants';
 import { capitalizeFirstLetter } from '../../utils/rut';
-import { SedeT } from '../admin/sedes/sedes';
+import { UpdateModalPropsTS } from '../admin/modals';
 import useUpdatableToast from '../hooks/useUpdatableToast';
 import DrawableMapComponent from './DrawableMapComponent';
-import { Estacionamiento } from './types';
+import { Estacionamiento, OptEstacionamiento } from './types';
 import { getLatLngArray } from './utils';
 
-function CreateEstaciSedeTonamientoModal({
+
+function UpdateEstacionamientoModal({
+  handleUpdate,
   columns,
+  data,
   sedes,
-  dataArray,
-}: {
-  columns: Array<ColumnDef<Estacionamiento> & { form: string }>;
-  sedes: SedeT[];
-  dataArray: Estacionamiento[];
-}) {
+}: UpdateModalPropsTS<Estacionamiento>) {
+  const { area_espacio: area, ...rest } = data;
+
+  const formData = rest;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef<HTMLInputElement | null>(null);
-  const { register, handleSubmit, reset } = useForm<
-    Omit<Estacionamiento, 'area_espacio'>
-  >({});
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: formData,
+    ...formData,
+  });
   const { addToast, updateToast, clearToasts } = useUpdatableToast();
   const { invalidate } = useRouter();
 
@@ -51,55 +55,42 @@ function CreateEstaciSedeTonamientoModal({
 
   const { onChange, onBlur, name, ref } = register('id');
 
-  const onSubmit = async (data: Omit<Estacionamiento, 'area_espacio'>) => {
-    addToast({ status: 'loading', description: 'Creando estacionamiento.' });
-    if (!polygonCoords) {
-      updateToast({
-        status: 'error',
-        description: 'No has designado un estacionamiento.',
+  function onSubmit(vals: Omit<Estacionamiento, 'area_espacio'>) {
+    const estacionamiento: OptEstacionamiento = polygonCoords ? { ...vals, area_espacio: { type: "Polygon", coordinates: getLatLngArray(polygonCoords) } } : { ...vals }
+    clearToasts();
+    addToast({
+      status: 'loading',
+      description: 'Se está actualizando el elemento.',
+    });
+    handleUpdate(estacionamiento as Estacionamiento)
+      .then(() => {
+        updateToast({
+          status: 'success',
+          description: 'El elemento ha sido actualizado.}',
+        });
+      })
+      .catch(() =>
+        updateToast({
+          status: 'error',
+          description: 'Ha ocurrido un error inesperado.',
+        })
+      )
+      .finally(() => {
+        reset(vals);
+        invalidate();
+        onClose();
       });
-      return;
-    }
-
-    if (dataArray.filter((el) => data.id === el.id).length) {
-      updateToast({
-        status: 'error',
-        description: `El estacionamiento con código ${data.id} ya existe.`,
-      });
-      return;
-    }
-
-    try {
-      const url = new URL('estacionamientos/', APIS.admin).toString();
-      await authApiWithBearer.post(url, {
-        ...data,
-        area_espacio: {
-          type: 'Polygon',
-          coordinates: getLatLngArray(polygonCoords),
-        },
-      });
-      updateToast({
-        status: 'success',
-        description: 'Se ha añadido el estacionamiento.',
-      });
-    } catch {
-      updateToast({
-        status: 'error',
-        description: 'Ha ocurrido un error inesperado.',
-      });
-    } finally {
-      onClose();
-      setPolygonCoords(null);
-      invalidate();
-      reset();
-    }
-  };
+  }
   return (
     <>
-      <Button w="100%" colorScheme="green" onClick={onOpen}>
-        Añadir
-      </Button>
-
+      <Tooltip label="Editar">
+        <IconButton
+          colorScheme="blue"
+          aria-label="Editar"
+          onClick={onOpen}
+          icon={<EditIcon />}
+        />
+      </Tooltip>
       <Modal
         size="xl"
         isOpen={isOpen}
@@ -166,7 +157,7 @@ function CreateEstaciSedeTonamientoModal({
                       <AspectRatio>
                         <APIProvider apiKey={MAP_API_KEY}>
                           <DrawableMapComponent
-                            dataArray={dataArray}
+                            dataArray={[data]}
                             onAction={setPolygonCoords}
                           />
                         </APIProvider>
@@ -233,4 +224,4 @@ function CreateEstaciSedeTonamientoModal({
     </>
   );
 }
-export default CreateEstaciSedeTonamientoModal;
+export default UpdateEstacionamientoModal;
