@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend
       dockerfile: ./env.dockerfile
-    restart: always
+    restart: on-failure:3
     volumes:
       - ./static_volume/:/staticfiles/
     ports:
