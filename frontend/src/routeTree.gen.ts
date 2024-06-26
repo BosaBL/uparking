@@ -11,10 +11,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ResendVerifyEmailImport } from './routes/resend-verify-email'
 import { Route as HomeImport } from './routes/_home'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AdminImport } from './routes/_admin'
 import { Route as IndexImport } from './routes/index'
+import { Route as VerifyAccountUidImport } from './routes/verify-account.$uid'
 import { Route as HomeHomeIndexImport } from './routes/_home/home.index'
 import { Route as AdminAdminIndexImport } from './routes/_admin/admin.index'
 import { Route as HomeHomeUserImport } from './routes/_home/home.user'
@@ -25,6 +27,11 @@ import { Route as AdminAdminSedesImport } from './routes/_admin/admin.sedes'
 import { Route as AdminAdminEstacionamientosImport } from './routes/_admin/admin.estacionamientos'
 
 // Create/Update Routes
+
+const ResendVerifyEmailRoute = ResendVerifyEmailImport.update({
+  path: '/resend-verify-email',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const HomeRoute = HomeImport.update({
   id: '/_home',
@@ -43,6 +50,11 @@ const AdminRoute = AdminImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const VerifyAccountUidRoute = VerifyAccountUidImport.update({
+  path: '/verify-account/$uid',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -120,6 +132,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeImport
       parentRoute: typeof rootRoute
     }
+    '/resend-verify-email': {
+      id: '/resend-verify-email'
+      path: '/resend-verify-email'
+      fullPath: '/resend-verify-email'
+      preLoaderRoute: typeof ResendVerifyEmailImport
+      parentRoute: typeof rootRoute
+    }
+    '/verify-account/$uid': {
+      id: '/verify-account/$uid'
+      path: '/verify-account/$uid'
+      fullPath: '/verify-account/$uid'
+      preLoaderRoute: typeof VerifyAccountUidImport
+      parentRoute: typeof rootRoute
+    }
     '/_admin/admin/estacionamientos': {
       id: '/_admin/admin/estacionamientos'
       path: '/admin/estacionamientos'
@@ -194,6 +220,8 @@ export const routeTree = rootRoute.addChildren({
     AuthAuthRegisterRoute,
   }),
   HomeRoute: HomeRoute.addChildren({ HomeHomeUserRoute, HomeHomeIndexRoute }),
+  ResendVerifyEmailRoute,
+  VerifyAccountUidRoute,
 })
 
 /* prettier-ignore-end */
@@ -207,7 +235,9 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/_admin",
         "/_auth",
-        "/_home"
+        "/_home",
+        "/resend-verify-email",
+        "/verify-account/$uid"
       ]
     },
     "/": {
@@ -235,6 +265,12 @@ export const routeTree = rootRoute.addChildren({
         "/_home/home/user",
         "/_home/home/"
       ]
+    },
+    "/resend-verify-email": {
+      "filePath": "resend-verify-email.tsx"
+    },
+    "/verify-account/$uid": {
+      "filePath": "verify-account.$uid.tsx"
     },
     "/_admin/admin/estacionamientos": {
       "filePath": "_admin/admin.estacionamientos.tsx",

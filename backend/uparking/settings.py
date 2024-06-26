@@ -30,6 +30,7 @@ USE_X_FORWARDED_HOST = True
 FORCE_SCRIPT_NAME = "/api/"
 
 
+print(BASE_DIR / "templates")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -39,12 +40,16 @@ SECRET_KEY = os.getenv("DJANGO_KEY")
 DOCKER_CONTAINER = bool(int(os.getenv("DOCKER_CONTAINER", 0)))
 DEBUG = bool(int(os.getenv("DEV", 0)))
 
-ALLOWED_HOSTS = ["*", "127.0.0.1", ".vercel.app", ".csep.dev"]
+ALLOWED_HOSTS = [
+    "*",
+    ".csep.dev",
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -70,6 +75,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "dj_rest_auth.registration",
     "rest_framework_simplejwt.token_blacklist",
+    # REAL TIME WS
+    "channels",
 ]
 
 SITE_ID = 1
@@ -95,7 +102,7 @@ CORS_ALLOW_CREDENTIALS = True
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -108,15 +115,14 @@ TEMPLATES = [
     },
 ]
 
+
+ASGI_APPLICATION = "uparking.asgi.application"
 WSGI_APPLICATION = "uparking.wsgi.app"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-print(os.environ.get("POSTGRES_DB"))
-print(os.environ.get("POSTGRES_USER"))
-print(os.environ.get("POSTGRES_PASSWORD"))
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -126,6 +132,15 @@ DATABASES = {
         "HOST": os.environ.get("POSTGRES_HOST"),
         "PORT": "",
     }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
 }
 
 # Password validation
@@ -194,26 +209,38 @@ REST_AUTH = {
     "JWT_AUTH_HTTPONLY": False,
 }
 
+# SMTP CONFIG
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+
+print(os.getenv("EMAIL_HOST_USER", ""))
+print(os.getenv("EMAIL_HOST_PASSWORD", ""))
 
 # AUTHENTICATION SETTINGS
 AUTH_USER_MODEL = "authentication.CustomUser"
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
+ACCOUNT_ADAPTER = "uparking.authentication.adapters.CustomAccountAdapter"
 
 # DEV DOC SETTINGS
 if DEBUG:
     logger.warning("RUNNING AS DEVELOPMENT MODE")
 
     INSTALLED_APPS += ["drf_spectacular", "drf_spectacular_sidecar"]
-    REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = (
-        "drf_spectacular.openapi.AutoSchema"
-    )
+    REST_FRAMEWORK[
+        "DEFAULT_SCHEMA_CLASS"
+    ] = "drf_spectacular.openapi.AutoSchema"
     SPECTACULAR_SETTINGS = {
         "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
         "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
@@ -227,7 +254,7 @@ if DEBUG:
     Increased token lifetimes for user development testing purposes
     """
     SIMPLE_JWT = {
-        "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+        "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
         "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     }
 

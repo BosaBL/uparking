@@ -30,3 +30,15 @@ export function checkRut(rut: string): boolean {
 export function capitalizeFirstLetter(string: string | undefined) {
   return string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
 }
+
+export function formatRut(rut: string) {
+  const dottedRut = rut
+    .split('')
+    .reverse()
+    .join('')
+    .replace(/(.{3})/g, '$1.')
+    .split('')
+    .reverse()
+    .join('');
+  return [dottedRut, getVerifierDigit(rut)].join('-');
+}

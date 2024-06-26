@@ -29,6 +29,7 @@ class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = VigilanteNotifica
         fields = [
+            "id",
             "vigilante",
             "notificar",
             "leido",
@@ -39,6 +40,7 @@ class NotificacionSerializer(serializers.ModelSerializer):
             "mensaje",
         ]
         read_only_fields = [
+            "id",
             "vigilante",
             "notificar",
             "leido",

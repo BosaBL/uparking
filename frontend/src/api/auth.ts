@@ -1,5 +1,12 @@
-import { UserUpdateDataFormType } from '../components/home/UpdateUserDataForm';
 import axios from '../libs/axiosAuthBearer';
+
+export type UserUpdateDataFormType = {
+  p_nombre: string;
+  s_nombre: string;
+  p_apellido: string;
+  s_apellido: string;
+  telefono: string;
+};
 
 export type RegisterFormType = {
   rut: string;

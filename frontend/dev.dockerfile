@@ -1,9 +1,11 @@
-FROM node:20.14-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
+RUN npm install -g pnpm
+
 COPY package.json .
-RUN npm install
+RUN pnpm install
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["pnpm", "run", "dev"]

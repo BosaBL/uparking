@@ -17,9 +17,11 @@ dj-rest-auth = {extras = ["with-social"], version = "^6.0.0"}
 djangorestframework-simplejwt = "^5.3.1"
 drf-spectacular = {extras = ["sidecar"], version = "^0.27.2"}
 djangorestframework-gis = "^1.0"
-uvicorn = "^0.30.1"
+uvicorn = {extras = ["standard"], version = "^0.30.1"}
 gunicorn = "^22.0.0"
 django-cors-headers = "^4.3.1"
+channels-redis = "^4.2.0"
+channels = {extras = ["daphne"], version = "^4.1.0"}
 
 [tool.poetry.group.dev.dependencies]
 python-lsp-isort = "^0.1"
@@ -48,9 +50,7 @@ plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
 
 [tool.pylint.main]
 load-plugins = ["pylint_django"]
-
-[tool.pylint.'DJANGO FOREIGN KEYS REFERENCED BY STRINGS']
-django-settings-module="uparking.settings"
+django-settings-module = "uparking.settings"
 
 [tool.pylint.messages_control]
 disable = ["missing-module-docstring","missing-class-docstring","missing-function-docstring"]

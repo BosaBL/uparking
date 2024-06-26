@@ -11,22 +11,26 @@ services:
           target: ./
     volumes:
       - ./django_volume/:/staticfiles/
-    expose:
-      - "8000"
+    # expose:
+    #   - "8000"
+    ports:
+      - "8080:8000"
     env_file:
       - .env
     environment:
+      - PYTHONUNBUFFERED=1
       - DOCKER_CONTAINER=1
       - DEV=1
     container_name: uparking_backend
     depends_on:
       - database
+      - redis
     command: >
       sh -c "python manage.py makemigrations administration authentication &&
           python manage.py makemigrations --merge &&
           python manage.py migrate &&
           python manage.py collectstatic --no-input &&
-          gunicorn uparking.wsgi:app --bind 0.0.0.0:8000 --reload --log-level debug --capture-output"
+          gunicorn --reload uparking.asgi:application -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000  --log-level debug --capture-output"
 
   dev-frontend:
     build:
@@ -37,6 +41,10 @@ services:
         - action: sync
           path: ./frontend/
           target: ./app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./frontend/package.json
     env_file:
       - .env
     ports:
@@ -77,11 +85,18 @@ services:
       dockerfile: ./prod.dockerfile
     ports:
       - 80:8080
+    env_file:
+      - .env
     volumes:
       - ./nginx/nginx-setup.conf:/etc/nginx/conf.d/default.conf
       - ./django_volume/:/staticfiles/
     depends_on:
       - app
+
+  redis:
+    image: redis:7-alpine
+    expose:
+      - 6379
 
 volumes:
   django_volume:

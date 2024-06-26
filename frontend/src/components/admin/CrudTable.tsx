@@ -29,9 +29,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useCallback, useEffect, useState } from 'react';
-import ActionButtons from './ActionButtons';
 import { HandleDeleteT, HandleUpdateT } from './handlers';
 import { CreateModalT, UpdateModalT } from './modals.d';
+import ActionButtons from './ActionButtons';
 
 // A typical debounced input react component
 function DebouncedInput({
@@ -91,6 +91,8 @@ export default function CrudTable<Data>({
   UpdateModal,
   handleDelete,
   handleUpdate,
+  isDeletable = true,
+  isUpdatable = true,
 }: {
   data: Data[];
   columns: ColumnDef<Data>[];
@@ -98,6 +100,8 @@ export default function CrudTable<Data>({
   UpdateModal: UpdateModalT<Data>;
   handleDelete: HandleDeleteT<Data>;
   handleUpdate: HandleUpdateT<Data>;
+  isDeletable?: boolean;
+  isUpdatable?: boolean;
 }) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -117,7 +121,7 @@ export default function CrudTable<Data>({
 
   return (
     <TableContainer>
-      <Table variant="striped" colorScheme="blue">
+      <Table flex="1 0 auto" variant="striped" colorScheme="blue">
         <Thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
@@ -139,7 +143,7 @@ export default function CrudTable<Data>({
                               : undefined
                           }
                         >
-                          <Text>
+                          <Text minW="20">
                             {flexRender(
                               header.column.columnDef.header,
                               header.getContext()
@@ -194,6 +198,8 @@ export default function CrudTable<Data>({
                     UpdateModal={UpdateModal}
                     handleUpdate={handleUpdate}
                     handleDelete={handleDelete}
+                    isUpdatable={isUpdatable}
+                    isDeletable={isDeletable}
                   />
                 </Td>
               </Tr>

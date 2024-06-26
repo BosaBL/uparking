@@ -4,6 +4,7 @@ import {
   Button,
   Link as ChakraLink,
   CloseButton,
+  Divider,
   Drawer,
   DrawerContent,
   Flex,
@@ -50,13 +51,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Mapa', icon: FiMap, url: '/home' },
   { name: 'Notificaciones', icon: FiBell, url: '/home/notifications' },
-  { name: 'Sedes', icon: PiBuildingOffice, url: '/admin/sedes/' },
-  {
-    name: 'Estacionamientos',
-    icon: LuParkingSquare,
-    url: '/admin/estacionamientos',
-  },
-  { name: 'Vigilantes', icon: PiFlashlight, url: '/admin/vigilantes' },
+
   {
     name: 'Deja tus sugerencias',
     icon: FaRegComment,
@@ -64,7 +59,17 @@ const LinkItems: Array<LinkItemProps> = [
   },
 ];
 
-const LastItem: LinkItemProps = LinkItems.pop();
+const AdminItems: Array<LinkItemProps> = [
+  { name: 'Sedes', icon: PiBuildingOffice, url: '/admin/sedes/' },
+  {
+    name: 'Estacionamientos',
+    icon: LuParkingSquare,
+    url: '/admin/estacionamientos',
+  },
+  { name: 'Vigilantes', icon: PiFlashlight, url: '/admin/vigilantes' },
+];
+
+const LastItem: LinkItemProps = LinkItems.pop() as LinkItemProps;
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
@@ -104,8 +109,6 @@ function NavItem({ icon, children, url, ...rest }: NavItemProps) {
 }
 
 function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
-  const userData = user === '' ? null : (user as User);
-
   return (
     <Box
       transition="3s ease"
@@ -125,15 +128,34 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
       </Flex>
       {LinkItems.map((link) =>
         link.name !== 'Notificaciones' || user ? (
-          <NavItem key={link.name} icon={link.icon} url={link.url}>
+          <NavItem
+            onClick={onClose}
+            key={link.name}
+            icon={link.icon}
+            url={link.url}
+          >
             {link.name}
           </NavItem>
         ) : null
       )}
+      <Text pl="8" mt="4" fontSize="large" fontWeight="bold">
+        Administración
+      </Text>
+      <Divider />
+      {AdminItems.map((link) => (
+        <NavItem
+          onClick={onClose}
+          key={link.name}
+          icon={link.icon}
+          url={link.url}
+        >
+          {link.name}
+        </NavItem>
+      ))}
       <NavItem
+        onClick={onClose}
         pos="absolute"
         bottom={0}
-        key={LastItem.name}
         icon={LastItem.icon}
         url={LastItem.url}
       >

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from '../libs/axiosAuth';
+import axiosBearer from '../libs/axiosAuthBearer';
 
 export type User = {
   id: number;
@@ -50,20 +51,16 @@ export const useAuthStore = create(
       logout: () => set(initialState),
       getUserData: async () => {
         if (get().refreshToken && get().accessToken && get().isAuthenticated) {
-          await get().checkTokens();
           try {
-            const res = await axios.get('/auth/user/', {
-              headers: {
-                Authorization: `Bearer ${get().accessToken}`,
-              },
-            });
+            const res = await axiosBearer.get('/user/');
             set(() => ({ userData: res.data }));
+            console.log('AA');
             return res.data;
           } catch {
-            get().logout();
+            return get().logout();
           }
         }
-        return null;
+        return get().logout();
       },
       checkTokens: async (nav?: () => Promise<void>) => {
         if (!get().accessToken) {

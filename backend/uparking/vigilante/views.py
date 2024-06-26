@@ -22,7 +22,8 @@ class IncreaseCapacityViewset(viewsets.GenericViewSet):
 
     queryset = Estacionamiento.objects.all()
     serializer_class = SingleValueUpdateEstacionamientoCapacidadSerializer
-    permission_classes = [IsAuthenticated, IsVigilante]
+    permission_classes = [AllowAny]
+    # permission_classes = [IsAuthenticated, IsVigilante]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -75,6 +76,7 @@ class NotificacionViewset(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
 ):
 
     serializer_class = NotificacionSerializer

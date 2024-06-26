@@ -1,4 +1,4 @@
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { CheckCircleIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Alert,
   AlertDescription,
@@ -11,12 +11,21 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  Icon,
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
   useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from '@tanstack/react-router';
@@ -33,6 +42,8 @@ import PasswordStrengthBar from './PasswordStrength';
 
 export default function Register() {
   const { addToast, updateToast } = useUpdatableToast(5000, true);
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const validationSchema = z
     .object({
@@ -92,11 +103,15 @@ export default function Register() {
         title: 'Genial!',
         description: 'Te has registrado correctamente.',
       });
-      navigate({ to: '/' });
+      onOpen();
     } catch (err) {
-      const error = err as AxiosError;
-      const rutError = error?.response.data.rut as string;
-      const emailError = error?.response.data.email as string;
+      type ErrorRes = {
+        rut: string;
+        email: string;
+      };
+      const error = err as AxiosError<ErrorRes>;
+      const rutError = error.response?.data.rut;
+      const emailError = error.response?.data.email;
       updateToast({
         status: 'error',
         title: 'Error',
@@ -118,166 +133,204 @@ export default function Register() {
   };
 
   return (
-    <Flex
-      minH="100vh"
-      align="center"
-      justify="center"
-      bg={useColorModeValue('gray.50', 'gray.800')}
-    >
-      <Stack spacing={4} mx="auto" maxW="xl" w="xl" px={6}>
-        <Stack align="center">
-          <Box width="100%">
-            <Logo color="var(--chakra-colors-blue-600)" />
-          </Box>
-        </Stack>
-        <Box
-          rounded="lg"
-          bg={useColorModeValue('white', 'gray.600')}
-          boxShadow="lg"
-          p={8}
-        >
-          <Heading fontSize="2xl" pb={8}>
-            Regístrate
-          </Heading>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={4}>
-              <Stack direction={['column', 'row']}>
-                <Box w="100%">
-                  <FormControl
-                    isInvalid={Boolean(errors?.firstName?.message)}
-                    id="firstName"
-                    isRequired
-                  >
-                    <FormLabel>Nombres</FormLabel>
-                    <Input
-                      type="text"
-                      placeholder="john trevor"
-                      {...register('firstName')}
-                    />
-                    <FormErrorMessage>
-                      {errors?.firstName?.message}
-                    </FormErrorMessage>
-                  </FormControl>
-                </Box>
-                <Box w="100%">
-                  <FormControl
-                    isInvalid={Boolean(errors?.lastName?.message)}
-                    id="lastName"
-                    isRequired
-                  >
-                    <FormLabel>Apellidos</FormLabel>
-                    <Input
-                      type="text"
-                      placeholder="doe smith"
-                      {...register('lastName')}
-                    />
-                    <FormErrorMessage>
-                      {errors?.lastName?.message}
-                    </FormErrorMessage>
-                  </FormControl>
-                </Box>
-              </Stack>
-              <FormControl isInvalid={Boolean(errors?.rut)} id="rut" isRequired>
-                <FormLabel>RUT</FormLabel>
-                <Input placeholder="12.456.789-k" {...register('rut')} />
-                <FormErrorMessage>{errors?.rut?.message}</FormErrorMessage>
-              </FormControl>
-              <FormControl
-                isInvalid={Boolean(errors.email)}
-                id="email"
-                isRequired
-              >
-                <FormLabel>Email</FormLabel>
-                <Input
-                  placeholder="jonhdoe@domino.cl"
-                  type="email"
-                  {...register('email')}
-                />
-                <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={Boolean(errors?.password)} id="password">
-                <FormLabel>Contraseña</FormLabel>
-                <InputGroup>
-                  <Input
-                    placeholder="contraseña"
-                    type={show ? 'text' : 'password'}
-                    {...register('password')}
-                  />
-                  <InputRightElement onClick={() => setShow(!show)}>
-                    <Button>{show ? <ViewIcon /> : <ViewOffIcon />}</Button>
-                  </InputRightElement>
-                </InputGroup>{' '}
-                <FormErrorMessage>
-                  La contraseña debe ser al menos de nivel Fuerte.
-                </FormErrorMessage>
-                <PasswordStrengthBar
-                  scoreWords={[
-                    'Debil',
-                    'Debil',
-                    'Buena',
-                    'Fuerte',
-                    'Muy Fuerte',
-                  ]}
-                  shortScoreWord="Muy corta"
-                  password={password}
-                />
-                <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
-              </FormControl>
-              <FormControl
-                isInvalid={Boolean(errors?.repeat_password)}
-                id="repeat_password"
-              >
-                <FormLabel>Repita su contraseña</FormLabel>
-                <InputGroup>
-                  <Input
-                    placeholder="contraseña"
-                    type="password"
-                    {...register('repeat_password')}
-                  />
-                </InputGroup>
-                <FormErrorMessage>
-                  {errors?.repeat_password?.message}
-                </FormErrorMessage>
-              </FormControl>
-              <Stack spacing={6}>
-                <Stack spacing={2}>
-                  {errors.root?.serverError && (
-                    <Alert status="error">
-                      <AlertIcon />
-                      <AlertDescription>
-                        {errors.root?.serverError.message}
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  <Button
-                    isLoading={isSubmitting}
-                    type="submit"
-                    variant="solid"
-                    bg="blue.600"
-                    color="white"
-                    _hover={{
-                      bg: 'blue.700',
-                    }}
-                  >
-                    Registrarme
-                  </Button>
-                  <Text>
-                    Ya tienes una cuenta?{' '}
-                    <ChakraLink
-                      as={Link}
-                      to="/auth/login"
-                      color="blue.600"
-                      style={{ textDecoration: 'underline' }}
+    <>
+      <Modal isOpen={isOpen} isCentered onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader />
+          <ModalCloseButton />
+          <ModalBody>
+            <Stack alignItems="center" gap="6">
+              <Icon as={CheckCircleIcon} color="green.500" boxSize="16" />
+              <Heading size="md">
+                Se ha enviado el correo de verificación!
+              </Heading>
+              <Text>
+                ¿No has recibido el correo?{' '}
+                <ChakraLink
+                  as={Link}
+                  to="/resend-verify-email"
+                  color="blue.600"
+                  style={{ textDecoration: 'underline' }}
+                >
+                  intenta reenviarlo
+                </ChakraLink>
+              </Text>
+            </Stack>
+          </ModalBody>
+          <ModalFooter />
+        </ModalContent>
+      </Modal>
+      <Flex
+        minH="100vh"
+        align="center"
+        justify="center"
+        bg={useColorModeValue('gray.50', 'gray.800')}
+      >
+        <Stack spacing={4} mx="auto" maxW="xl" w="xl" px={6}>
+          <Stack align="center">
+            <Box width="100%">
+              <Logo color="var(--chakra-colors-blue-600)" />
+            </Box>
+          </Stack>
+          <Box
+            rounded="lg"
+            bg={useColorModeValue('white', 'gray.600')}
+            boxShadow="lg"
+            p={8}
+          >
+            <Heading fontSize="2xl" pb={8}>
+              Regístrate
+            </Heading>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Stack spacing={4}>
+                <Stack direction={['column', 'row']}>
+                  <Box w="100%">
+                    <FormControl
+                      isInvalid={Boolean(errors?.firstName?.message)}
+                      id="firstName"
+                      isRequired
                     >
-                      Ingresa
-                    </ChakraLink>
-                  </Text>
+                      <FormLabel>Nombres</FormLabel>
+                      <Input
+                        type="text"
+                        placeholder="john trevor"
+                        {...register('firstName')}
+                      />
+                      <FormErrorMessage>
+                        {errors?.firstName?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Box>
+                  <Box w="100%">
+                    <FormControl
+                      isInvalid={Boolean(errors?.lastName?.message)}
+                      id="lastName"
+                      isRequired
+                    >
+                      <FormLabel>Apellidos</FormLabel>
+                      <Input
+                        type="text"
+                        placeholder="doe smith"
+                        {...register('lastName')}
+                      />
+                      <FormErrorMessage>
+                        {errors?.lastName?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Box>
+                </Stack>
+                <FormControl
+                  isInvalid={Boolean(errors?.rut)}
+                  id="rut"
+                  isRequired
+                >
+                  <FormLabel>RUT</FormLabel>
+                  <Input placeholder="12.456.789-k" {...register('rut')} />
+                  <FormErrorMessage>{errors?.rut?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isInvalid={Boolean(errors.email)}
+                  id="email"
+                  isRequired
+                >
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    placeholder="jonhdoe@domino.cl"
+                    type="email"
+                    {...register('email')}
+                  />
+                  <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isInvalid={Boolean(errors?.password)}
+                  id="password"
+                >
+                  <FormLabel>Contraseña</FormLabel>
+                  <InputGroup>
+                    <Input
+                      placeholder="contraseña"
+                      type={show ? 'text' : 'password'}
+                      {...register('password')}
+                    />
+                    <InputRightElement onClick={() => setShow(!show)}>
+                      <Button>{show ? <ViewIcon /> : <ViewOffIcon />}</Button>
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormErrorMessage>
+                    La contraseña debe ser al menos de nivel Fuerte.
+                  </FormErrorMessage>
+                  <PasswordStrengthBar
+                    scoreWords={[
+                      'Debil',
+                      'Debil',
+                      'Buena',
+                      'Fuerte',
+                      'Muy Fuerte',
+                    ]}
+                    shortScoreWord="Muy corta"
+                    password={password}
+                  />
+                  <FormErrorMessage>
+                    {errors?.password?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isInvalid={Boolean(errors?.repeat_password)}
+                  id="repeat_password"
+                >
+                  <FormLabel>Repita su contraseña</FormLabel>
+                  <InputGroup>
+                    <Input
+                      placeholder="contraseña"
+                      type="password"
+                      {...register('repeat_password')}
+                    />
+                  </InputGroup>
+                  <FormErrorMessage>
+                    {errors?.repeat_password?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <Stack spacing={6}>
+                  <Stack spacing={2}>
+                    {errors.root?.serverError && (
+                      <Alert status="error">
+                        <AlertIcon />
+                        <AlertDescription>
+                          {errors.root?.serverError.message}
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                    <Button
+                      isLoading={isSubmitting}
+                      type="submit"
+                      variant="solid"
+                      bg="blue.600"
+                      color="white"
+                      _hover={{
+                        bg: 'blue.700',
+                      }}
+                    >
+                      Registrarme
+                    </Button>
+                    <Text>
+                      Ya tienes una cuenta?{' '}
+                      <ChakraLink
+                        as={Link}
+                        to="/auth/login"
+                        color="blue.600"
+                        style={{ textDecoration: 'underline' }}
+                      >
+                        Ingresa
+                      </ChakraLink>
+                    </Text>
+                  </Stack>
                 </Stack>
               </Stack>
-            </Stack>
-          </form>
-        </Box>
-      </Stack>
-    </Flex>
+            </form>
+          </Box>
+        </Stack>
+      </Flex>
+    </>
   );
 }

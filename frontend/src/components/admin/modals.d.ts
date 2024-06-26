@@ -8,7 +8,14 @@ export type UpdateModalPropsT<Data> = {
   columns: ColumnDef<Data>[];
   handleUpdate: HandleUpdateT<Data>;
 };
+export type UpdateModalPropsTS<Data> = {
+  data: Data;
+  columns: Array<ColumnDef<Data> & { form: string }>;
+  handleUpdate: HandleUpdateT<Data>;
+  sedes: SedeT[];
+};
 export type UpdateModalT<Data> = FC<UpdateModalPropsT<Data>>;
+export type UpdateModalTS<Data> = FC<UpdateModalPropsTS<Data>>;
 
 export type CreateModalPropsT<Data> = {
   dataArray: Data[];

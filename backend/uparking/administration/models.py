@@ -1,9 +1,11 @@
+from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.contrib.gis.db import models as geo_models
-from django.contrib.gis.geos import Polygon
 from django.db import models
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
+
+from uparking.user.channel_senders import update_estacionamientos
 
 
 class Sede(models.Model):
@@ -28,7 +30,7 @@ class Estacionamiento(models.Model):
     nombre = models.CharField(max_length=50, null=False)
     capacidad = models.PositiveIntegerField(default=0)
     capacidad_max = models.PositiveIntegerField(default=0)
-    area_espacio = geo_models.PolygonField(null=False)
+    area_espacio = geo_models.PolygonField()
 
     def increment_capacity(self, increment):
         self.capacidad += increment
@@ -51,9 +53,13 @@ class Estacionamiento(models.Model):
                 {"capacidad": "capacidad can't be less than 0."}
             )
 
-    def save(self, *args, **kwargs):
+    def delete(self, *args, **kwargs):
+        async_to_sync(update_estacionamientos)()
+        super().delete(*args, **kwargs)
 
+    def save(self, *args, **kwargs):
         self.full_clean()
+        async_to_sync(update_estacionamientos)()
         super().save(*args, **kwargs)
 
 
