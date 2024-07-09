@@ -14,9 +14,11 @@ def update_site_name(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+    initial = True
 
     dependencies = [
         ("administration", "0002_initial"),
+        ("sites", "0001_initial"),
     ]
 
     operations = [

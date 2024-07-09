@@ -57,13 +57,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.gis",
-    "django.contrib.sites",
     "corsheaders",
     # DRF
     "rest_framework",
     "rest_framework_gis",
     "rest_framework.authtoken",
     # APPS
+    "django.contrib.sites",
     "uparking.authentication",
     "uparking.administration",
     "uparking.user",

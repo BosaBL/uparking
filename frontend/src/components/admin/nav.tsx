@@ -9,6 +9,8 @@ import {
   DrawerContent,
   Flex,
   FlexProps,
+  FormControl,
+  FormLabel,
   HStack,
   Icon,
   IconButton,
@@ -17,28 +19,32 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  Textarea,
   VStack,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import { Link, Outlet, useRouter } from '@tanstack/react-router';
+import axios from 'axios';
 import { ReactNode } from 'react';
+import { useForm } from 'react-hook-form';
 import { IconType } from 'react-icons';
 import { FaRegComment } from 'react-icons/fa';
-import {
-  FiBell,
-  FiChevronDown,
-  FiLogIn,
-  FiMap,
-  FiMenu,
-  FiUser,
-} from 'react-icons/fi';
+import { FiChevronDown, FiLogIn, FiMap, FiMenu, FiUser } from 'react-icons/fi';
 import { LuParkingSquare } from 'react-icons/lu';
 import { PiBuildingOffice, PiFlashlight } from 'react-icons/pi';
 import { blacklistRequest } from '../../api/auth';
 import { Logo } from '../../assets/logo';
+import { APIS } from '../../constants';
 import { User, useAuthStore } from '../../stores/auth';
 import Footer from '../home/footer';
 import useUpdatableToast from '../hooks/useUpdatableToast';
@@ -50,13 +56,6 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Mapa', icon: FiMap, url: '/home' },
-  { name: 'Notificaciones', icon: FiBell, url: '/home/notifications' },
-
-  {
-    name: 'Deja tus sugerencias',
-    icon: FaRegComment,
-    url: '/home/feedback',
-  },
 ];
 
 const AdminItems: Array<LinkItemProps> = [
@@ -68,8 +67,6 @@ const AdminItems: Array<LinkItemProps> = [
   },
   { name: 'Vigilantes', icon: PiFlashlight, url: '/admin/vigilantes' },
 ];
-
-const LastItem: LinkItemProps = LinkItems.pop() as LinkItemProps;
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
@@ -109,6 +106,32 @@ function NavItem({ icon, children, url, ...rest }: NavItemProps) {
 }
 
 function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
+  const userData = user === '' ? null : (user as User);
+  const { addToast, updateToast } = useUpdatableToast(5000);
+
+  const {
+    isOpen: isOpenModal,
+    onOpen: onOpenModal,
+    onClose: onCloseModal,
+  } = useDisclosure();
+  const { register, handleSubmit, reset } = useForm<{ message: string }>({});
+
+  function onSubmit(data: { message: string }) {
+    const url = new URL('feedback/', APIS.user).toString();
+    addToast({ status: 'loading', description: 'Enviando sugerencia...' });
+    axios
+      .post(url, { comentario: data.message })
+      .then(() =>
+        updateToast({ status: 'success', description: 'Sugerencia enviada.' })
+      )
+      .catch(() =>
+        updateToast({
+          status: 'error',
+          description: 'Error al enviar sugerencia.',
+        })
+      )
+      .finally(onCloseModal);
+  }
   return (
     <Box
       transition="3s ease"
@@ -153,13 +176,44 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
         </NavItem>
       ))}
       <NavItem
-        onClick={onClose}
         pos="absolute"
         bottom={0}
-        icon={LastItem.icon}
-        url={LastItem.url}
+        onClick={onOpenModal}
+        icon={FaRegComment}
+        url={'#'}
       >
-        {LastItem.name}
+        <>
+          Deja tus sugerencias
+          <Modal
+            isOpen={isOpenModal}
+            isCentered
+            onCloseComplete={reset}
+            onClose={onCloseModal}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Deja tu Sugerencia</ModalHeader>
+              <ModalCloseButton />
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <ModalBody pb={6}>
+                  <FormControl isRequired>
+                    <FormLabel>Mensaje</FormLabel>
+                    <Textarea
+                      placeholder="Escribe tu Comentario"
+                      {...register('message')}
+                    />
+                  </FormControl>
+                </ModalBody>
+                <ModalFooter>
+                  <Button type="submit" colorScheme="blue" mr={3}>
+                    Enviar
+                  </Button>
+                  <Button onClick={onCloseModal}>Cancelar</Button>
+                </ModalFooter>
+              </form>
+            </ModalContent>
+          </Modal>
+        </>
       </NavItem>
     </Box>
   );
@@ -272,12 +326,6 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
       )}
       {userData && (
         <HStack spacing={{ base: '0', md: '0' }}>
-          <IconButton
-            size="lg"
-            variant="ghost"
-            aria-label="open menu"
-            icon={<FiBell />}
-          />
           <Flex alignItems="center">
             <Menu>
               <MenuButton
