@@ -38,7 +38,14 @@ import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { IconType } from 'react-icons';
 import { FaRegComment } from 'react-icons/fa';
-import { FiChevronDown, FiLogIn, FiMap, FiMenu, FiUser } from 'react-icons/fi';
+import {
+  FiChevronDown,
+  FiLogIn,
+  FiMap,
+  FiMenu,
+  FiShield,
+  FiUser,
+} from 'react-icons/fi';
 import { blacklistRequest } from '../../api/auth';
 import { Logo } from '../../assets/logo';
 import { APIS } from '../../constants';
@@ -57,7 +64,7 @@ const LinkItems: Array<LinkItemProps> = [
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
-  user: User | string;
+  user: User | null;
 }
 
 interface NavItemProps extends FlexProps {
@@ -93,7 +100,6 @@ function NavItem({ icon, children, url, ...rest }: NavItemProps) {
 }
 
 function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
-  const userData = user === '' ? null : (user as User);
   const { addToast, updateToast } = useUpdatableToast(5000);
 
   const {
@@ -132,22 +138,25 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Box w="60">
+        <Box w="60" as={Link} to={'/home'}>
           <Logo color="var(--chakra-colors-blue-600)" />
         </Box>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) =>
-        link.name !== 'Notificaciones' || userData ? (
-          <NavItem
-            onClick={onClose}
-            key={link.name}
-            icon={link.icon}
-            url={link.url}
-          >
-            {link.name}
-          </NavItem>
-        ) : null
+      {LinkItems.map((link) => (
+        <NavItem
+          onClick={onClose}
+          key={link.name}
+          icon={link.icon}
+          url={link.url}
+        >
+          {link.name}
+        </NavItem>
+      ))}
+      {user?.rol === 'admin' && (
+        <NavItem url={'/admin'} icon={FiShield}>
+          Administración
+        </NavItem>
       )}
       <NavItem
         pos="absolute"
@@ -195,27 +204,26 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
-  user: User | string;
+  user: User | null;
   logout: () => void;
 }
 
 function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
-  const userData = user === '' ? null : (user as User);
   const { addToast, updateToast } = useUpdatableToast(5000);
   const { invalidate } = useRouter();
   const { refreshToken } = useAuthStore();
   const color = useColorModeValue('white', 'gray.900');
   const colorTwo = useColorModeValue('gray.200', 'gray.700');
 
-  if (userData) {
-    if (userData.rol === 'admin') {
-      userData.rol = 'Administrador';
+  if (user) {
+    if (user.rol === 'admin') {
+      user.rol = 'Administrador';
     }
-    if (userData.rol === 'user') {
-      userData.rol = 'Usuario';
+    if (user.rol === 'user') {
+      user.rol = 'Usuario';
     }
-    if (userData.rol === 'vigilante') {
-      userData.rol = 'Vigilante';
+    if (user.rol === 'vigilante') {
+      user.rol = 'Vigilante';
     }
   }
 
@@ -256,10 +264,16 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
         icon={<FiMenu />}
       />
 
-      <Box w="60" p={4} display={{ base: 'block', md: 'none' }}>
+      <Box
+        w="60"
+        p={4}
+        display={{ base: 'block', md: 'none' }}
+        as={Link}
+        to={'/home'}
+      >
         <Logo color="var(--chakra-colors-blue-600)" />
       </Box>
-      {!userData && (
+      {!user && (
         <>
           <HStack display={{ base: 'none', md: 'flex' }} spacing={4}>
             <Button
@@ -297,7 +311,7 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
           </Flex>
         </>
       )}
-      {userData && (
+      {user && (
         <HStack spacing={{ base: '0', md: '0' }}>
           <Flex alignItems="center">
             <Menu>
@@ -315,10 +329,10 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
                     ml="2"
                   >
                     <Text fontSize="sm">
-                      {[userData.p_nombre, userData.p_apellido].join(' ')}
+                      {[user.p_nombre, user.p_apellido].join(' ')}
                     </Text>
                     <Text fontSize="xs" color="gray.600">
-                      {userData.rol}
+                      {user.rol}
                     </Text>
                   </VStack>
                   <Box display={{ base: 'none', md: 'flex' }}>
@@ -342,7 +356,7 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
 }
 
 type NavPropsType = {
-  user: User | string;
+  user: User | null;
   logout: () => void;
 };
 

@@ -144,7 +144,7 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Box w="60">
+        <Box w="60" as={Link} to={'/home'}>
           <Logo color="var(--chakra-colors-blue-600)" />
         </Box>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
@@ -280,7 +280,13 @@ function MobileNav({ onOpen, user, logout, ...rest }: MobileProps) {
         icon={<FiMenu />}
       />
 
-      <Box w="60" p={4} display={{ base: 'block', md: 'none' }}>
+      <Box
+        w="60"
+        p={4}
+        display={{ base: 'block', md: 'none' }}
+        as={Link}
+        to={'/home'}
+      >
         <Logo color="var(--chakra-colors-blue-600)" />
       </Box>
       {!userData && (

@@ -84,7 +84,6 @@ function DrawableMapComponent({
                 </AdvancedMarker>
                 <Polygon
                   paths={getLatLngFromArray(el.area_espacio.coordinates[0])}
-                  onClick={() => console.log(el.id)}
                   strokeColor={colors.stroke}
                   fillColor={colors.fill}
                   strokeWeight={1.25}

@@ -54,7 +54,6 @@ export const useAuthStore = create(
           try {
             const res = await axiosBearer.get('/user/');
             set(() => ({ userData: res.data }));
-            console.log('AA');
             return res.data;
           } catch {
             return get().logout();
