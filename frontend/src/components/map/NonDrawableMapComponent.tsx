@@ -50,6 +50,7 @@ function NonDrawableMapComponents({
       <Map
         defaultZoom={defaultZoom}
         maxZoom={maxZoom}
+        disableDefaultUI
         minZoom={minZoom}
         mapId="d1d387488b4410d4"
         defaultCenter={defaultCenter}

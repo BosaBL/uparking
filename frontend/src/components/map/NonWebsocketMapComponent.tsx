@@ -42,6 +42,7 @@ function NonWebsockerMapComponents({
         defaultZoom={defaultZoom}
         maxZoom={maxZoom}
         minZoom={minZoom}
+        disableDefaultUI
         mapId="d1d387488b4410d4"
         defaultCenter={defaultCenter}
         gestureHandling="greedy"
