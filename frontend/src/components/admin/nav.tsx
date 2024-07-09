@@ -180,7 +180,7 @@ function SidebarContent({ onClose, user, ...rest }: SidebarProps) {
         bottom={0}
         onClick={onOpenModal}
         icon={FaRegComment}
-        url={'#'}
+        url={'.'}
       >
         <>
           Deja tus sugerencias
