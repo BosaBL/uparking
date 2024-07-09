@@ -73,7 +73,7 @@ function UpdateEstacionamientoModal({
       .then(() => {
         updateToast({
           status: 'success',
-          description: 'El elemento ha sido actualizado.}',
+          description: 'El elemento ha sido actualizado.',
         });
       })
       .catch(() =>
