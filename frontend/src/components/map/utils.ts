@@ -1,3 +1,10 @@
+import {
+  CheckCircleIcon,
+  InfoIcon,
+  NotAllowedIcon,
+  WarningIcon,
+} from '@chakra-ui/icons';
+import { As } from '@chakra-ui/react';
 import { Estacionamiento } from './types';
 
 export function getLatLngFromPolygon(
@@ -36,27 +43,41 @@ export function getLatLngFromArray(
 export function getTreshholdColor(estacionamiento: Estacionamiento): {
   stroke: string;
   fill: string;
+  text: string;
+  icon: As;
 } {
   const half = Math.floor(estacionamiento.capacidad_max / 2);
   const quart = Math.floor(half / 2);
+  const oct = Math.floor(quart / 2);
 
   if (estacionamiento.capacidad < half) {
     return {
       stroke: '#22543D',
       fill: '#48BB78',
+      text: 'Más de la mitad de estacionamientos disponibles.',
+      icon: CheckCircleIcon,
     };
   }
-  if (
-    estacionamiento.capacidad >= half &&
-    estacionamiento.capacidad < quart + half
-  ) {
+  if (estacionamiento.capacidad < quart + half + oct) {
+    return {
+      stroke: '#D69E2E',
+      fill: '#ECC94B',
+      text: 'Menos de la mitad de estacionamientos disponibles.',
+      icon: InfoIcon,
+    };
+  }
+  if (estacionamiento.capacidad !== estacionamiento.capacidad_max) {
     return {
       stroke: '#7B341E',
       fill: '#ED8936',
+      text: 'Muy pocos estacionamientos disponibles.',
+      icon: WarningIcon,
     };
   }
   return {
     stroke: '#9B2C2C',
     fill: '#F56565',
+    text: 'No hay estacionamientos libres.',
+    icon: NotAllowedIcon,
   };
 }

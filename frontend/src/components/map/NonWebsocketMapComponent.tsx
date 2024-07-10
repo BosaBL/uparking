@@ -42,10 +42,11 @@ function NonWebsockerMapComponents({
         defaultZoom={defaultZoom}
         maxZoom={maxZoom}
         minZoom={minZoom}
+        disableDefaultUI
         mapId="d1d387488b4410d4"
         defaultCenter={defaultCenter}
         gestureHandling="greedy"
-      // disableDefaultUI
+        // disableDefaultUI
       >
         {coreLib &&
           map &&
@@ -69,7 +70,6 @@ function NonWebsockerMapComponents({
                 </AdvancedMarker>
                 <Polygon
                   paths={getLatLngFromArray(el.area_espacio.coordinates[0])}
-                  onClick={() => console.log(el.id)}
                   strokeColor={colors.stroke}
                   fillColor={colors.fill}
                   strokeWeight={1.25}

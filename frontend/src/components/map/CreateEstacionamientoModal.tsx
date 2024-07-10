@@ -112,7 +112,7 @@ function CreateEstaciSedeTonamientoModal({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Añadir Sede</ModalHeader>
+          <ModalHeader>Añadir Estacionamiento</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody pb={6}>

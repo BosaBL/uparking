@@ -1,16 +1,11 @@
-import {
-  AdvancedMarker,
-  Map,
-  Pin,
-  useMapsLibrary,
-} from '@vis.gl/react-google-maps';
+import { Map, useMapsLibrary } from '@vis.gl/react-google-maps';
 
 import { Box, Stack } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { APIS, WEBSOCKET } from '../../constants';
-import { Polygon } from './Polygon';
+import ParkingStatus from './ParkingStatus';
 import { Estacionamiento } from './types';
 import { getLatLngFromArray, getTreshholdColor } from './utils';
 
@@ -40,9 +35,6 @@ function NonDrawableMapComponents({
 
       setDataArray(res.data);
     };
-
-    console.log('UPDATED');
-
     fetchEstacionamientos();
   }, [setDataArray, lastMessage]);
 
@@ -58,11 +50,12 @@ function NonDrawableMapComponents({
       <Map
         defaultZoom={defaultZoom}
         maxZoom={maxZoom}
+        disableDefaultUI
         minZoom={minZoom}
         mapId="d1d387488b4410d4"
         defaultCenter={defaultCenter}
         gestureHandling="greedy"
-      // disableDefaultUI
+        // disableDefaultUI
       >
         {coreLib &&
           dataArray &&
@@ -75,19 +68,10 @@ function NonDrawableMapComponents({
             const centroid = bounds.getCenter();
             return (
               <Box key={el.id}>
-                <AdvancedMarker position={centroid}>
-                  <Pin
-                    borderColor={colors.fill}
-                    glyphColor="white"
-                    background={colors.fill}
-                  />
-                </AdvancedMarker>
-                <Polygon
-                  paths={getLatLngFromArray(el.area_espacio.coordinates[0])}
-                  onClick={() => console.log(el.id)}
-                  strokeColor={colors.stroke}
-                  fillColor={colors.fill}
-                  strokeWeight={1.25}
+                <ParkingStatus
+                  estacionamiento={el}
+                  color={colors}
+                  centroid={centroid}
                 />
               </Box>
             );

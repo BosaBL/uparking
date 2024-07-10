@@ -29,7 +29,6 @@ import DrawableMapComponent from './DrawableMapComponent';
 import { Estacionamiento, OptEstacionamiento } from './types';
 import { getLatLngArray } from './utils';
 
-
 function UpdateEstacionamientoModal({
   handleUpdate,
   columns,
@@ -56,7 +55,15 @@ function UpdateEstacionamientoModal({
   const { onChange, onBlur, name, ref } = register('id');
 
   function onSubmit(vals: Omit<Estacionamiento, 'area_espacio'>) {
-    const estacionamiento: OptEstacionamiento = polygonCoords ? { ...vals, area_espacio: { type: "Polygon", coordinates: getLatLngArray(polygonCoords) } } : { ...vals }
+    const estacionamiento: OptEstacionamiento = polygonCoords
+      ? {
+          ...vals,
+          area_espacio: {
+            type: 'Polygon',
+            coordinates: getLatLngArray(polygonCoords),
+          },
+        }
+      : { ...vals };
     clearToasts();
     addToast({
       status: 'loading',
@@ -66,7 +73,7 @@ function UpdateEstacionamientoModal({
       .then(() => {
         updateToast({
           status: 'success',
-          description: 'El elemento ha sido actualizado.}',
+          description: 'El elemento ha sido actualizado.',
         });
       })
       .catch(() =>
@@ -103,14 +110,14 @@ function UpdateEstacionamientoModal({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Añadir Sede</ModalHeader>
+          <ModalHeader>Actualizar Estacionamiento</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody pb={6}>
               {columns.map((element, index) => {
                 if (index === 0 && element.id) {
                   return (
-                    <FormControl isRequired key={element.id} mt={4}>
+                    <FormControl isRequired key={element.id} mt={4} isDisabled>
                       <FormLabel>{capitalizeFirstLetter(element.id)}</FormLabel>
                       <Input
                         placeholder={capitalizeFirstLetter(element.id)}
