@@ -17,6 +17,9 @@ Este progreso corresponde tanto a la aplicación móvil como al web y backend. P
 ![Imágen Progreso en Jira](https://raw.githubusercontent.com/BosaBL/uparking/main/artifacts/jira_avance_2.png)
 Este progreso corresponde a la finalización de funciones principales de la aplicación, por lo cual queda pendiente arreglar detalles y agregar funcionalidades menores.
 
+## Entrega Final
+Debido a la naturaleza d ela entrega final, se realizaron es su mayoría validaciones y arreglos menores en el código que no requirieron de un software de control de tareas como Jira.
+
 ## Instalación Local (PREVISUALIZACIÓN, NO USAR PARA DESARROLLO!)
 
 > [!IMPORTANT]
