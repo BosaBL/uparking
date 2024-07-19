@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.gis",
+    "django.contrib.sites",
     "corsheaders",
     # DRF
     "rest_framework",
@@ -69,7 +70,6 @@ INSTALLED_APPS = [
     "uparking.vigilante",
     # AUTH
     "dj_rest_auth",
-    "django.contrib.sites",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -238,9 +238,9 @@ if DEBUG:
     logger.warning("RUNNING AS DEVELOPMENT MODE")
 
     INSTALLED_APPS += ["drf_spectacular", "drf_spectacular_sidecar"]
-    REST_FRAMEWORK[
-        "DEFAULT_SCHEMA_CLASS"
-    ] = "drf_spectacular.openapi.AutoSchema"
+    REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = (
+        "drf_spectacular.openapi.AutoSchema"
+    )
     SPECTACULAR_SETTINGS = {
         "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
         "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
