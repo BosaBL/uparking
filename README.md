@@ -1,9 +1,9 @@
-> [!NOTE]  
+> [!WARNING]  
 > # Achive Notice
 > I'm archving this repository since it was only used for a semester project at my university. Later on i want to revisit it and apply a new stack to rebuild it.
 > This repository will stay up for historical purposes.
 
-> [!NOTE]  
+> [!WARNING]  
 > # Noticia de Archivado
 > Estoy archivando este repositorio ya que fué usando solamente para un proyecto semestral. Posteriormente quiero revisitar el proyecto y aplicar un nuevo conjunto de tecnolgías a el.
 > I'm archving this repository since it was only used for a semester project at my university. Later on i want to revisit it and apply a new stack to rebuild it.
