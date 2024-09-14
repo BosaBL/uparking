@@ -1,5 +1,5 @@
 > [!WARNING]  
-> # Achive Notice
+> # Archive Notice
 > I'm archving this repository since it was only used for a semester project at my university. Later on i want to revisit it and apply a new stack to rebuild it.\
 > This repository will stay up for historical purposes.
 
